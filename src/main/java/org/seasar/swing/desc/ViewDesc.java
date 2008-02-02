@@ -1,0 +1,41 @@
+/*
+ * Copyright 2004-2008 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+package org.seasar.swing.desc;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
+
+/**
+ * @author kaiseh
+ */
+
+public interface ViewDesc {
+    Method getInitializer();
+    
+    List<Field> getViewManagerFields();
+    
+    List<ActionSourceDesc> getActionSourceDescs();
+
+    List<Field> getModelFields();
+
+    Field getModelField(Class<?> modelClass);
+
+    List<Field> getComponentFields();
+
+    List<Field> getBindingTargetFields();
+}
