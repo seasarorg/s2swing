@@ -1,0 +1,4 @@
+# valid service list
+
+org.seasar.swing.factory.ServiceLoaderFactoryBaseTest$FooService
+org.seasar.swing.factory.ServiceLoaderFactoryBaseTest$BarService
