@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.View;
 
@@ -32,6 +33,15 @@ import org.jdesktop.application.View;
 
 public abstract class S2SingleFrameApplication extends SingleFrameApplication {
     private boolean windowShown;
+
+    public static S2SingleFrameApplication getInstance() {
+        Application instance = Application.getInstance();
+        if (!(instance instanceof S2SingleFrameApplication)) {
+            throw new IllegalStateException(
+                    "S2SingleFrameApplication has not been instantiated.");
+        }
+        return (S2SingleFrameApplication)instance;
+    }
 
     @Override
     protected void configureWindow(Window root) {
