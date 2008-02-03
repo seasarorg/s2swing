@@ -49,7 +49,7 @@ public class PropertyChangeInterceptor implements MethodInterceptor {
         Object result = invocation.proceed();
         Object newValue = propDesc.getValue(invocation.getThis());
 
-        Beans.firePropertyChange(bean, propertyName, oldValue, newValue);
+        ObservableBeans.firePropertyChange(bean, propertyName, oldValue, newValue);
 
         return result;
     }

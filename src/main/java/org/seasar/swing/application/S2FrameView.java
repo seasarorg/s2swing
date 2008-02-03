@@ -16,9 +16,6 @@
 
 package org.seasar.swing.application;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
 
@@ -32,20 +29,13 @@ public class S2FrameView extends FrameView {
     public S2FrameView() {
         super(Application.getInstance());
         viewManager = new ViewManager(this, getFrame());
-        viewManager.addPropertyChangeListener("modelValid", new ModelValidListener());
     }
 
     public ViewManager getViewManager() {
         return viewManager;
     }
-    
+
     public boolean isModelValid() {
         return viewManager.isModelValid();
-    }
-
-    private class ModelValidListener implements PropertyChangeListener {
-        public void propertyChange(PropertyChangeEvent e) {
-            firePropertyChange(e);
-        }
     }
 }

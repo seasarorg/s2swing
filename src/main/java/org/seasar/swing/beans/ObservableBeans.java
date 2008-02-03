@@ -30,7 +30,7 @@ import org.seasar.swing.factory.CacheFactoryBase;
  * @author kaiseh
  */
 
-public abstract class Beans {
+public abstract class ObservableBeans {
     public static final String ADD_LISTENER = "addPropertyChangeListener";
     public static final Class<?>[] ADD_LISTENER_ARGS1 = { PropertyChangeListener.class };
     public static final Class<?>[] ADD_LISTENER_ARGS2 = { String.class,
@@ -69,7 +69,7 @@ public abstract class Beans {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T createObservableBean(Class<T> beanClass) {
+    public static <T> T create(Class<T> beanClass) {
         if (beanClass == null) {
             throw new EmptyRuntimeException("beanClass");
         }
@@ -77,11 +77,11 @@ public abstract class Beans {
             return (T) ClassUtil.newInstance(beanClass);
         }
 
-        Class<?> enhancedClass = CacheFactoryBase.get(Beans.class,
+        Class<?> enhancedClass = CacheFactoryBase.get(ObservableBeans.class,
                 beanClass, Class.class);
         if (enhancedClass == null) {
             PropertyChangeWeaver weaver = new PropertyChangeWeaver();
-            enhancedClass = CacheFactoryBase.put(Beans.class, beanClass,
+            enhancedClass = CacheFactoryBase.put(ObservableBeans.class, beanClass,
                     weaver.generateClass(beanClass));
         }
         return (T) ClassUtil.newInstance(enhancedClass);

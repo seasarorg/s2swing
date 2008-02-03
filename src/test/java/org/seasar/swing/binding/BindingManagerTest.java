@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 import org.jdesktop.beansbinding.Binding;
 import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadWriteSelection;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.impl.BindingDescImpl;
 
@@ -66,7 +66,7 @@ public class BindingManagerTest extends TestCase {
             public void run() {
                 BindingManager manager = new BindingManager();
 
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JComboBox comboBox = new JComboBox();
 
                 BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
@@ -121,7 +121,7 @@ public class BindingManagerTest extends TestCase {
             public void run() {
                 BindingManager manager = new BindingManager();
 
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JList list = new JList();
 
                 BindingDesc valueDesc = new BindingDescImpl(Aaa.class,

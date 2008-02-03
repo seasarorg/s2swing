@@ -35,7 +35,7 @@ import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadOnce;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.impl.BindingDescImpl;
 
@@ -169,7 +169,7 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
@@ -219,7 +219,7 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
@@ -243,7 +243,7 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
@@ -274,7 +274,7 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
@@ -305,7 +305,7 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerDateModel());
@@ -338,7 +338,7 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerListModel(Arrays.asList("aaa",

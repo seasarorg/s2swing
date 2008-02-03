@@ -38,7 +38,7 @@ import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.FieldUtil;
 import org.seasar.framework.util.MethodUtil;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.binding.Binder;
 import org.seasar.swing.binding.BinderFactory;
 import org.seasar.swing.binding.BindingManager;
@@ -101,6 +101,14 @@ public class ViewManager extends AbstractBean {
         }
         bindingManager = new BindingManager();
         bindingManager.addBindingListener(new ModelBindingListener());
+    }
+
+    public ApplicationActionMap getActionMap() {
+        return actionMap;
+    }
+
+    public ResourceMap getResourceMap() {
+        return resourceMap;
     }
 
     public void configure() {
@@ -177,8 +185,9 @@ public class ViewManager extends AbstractBean {
 
     protected void autoInjectModels() {
         for (Field field : viewDesc.getModelFields()) {
-            Object model = Beans.createObservableBean(field.getType());
-            Beans.addPropertyChangeListener(model, new ModelPropertyChangeListener());
+            Object model = ObservableBeans.create(field.getType());
+            ObservableBeans.addPropertyChangeListener(model,
+                    new ModelPropertyChangeListener());
             FieldUtil.set(field, view, model);
         }
     }
@@ -289,6 +298,12 @@ public class ViewManager extends AbstractBean {
         boolean modelValid = isModelValid();
         if (cachedModelValid != modelValid) {
             firePropertyChange("modelValid", cachedModelValid, modelValid);
+            if (viewDesc.hasModelValidProperty()) {
+                if (ObservableBeans.isObservable(view.getClass())) {
+                    ObservableBeans.firePropertyChange(view, "modelValid",
+                            cachedModelValid, modelValid);
+                }
+            }
         }
         cachedModelValid = modelValid;
     }
@@ -305,7 +320,7 @@ public class ViewManager extends AbstractBean {
             refreshModelValid();
         }
     }
-    
+
     private class ModelPropertyChangeListener implements PropertyChangeListener {
         public void propertyChange(PropertyChangeEvent e) {
             refreshModelValid();

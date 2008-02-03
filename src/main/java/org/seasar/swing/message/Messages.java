@@ -34,7 +34,7 @@ public class Messages {
     private static final Messages converterMessages = new Messages(
             "org/seasar/swing/converter/Messages");
     private static final Messages validatorMessages = new Messages(
-    "org/seasar/swing/validator/Messages");
+            "org/seasar/swing/validator/Messages");
 
     private List<ResourceBundle> bundles = new ArrayList<ResourceBundle>();
 

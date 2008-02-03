@@ -52,6 +52,7 @@ public class ViewDescImpl implements ViewDesc {
     private ArrayMap modelFields;
     private List<Field> componentFields;
     private List<Field> bindingTargetFields;
+    private boolean hasModelValidProperty;
 
     public ViewDescImpl(Class<?> viewClass) {
         if (viewClass == null) {
@@ -66,6 +67,7 @@ public class ViewDescImpl implements ViewDesc {
         setupModelFields();
         setupComponentFields();
         setupBindingTargetFields();
+        setupHasModelValidProperty();
     }
 
     private void setupInitializer() {
@@ -150,6 +152,14 @@ public class ViewDescImpl implements ViewDesc {
         }
     }
 
+    private void setupHasModelValidProperty() {
+        Method getter = beanDesc.getMethodNoException("isModelValid",
+                new Class<?>[0]);
+        if (getter != null && getter.getReturnType() == boolean.class) {
+            hasModelValidProperty = true;
+        }
+    }
+
     public Method getInitializer() {
         return initializer;
     }
@@ -157,15 +167,15 @@ public class ViewDescImpl implements ViewDesc {
     public List<Field> getViewManagerFields() {
         return Collections.unmodifiableList(viewManagerFields);
     }
-    
+
     public List<ActionSourceDesc> getActionSourceDescs() {
         return Collections.unmodifiableList(actionSourceDescs);
     }
-    
+
     public List<Field> getModelFields() {
         return CollectionsUtils.unmodifiableList(modelFields, Field.class);
     }
-    
+
     public Field getModelField(Class<?> modelClass) {
         return (Field) modelFields.get(modelClass);
     }
@@ -176,5 +186,9 @@ public class ViewDescImpl implements ViewDesc {
 
     public List<Field> getBindingTargetFields() {
         return Collections.unmodifiableList(bindingTargetFields);
+    }
+
+    public boolean hasModelValidProperty() {
+        return hasModelValidProperty;
     }
 }

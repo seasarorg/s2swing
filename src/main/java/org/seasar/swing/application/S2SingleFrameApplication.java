@@ -31,6 +31,8 @@ import org.jdesktop.application.View;
  */
 
 public abstract class S2SingleFrameApplication extends SingleFrameApplication {
+    private boolean windowShown;
+
     @Override
     protected void configureWindow(Window root) {
     }
@@ -48,28 +50,40 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
     protected void show(JComponent c) {
         configure(c, c.getRootPane().getParent());
         super.show(c);
+        windowShown = true;
     }
 
     @Override
-    public void show(JFrame c) {
-        configure(c, c);
-        super.show(c);
+    public void show(JFrame frame) {
+        if (!windowShown) {
+            String title = getContext().getResourceMap().getString(
+                    "Application.title");
+            if (title != null) {
+                frame.setTitle(title);
+            }
+            setMainFrame(frame);
+        }
+        configure(frame, frame);
+        super.show(frame);
+        windowShown = true;
     }
 
     @Override
-    public void show(JDialog c) {
-        configure(c, c);
-        super.show(c);
+    public void show(JDialog dialog) {
+        configure(dialog, dialog);
+        super.show(dialog);
+        windowShown = true;
     }
 
     @Override
     public void show(View view) {
         if (view instanceof S2FrameView) {
-            ((S2FrameView)view).getViewManager().configure();
+            ((S2FrameView) view).getViewManager().configure();
         } else {
             configure(view, view.getRootPane().getParent());
         }
         super.show(view);
         view.getRootPane().getParent().setVisible(true);
+        windowShown = true;
     }
 }
