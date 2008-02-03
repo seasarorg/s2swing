@@ -29,7 +29,7 @@ import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadOnce;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.impl.BindingDescImpl;
 
@@ -151,7 +151,7 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSlider slider = new JSlider();
 
                 slider.setMinimum(0);
@@ -208,7 +208,7 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSlider slider = new JSlider();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
@@ -230,7 +230,7 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSlider slider = new JSlider();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
@@ -252,7 +252,7 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSlider slider = new JSlider();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
@@ -274,7 +274,7 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JSlider slider = new JSlider();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,

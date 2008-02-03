@@ -31,7 +31,6 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.Binding.SyncFailureType;
-import org.jdesktop.beansbinding.Binding.ValueResult;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.application.ApplicationResources;
 import org.seasar.swing.desc.BindingDesc;
@@ -124,10 +123,14 @@ public class BindingManager {
     public void bind() {
         for (Binding binding : bindingGroup.getBindings()) {
             if (!binding.isBound()) {
-                ValueResult result = binding.getSourceValueForTarget();
-                if (!result.failed()) {
-                    cachedSourceValueMap.put(binding, result.getValue());
-                }
+                BindingDesc bindingDesc = getBindingDesc(binding);
+                Object value = bindingDesc.getSourcePropertyDesc().getValue(
+                        binding.getSourceObject());
+                cachedSourceValueMap.put(binding, value);
+            }
+        }
+        for (Binding binding : bindingGroup.getBindings()) {
+            if (!binding.isBound()) {
                 binding.bind();
             }
         }
@@ -189,15 +192,15 @@ public class BindingManager {
     public void addBindingListener(BindingListener listener) {
         bindingGroup.addBindingListener(listener);
     }
-    
+
     public void removeBindingListener(BindingListener listener) {
         bindingGroup.removeBindingListener(listener);
     }
-    
+
     public BindingListener[] getBindingListeners() {
         return bindingGroup.getBindingListeners();
     }
-    
+
     public void addBindingStateListener(BindingStateListener listener) {
         if (listener == null) {
             return;

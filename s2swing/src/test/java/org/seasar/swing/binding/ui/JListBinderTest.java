@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 import org.jdesktop.beansbinding.Binding;
 import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadSelection;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.impl.BindingDescImpl;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
@@ -106,7 +106,7 @@ public class JListBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JListBinder binder = new JListBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JList list = new JList();
 
                 Binding binding = binder.createBinding(new BindingDescImpl(

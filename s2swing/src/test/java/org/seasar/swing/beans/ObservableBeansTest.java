@@ -35,7 +35,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
  * @author kaiseh
  */
 
-public class BeansTest extends TestCase {
+public class ObservableBeansTest extends TestCase {
     public static class Aaa {
         private String name;
         private int age;
@@ -102,21 +102,21 @@ public class BeansTest extends TestCase {
     }
 
     public void testIsObservable() throws Exception {
-        assertFalse(Beans.isObservable(Aaa.class));
-        assertTrue(Beans.isObservable(Bbb.class));
-        assertTrue(Beans.isObservable(Beans.createObservableBean(Aaa.class)
+        assertFalse(ObservableBeans.isObservable(Aaa.class));
+        assertTrue(ObservableBeans.isObservable(Bbb.class));
+        assertTrue(ObservableBeans.isObservable(ObservableBeans.create(Aaa.class)
                 .getClass()));
         try {
-            Beans.isObservable(null);
+            ObservableBeans.isObservable(null);
         } catch (EmptyRuntimeException e) {
         }
     }
 
-    public void testCreateOvservableBean() throws Exception {
+    public void testCreate() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                final Aaa aaa1 = Beans.createObservableBean(Aaa.class);
-                final Aaa aaa2 = Beans.createObservableBean(Aaa.class);
+                final Aaa aaa1 = ObservableBeans.create(Aaa.class);
+                final Aaa aaa2 = ObservableBeans.create(Aaa.class);
 
                 Binding<?, ?, ?, ?> binding = Bindings.createAutoBinding(
                         UpdateStrategy.READ_WRITE, aaa1, ELProperty
@@ -142,8 +142,8 @@ public class BeansTest extends TestCase {
                 assertEquals("foo", aaa1.getName());
                 assertEquals("bar", aaa2.getName());
 
-                final Bbb bbb1 = Beans.createObservableBean(Bbb.class);
-                final Bbb bbb2 = Beans.createObservableBean(Bbb.class);
+                final Bbb bbb1 = ObservableBeans.create(Bbb.class);
+                final Bbb bbb2 = ObservableBeans.create(Bbb.class);
 
                 binding = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE,
                         bbb1, ELProperty.create("${name}"), bbb2, ELProperty
@@ -157,7 +157,7 @@ public class BeansTest extends TestCase {
                 assertEquals("foo", bbb2.getName());
 
                 try {
-                    Beans.createObservableBean(null);
+                    ObservableBeans.create(null);
                     fail();
                 } catch (EmptyRuntimeException e) {
                 }
@@ -175,8 +175,8 @@ public class BeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
-                Beans.addPropertyChangeListener(aaa, listener);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                ObservableBeans.addPropertyChangeListener(aaa, listener);
 
                 aaa.setName("foo");
 
@@ -186,17 +186,17 @@ public class BeansTest extends TestCase {
         });
 
         try {
-            Beans.addPropertyChangeListener(new Aaa(), listener);
+            ObservableBeans.addPropertyChangeListener(new Aaa(), listener);
         } catch (MethodNotFoundRuntimeException e) {
         }
 
         try {
-            Beans.addPropertyChangeListener(null, listener);
+            ObservableBeans.addPropertyChangeListener(null, listener);
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.addPropertyChangeListener(new Aaa(), null);
+            ObservableBeans.addPropertyChangeListener(new Aaa(), null);
         } catch (EmptyRuntimeException e) {
         }
     }
@@ -211,8 +211,8 @@ public class BeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
-                Beans.addPropertyChangeListener(aaa, "name", listener);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                ObservableBeans.addPropertyChangeListener(aaa, "name", listener);
 
                 aaa.setName("foo");
 
@@ -227,22 +227,22 @@ public class BeansTest extends TestCase {
         });
 
         try {
-            Beans.addPropertyChangeListener(new Aaa(), "dummy", listener);
+            ObservableBeans.addPropertyChangeListener(new Aaa(), "dummy", listener);
         } catch (MethodNotFoundRuntimeException e) {
         }
 
         try {
-            Beans.addPropertyChangeListener(null, "dummy", listener);
+            ObservableBeans.addPropertyChangeListener(null, "dummy", listener);
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.addPropertyChangeListener(new Aaa(), null, listener);
+            ObservableBeans.addPropertyChangeListener(new Aaa(), null, listener);
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.addPropertyChangeListener(new Aaa(), "dummy", null);
+            ObservableBeans.addPropertyChangeListener(new Aaa(), "dummy", null);
         } catch (EmptyRuntimeException e) {
         }
     }
@@ -257,10 +257,10 @@ public class BeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
-                Beans.addPropertyChangeListener(aaa, listener);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                ObservableBeans.addPropertyChangeListener(aaa, listener);
 
-                Beans.removePropertyChangeListener(aaa, listener);
+                ObservableBeans.removePropertyChangeListener(aaa, listener);
 
                 aaa.setName("foo");
 
@@ -269,17 +269,17 @@ public class BeansTest extends TestCase {
         });
 
         try {
-            Beans.removePropertyChangeListener(new Aaa(), listener);
+            ObservableBeans.removePropertyChangeListener(new Aaa(), listener);
         } catch (MethodNotFoundRuntimeException e) {
         }
 
         try {
-            Beans.removePropertyChangeListener(null, listener);
+            ObservableBeans.removePropertyChangeListener(null, listener);
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.removePropertyChangeListener(new Aaa(), null);
+            ObservableBeans.removePropertyChangeListener(new Aaa(), null);
         } catch (EmptyRuntimeException e) {
         }
     }
@@ -294,32 +294,32 @@ public class BeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
-                Beans.addPropertyChangeListener(aaa, "name", listener);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                ObservableBeans.addPropertyChangeListener(aaa, "name", listener);
 
-                Beans.removePropertyChangeListener(aaa, "name", listener);
+                ObservableBeans.removePropertyChangeListener(aaa, "name", listener);
 
                 assertNull(result.event);
             }
         });
 
         try {
-            Beans.removePropertyChangeListener(new Aaa(), "dummy", listener);
+            ObservableBeans.removePropertyChangeListener(new Aaa(), "dummy", listener);
         } catch (MethodNotFoundRuntimeException e) {
         }
 
         try {
-            Beans.removePropertyChangeListener(null, "dummy", listener);
+            ObservableBeans.removePropertyChangeListener(null, "dummy", listener);
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.removePropertyChangeListener(new Aaa(), null, listener);
+            ObservableBeans.removePropertyChangeListener(new Aaa(), null, listener);
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.removePropertyChangeListener(new Aaa(), "dummy", null);
+            ObservableBeans.removePropertyChangeListener(new Aaa(), "dummy", null);
         } catch (EmptyRuntimeException e) {
         }
     }
@@ -334,10 +334,10 @@ public class BeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
-                Beans.addPropertyChangeListener(aaa, "name", listener);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                ObservableBeans.addPropertyChangeListener(aaa, "name", listener);
 
-                Beans.firePropertyChange(aaa, "name", "foo", null);
+                ObservableBeans.firePropertyChange(aaa, "name", "foo", null);
 
                 assertEquals("name", result.event.getPropertyName());
                 assertEquals("foo", result.event.getOldValue());
@@ -345,17 +345,17 @@ public class BeansTest extends TestCase {
         });
 
         try {
-            Beans.firePropertyChange(new Aaa(), "name", "foo", "bar");
+            ObservableBeans.firePropertyChange(new Aaa(), "name", "foo", "bar");
         } catch (MethodNotFoundRuntimeException e) {
         }
 
         try {
-            Beans.firePropertyChange(null, "dummy", "foo", "bar");
+            ObservableBeans.firePropertyChange(null, "dummy", "foo", "bar");
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            Beans.firePropertyChange(new Aaa(), null, "foo", "bar");
+            ObservableBeans.firePropertyChange(new Aaa(), null, "foo", "bar");
         } catch (EmptyRuntimeException e) {
         }
     }

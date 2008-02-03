@@ -33,7 +33,7 @@ import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadOnce;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.impl.BindingDescImpl;
@@ -141,7 +141,7 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JTextField textField = new JTextField();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
@@ -204,7 +204,7 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JTextField textField = new JTextField();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "int1");
@@ -237,7 +237,7 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JTextField textField = new JTextField();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,

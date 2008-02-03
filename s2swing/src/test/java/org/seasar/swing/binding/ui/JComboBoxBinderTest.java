@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 import org.jdesktop.beansbinding.Binding;
 import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadSelection;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.impl.BindingDescImpl;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
@@ -108,7 +108,7 @@ public class JComboBoxBinderTest extends TestCase {
                 JComboBoxBinder binder = new JComboBoxBinder();
                 JComboBox comboBox = new JComboBox();
 
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
 
                 Binding binding = binder.createBinding(new BindingDescImpl(
                         Aaa.class, "list1"), aaa, comboBox, null);

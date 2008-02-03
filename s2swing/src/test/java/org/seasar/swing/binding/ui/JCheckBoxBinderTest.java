@@ -27,7 +27,7 @@ import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadOnce;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
-import org.seasar.swing.beans.Beans;
+import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.impl.BindingDescImpl;
 
@@ -133,7 +133,7 @@ public class JCheckBoxBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JCheckBox checkBox = new JCheckBox();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
@@ -185,7 +185,7 @@ public class JCheckBoxBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JCheckBox checkBox = new JCheckBox();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "boolean4");
@@ -211,7 +211,7 @@ public class JCheckBoxBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JCheckBox checkBox = new JCheckBox();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "int1");
@@ -243,7 +243,7 @@ public class JCheckBoxBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = Beans.createObservableBean(Aaa.class);
+                Aaa aaa = ObservableBeans.create(Aaa.class);
                 JCheckBox checkBox = new JCheckBox();
 
                 BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "string1");

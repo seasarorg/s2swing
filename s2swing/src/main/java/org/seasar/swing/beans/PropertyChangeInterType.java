@@ -43,21 +43,21 @@ public class PropertyChangeInterType extends AbstractInterType {
     }
 
     private void introduceAddPropertyChangeListener() {
-        addMethod(Beans.ADD_LISTENER, Beans.ADD_LISTENER_ARGS1,
+        addMethod(ObservableBeans.ADD_LISTENER, ObservableBeans.ADD_LISTENER_ARGS1,
                 "{ pcs.addPropertyChangeListener($1); }");
-        addMethod(Beans.ADD_LISTENER, Beans.ADD_LISTENER_ARGS2,
+        addMethod(ObservableBeans.ADD_LISTENER, ObservableBeans.ADD_LISTENER_ARGS2,
                 "{ pcs.addPropertyChangeListener($1, $2); }");
     }
 
     private void introduceRemovePropertyChangeListener() {
-        addMethod(Beans.REMOVE_LISTENER, Beans.REMOVE_LISTENER_ARGS1,
+        addMethod(ObservableBeans.REMOVE_LISTENER, ObservableBeans.REMOVE_LISTENER_ARGS1,
                 "{ pcs.removePropertyChangeListener($1); }");
-        addMethod(Beans.REMOVE_LISTENER, Beans.REMOVE_LISTENER_ARGS2,
+        addMethod(ObservableBeans.REMOVE_LISTENER, ObservableBeans.REMOVE_LISTENER_ARGS2,
                 "{ pcs.removePropertyChangeListener($1, $2); }");
     }
 
     private void introduceFirePropertyChange() {
-        addMethod(Beans.FIRE, Beans.FIRE_ARGS,
+        addMethod(ObservableBeans.FIRE, ObservableBeans.FIRE_ARGS,
                 "{ pcs.firePropertyChange($1, $2, $3); }");
     }
 }

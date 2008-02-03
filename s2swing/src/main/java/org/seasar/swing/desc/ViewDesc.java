@@ -38,4 +38,6 @@ public interface ViewDesc {
     List<Field> getComponentFields();
 
     List<Field> getBindingTargetFields();
+
+    boolean hasModelValidProperty();
 }
