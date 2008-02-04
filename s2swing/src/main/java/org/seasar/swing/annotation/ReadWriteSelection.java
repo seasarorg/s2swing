@@ -25,14 +25,32 @@ import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
 
 /**
+ * モデルオブジェクトのプロパティが UI コンポーネントの選択値として継続的に読み出され、また逆に、UI
+ * コンポーネント側の選択値の変更がモデルオブジェクトのプロパティに継続的に書き出されることを許可します。
+ * <p>
+ * このアノテーションの指定は、{@code JComboBox} コンポーネントまたは {@code JList}
+ * コンポーネントとのバインディングに対して有効です。
+ * 
  * @author kaiseh
  */
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@BindingDescription(binding = BindingType.READ_WRITE, property = PropertyType.SELECTION, dependent = true)
+@BindingDescription(binding = BindingType.READ_WRITE, property = PropertyType.SELECTION)
 public @interface ReadWriteSelection {
+    /**
+     * バインディング対象となる UI コンポーネント名を指定します。指定を省略した場合は、
+     * モデルクラスのプロパティ名が選択されます。
+     * 
+     * @return
+     */
     String target() default "";
 
+    /**
+     * バインディング対象となる UI コンポーネントのプロパティ名を指定します。 指定を省略した場合は、UI
+     * コンポーネントの種類に応じて、適切なデフォルトプロパティ名が選択されます。
+     * 
+     * @return
+     */
     String targetProperty() default "";
 }

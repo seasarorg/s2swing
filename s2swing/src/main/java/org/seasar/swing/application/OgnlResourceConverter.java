@@ -16,28 +16,31 @@
 
 package org.seasar.swing.application;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.FrameView;
+import org.jdesktop.application.ResourceConverter;
+import org.jdesktop.application.ResourceMap;
+import org.seasar.framework.util.OgnlUtil;
 
 /**
- * {@code FrameView} に S2Swing の機構を付加したクラスです。
+ * リソースマップに設定された文字列の値を OGNL 式として解釈するコンバータです。
  * 
  * @author kaiseh
  */
 
-public class S2FrameView extends FrameView {
-    private ViewManager viewManager;
-
-    public S2FrameView() {
-        super(Application.getInstance());
-        viewManager = new ViewManager(this, getFrame());
+public class OgnlResourceConverter extends ResourceConverter {
+    public OgnlResourceConverter() {
+        super(Object.class);
     }
 
-    public ViewManager getViewManager() {
-        return viewManager;
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean supportsType(Class testType) {
+        return true;
     }
 
-    public boolean isModelValid() {
-        return viewManager.isModelValid();
+    @Override
+    public Object parseString(String s, ResourceMap map)
+            throws ResourceConverterException {
+        Object expr = OgnlUtil.parseExpression(s);
+        return OgnlUtil.getValue(expr, null);
     }
 }

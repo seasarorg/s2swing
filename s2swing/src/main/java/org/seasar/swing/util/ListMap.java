@@ -32,10 +32,10 @@ public class ListMap<K, V> implements Serializable {
     private static final long serialVersionUID = -6067491111439650613L;
 
     private Map<K, List<V>> map = new HashMap<K, List<V>>();
-    
+
     public void add(K key, V value) {
         List<V> values = map.get(key);
-        if(values == null) {
+        if (values == null) {
             values = new ArrayList<V>();
             map.put(key, values);
         }
@@ -44,8 +44,8 @@ public class ListMap<K, V> implements Serializable {
 
     public List<V> getValues(K key) {
         List<V> values = map.get(key);
-        if(values == null) {
-            return Collections.<V>emptyList();
+        if (values == null) {
+            return Collections.<V> emptyList();
         }
         return values;
     }
@@ -53,11 +53,11 @@ public class ListMap<K, V> implements Serializable {
     public void clear() {
         map.clear();
     }
-    
+
     public List<V> remove(K key) {
         return map.remove(key);
     }
-    
+
     public Set<K> keySet() {
         return map.keySet();
     }

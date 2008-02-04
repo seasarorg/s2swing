@@ -22,11 +22,31 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * アクション名を指定することによって、Swing コンポーネントとアクションを結び付けます。
+ * <p>
+ * 以下の例では、{@code okButton} ボタンと {@code ok} アクションが結び付けられます。
+ * 
+ * <pre>
+ * public class MyFrame extends JFrame {
+ *     &#064;ActionTarget(&quot;ok&quot;)
+ *     private JButton okButton;
+ * 
+ *     &#064;Action
+ *     public void ok() {
+ *     }
+ * }
+ * </pre>
+ * 
  * @author kaiseh
  */
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Bind {
+public @interface ActionTarget {
+    /**
+     * バインディング対象のアクション名です。
+     * 
+     * @return
+     */
     String value();
 }

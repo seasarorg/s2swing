@@ -16,28 +16,26 @@
 
 package org.seasar.swing.application;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.FrameView;
+import java.awt.Color;
+
+import javax.swing.border.LineBorder;
+
+import junit.framework.TestCase;
 
 /**
- * {@code FrameView} に S2Swing の機構を付加したクラスです。
- * 
  * @author kaiseh
  */
 
-public class S2FrameView extends FrameView {
-    private ViewManager viewManager;
+public class OgnlResourceConverterTest extends TestCase {
+    public void testParseString() throws Exception {
+        OgnlResourceConverter converter = new OgnlResourceConverter();
 
-    public S2FrameView() {
-        super(Application.getInstance());
-        viewManager = new ViewManager(this, getFrame());
-    }
+        assertEquals("aaa", converter.parseString("\"aaa\"", null));
+        assertEquals(111, converter.parseString("111", null));
 
-    public ViewManager getViewManager() {
-        return viewManager;
-    }
-
-    public boolean isModelValid() {
-        return viewManager.isModelValid();
+        LineBorder border = (LineBorder) converter.parseString(
+                "new javax.swing.border.LineBorder(@java.awt.Color@BLACK)",
+                null);
+        assertEquals(Color.BLACK, border.getLineColor());
     }
 }

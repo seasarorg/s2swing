@@ -28,6 +28,9 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.View;
 
 /**
+ * {@code SingleFrameApplication} に S2Swing の機構を付加した基本クラスです。
+ * S2Swing のアプリケーションは、通常このクラスを継承します。
+ * 
  * @author kaiseh
  */
 
@@ -40,7 +43,7 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
             throw new IllegalStateException(
                     "S2SingleFrameApplication has not been instantiated.");
         }
-        return (S2SingleFrameApplication)instance;
+        return (S2SingleFrameApplication) instance;
     }
 
     @Override

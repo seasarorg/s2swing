@@ -27,6 +27,8 @@ import org.seasar.framework.util.MethodUtil;
 import org.seasar.swing.factory.CacheFactoryBase;
 
 /**
+ * JavaBeans プロパティの変更監視に関するユーティリティクラスです。
+ * 
  * @author kaiseh
  */
 
@@ -45,6 +47,16 @@ public abstract class ObservableBeans {
     public static final Class<?>[] FIRE_ARGS = { String.class, Object.class,
             Object.class };
 
+    /**
+     * 指定されたクラスのプロパティが監視可能であるかどうかを調べます。
+     * クラスが {@code addPropertyChangeListener} メソッド、
+     * {@code removePropertyChangeListener} メソッド、および
+     * {@code firePropertyChange} メソッドを備えている場合に、そのクラスを
+     * プロパティ監視可能と判断します。
+     * 
+     * @param beanClass JavaBean クラス
+     * @return プロパティが監視可能である場合は {@code true}
+     */
     public static boolean isObservable(Class<?> beanClass) {
         if (beanClass == null) {
             throw new EmptyRuntimeException("beanClass");
@@ -68,6 +80,14 @@ public abstract class ObservableBeans {
         return true;
     }
 
+    /**
+     * 指定されたクラスの監視可能なインスタンスを作成します。このメソッドはクラスがすでに監視可能か
+     * どうかを調べ、そうでない場合は、監視用メソッドを追加した継承クラスを動的に作成します。
+     * 
+     * @param beanClass JavaBean クラス
+     * @return クラスがすでに監視可能である場合はそのインスタンス。そうでない場合は、
+     * 監視可能となるようエンハンスされたインスタンス
+     */
     @SuppressWarnings("unchecked")
     public static <T> T create(Class<T> beanClass) {
         if (beanClass == null) {
@@ -87,6 +107,13 @@ public abstract class ObservableBeans {
         return (T) ClassUtil.newInstance(enhancedClass);
     }
 
+    /**
+     * 指定されたオブジェクトが {@code addPropertyChangeListener} メソッドを持つ場合は、
+     * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
+     * 
+     * @param bean JavaBean
+     * @param listener リスナ
+     */
     public static void addPropertyChangeListener(Object bean,
             PropertyChangeListener listener) {
         if (bean == null) {
@@ -100,6 +127,13 @@ public abstract class ObservableBeans {
         MethodUtil.invoke(method, bean, new Object[] { listener });
     }
 
+    /**
+     * 指定されたオブジェクトが {@code addPropertyChangeListener} メソッドを持つ場合は、
+     * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
+     * 
+     * @param bean JavaBean
+     * @param listener リスナ
+     */
     public static void addPropertyChangeListener(Object bean,
             String propertyName, PropertyChangeListener listener) {
         if (bean == null) {
@@ -116,6 +150,13 @@ public abstract class ObservableBeans {
         MethodUtil.invoke(method, bean, new Object[] { propertyName, listener });
     }
 
+    /**
+     * 指定されたオブジェクトが {@code removePropertyChangeListener} メソッドを持つ場合は、
+     * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
+     * 
+     * @param bean JavaBean
+     * @param listener リスナ
+     */
     public static void removePropertyChangeListener(Object bean,
             PropertyChangeListener listener) {
         if (bean == null) {
@@ -129,6 +170,13 @@ public abstract class ObservableBeans {
         MethodUtil.invoke(method, bean, new Object[] { listener });
     }
 
+    /**
+     * 指定されたオブジェクトが {@code removePropertyChangeListener} メソッドを持つ場合は、
+     * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
+     * 
+     * @param bean JavaBean
+     * @param listener リスナ
+     */
     public static void removePropertyChangeListener(Object bean,
             String propertyName, PropertyChangeListener listener) {
         if (bean == null) {
@@ -145,6 +193,13 @@ public abstract class ObservableBeans {
         MethodUtil.invoke(method, bean, new Object[] { propertyName, listener });
     }
 
+    /**
+     * 指定されたオブジェクトが {@code firePropertyChange} メソッドを持つ場合は、
+     * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
+     * 
+     * @param bean JavaBean
+     * @param listener リスナ
+     */
     public static void firePropertyChange(Object bean, String propertyName,
             Object oldValue, Object newValue) {
         if (bean == null) {

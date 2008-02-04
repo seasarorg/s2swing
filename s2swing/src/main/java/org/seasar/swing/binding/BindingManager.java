@@ -95,6 +95,7 @@ public class BindingManager {
                 } catch (ClassCastException ex) {
                     throw ex;
                 } catch (RuntimeException ex) {
+                    ex.printStackTrace();
                     failed = true;
                 }
                 if (!failed) {

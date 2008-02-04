@@ -34,6 +34,4 @@ public @interface BindingDescription {
     BindingType binding();
 
     PropertyType property() default PropertyType.VALUE;
-
-    boolean dependent() default false;
 }

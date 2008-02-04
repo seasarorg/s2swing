@@ -48,7 +48,7 @@ public class NotEnteredConverter extends Converter {
         if (value == Constants.NOT_ENTERED) {
             if (sourcePropertyClass.isPrimitive()) {
                 throw new IllegalArgumentException(
-                        "Non-entered state cannot be accepted.");
+                        "Not entered state cannot be accepted.");
             }
             return null;
         } else {

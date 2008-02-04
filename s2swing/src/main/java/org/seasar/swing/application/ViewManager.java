@@ -44,7 +44,7 @@ import org.seasar.swing.binding.BinderFactory;
 import org.seasar.swing.binding.BindingManager;
 import org.seasar.swing.binding.BindingStateListener;
 import org.seasar.swing.binding.BindingTarget;
-import org.seasar.swing.desc.ActionSourceDesc;
+import org.seasar.swing.desc.ActionTargetDesc;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
@@ -55,6 +55,8 @@ import org.seasar.swing.util.SwingUtils;
 import org.seasar.swing.validator.S2Validator;
 
 /**
+ * ビューオブジェクトに対するリソースインジェクションやフィールドバインディングを管理するクラスです。
+ * 
  * @author kaiseh
  */
 
@@ -164,12 +166,13 @@ public class ViewManager extends AbstractBean {
     }
 
     protected void autoBindActions() {
-        for (ActionSourceDesc sourceDesc : viewDesc.getActionSourceDescs()) {
-            Action action = actionMap.get(sourceDesc.getActionName());
+        for (ActionTargetDesc targetDesc : viewDesc.getActionTargetDescs()) {
+            Action action = actionMap.get(targetDesc.getActionName());
             if (action == null) {
+                // TODO warn
                 continue;
             }
-            Object source = FieldUtil.get(sourceDesc.getField(), view);
+            Object source = FieldUtil.get(targetDesc.getField(), view);
             if (source == null) {
                 continue;
             }

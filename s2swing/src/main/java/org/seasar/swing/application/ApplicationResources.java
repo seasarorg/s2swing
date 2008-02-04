@@ -23,6 +23,8 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.desc.BindingDesc;
 
 /**
+ * リソースマップからリソース文字列を取得するためのユーティリティクラスです。
+ * 
  * @author kaiseh
  */
 

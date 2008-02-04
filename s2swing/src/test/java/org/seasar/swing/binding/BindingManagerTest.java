@@ -43,6 +43,10 @@ public class BindingManagerTest extends TestCase {
         private int foo;
         @Read(target = "foo")
         private List<Integer> fooItems;
+        @ReadWriteSelection
+        private String bar;
+        @Read(target = "bar")
+        private List<String> barItems;
 
         public int getFoo() {
             return foo;
@@ -59,9 +63,25 @@ public class BindingManagerTest extends TestCase {
         public void setFooItems(List<Integer> fooItems) {
             this.fooItems = fooItems;
         }
+
+        public String getBar() {
+            return bar;
+        }
+
+        public void setBar(String bar) {
+            this.bar = bar;
+        }
+
+        public List<String> getBarItems() {
+            return barItems;
+        }
+
+        public void setBarItems(List<String> barItems) {
+            this.barItems = barItems;
+        }
     }
 
-    public void testJComboBox() throws Exception {
+    public void testJComboBoxPrimitive() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 BindingManager manager = new BindingManager();
@@ -116,7 +136,56 @@ public class BindingManagerTest extends TestCase {
         });
     }
 
-    public void testJList() throws Exception {
+    public void testJComboBoxNonPrimitive() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                BindingManager manager = new BindingManager();
+
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                JComboBox comboBox = new JComboBox();
+
+                BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
+                        "barItems");
+                BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
+                        "bar");
+
+                Binder valueBinder = BinderFactory.getBinder(valueDesc,
+                        comboBox);
+                Binding valueBinding = valueBinder.createBinding(valueDesc,
+                        aaa, comboBox, valueBinder
+                                .getTargetPropertyName(valueDesc));
+
+                Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
+                        comboBox);
+                Binding selectionBinding = selectionBinder.createBinding(
+                        selectionDesc, aaa, comboBox, selectionBinder
+                                .getTargetPropertyName(selectionDesc));
+
+                manager.addBinding(valueBinding, valueDesc);
+                manager.addBinding(selectionBinding, selectionDesc);
+                manager.bind();
+
+                aaa.setBarItems(Arrays.asList("111", "222", "333"));
+                aaa.setBar("222");
+
+                assertEquals("111", comboBox.getItemAt(0));
+                assertEquals("222", comboBox.getItemAt(1));
+                assertEquals("333", comboBox.getItemAt(2));
+                assertEquals("222", comboBox.getSelectedItem());
+
+                aaa.setBar("666");
+                aaa.setBarItems(Arrays.asList("444", "555", "666", "777"));
+
+                assertEquals("444", comboBox.getItemAt(0));
+                assertEquals("555", comboBox.getItemAt(1));
+                assertEquals("666", comboBox.getItemAt(2));
+                assertEquals("777", comboBox.getItemAt(3));
+                assertEquals("666", comboBox.getSelectedItem());
+            }
+        });
+    }
+
+    public void testJListPrimitive() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 BindingManager manager = new BindingManager();
@@ -129,10 +198,9 @@ public class BindingManagerTest extends TestCase {
                 BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
                         "foo");
 
-                Binder valueBinder = BinderFactory.getBinder(valueDesc,
-                        list);
-                Binding valueBinding = valueBinder.createBinding(valueDesc,
-                        aaa, list, valueBinder
+                Binder valueBinder = BinderFactory.getBinder(valueDesc, list);
+                Binding valueBinding = valueBinder
+                        .createBinding(valueDesc, aaa, list, valueBinder
                                 .getTargetPropertyName(valueDesc));
 
                 Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
@@ -157,8 +225,8 @@ public class BindingManagerTest extends TestCase {
                 // foo -> fooItems の順にセットした場合
                 // デフォルトのバインディング仕様では foo = 666 のセット時点で
                 // list に該当アイテムが存在しないため foo がクリアされてしまう
-                // S2JListAdapterProvider と BindingManager の組み合わせが
-                // この問題を解決する
+                // S2JListAdapterProvider と BindingManager, S2JListBinding
+                // の組み合わせがこの問題を解決する
                 aaa.setFoo(666);
                 aaa.setFooItems(Arrays.asList(444, 555, 666, 777));
 
@@ -167,6 +235,54 @@ public class BindingManagerTest extends TestCase {
                 assertEquals(666, list.getModel().getElementAt(2));
                 assertEquals(777, list.getModel().getElementAt(3));
                 assertEquals(666, list.getSelectedValue());
+            }
+        });
+    }
+
+    public void testJListNonPrimitive() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                BindingManager manager = new BindingManager();
+
+                Aaa aaa = ObservableBeans.create(Aaa.class);
+                JList list = new JList();
+
+                BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
+                        "barItems");
+                BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
+                        "bar");
+
+                Binder valueBinder = BinderFactory.getBinder(valueDesc, list);
+                Binding valueBinding = valueBinder
+                        .createBinding(valueDesc, aaa, list, valueBinder
+                                .getTargetPropertyName(valueDesc));
+
+                Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
+                        list);
+                Binding selectionBinding = selectionBinder.createBinding(
+                        selectionDesc, aaa, list, selectionBinder
+                                .getTargetPropertyName(selectionDesc));
+
+                manager.addBinding(valueBinding, valueDesc);
+                manager.addBinding(selectionBinding, selectionDesc);
+                manager.bind();
+
+                aaa.setBarItems(Arrays.asList("111", "222", "333"));
+                aaa.setBar("222");
+
+                assertEquals("111", list.getModel().getElementAt(0));
+                assertEquals("222", list.getModel().getElementAt(1));
+                assertEquals("333", list.getModel().getElementAt(2));
+                assertEquals("222", list.getSelectedValue());
+
+                aaa.setBar("666");
+                aaa.setBarItems(Arrays.asList("444", "555", "666", "777"));
+
+                assertEquals("444", list.getModel().getElementAt(0));
+                assertEquals("555", list.getModel().getElementAt(1));
+                assertEquals("666", list.getModel().getElementAt(2));
+                assertEquals("777", list.getModel().getElementAt(3));
+                assertEquals("666", list.getSelectedValue());
             }
         });
     }

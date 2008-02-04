@@ -22,6 +22,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * ビューの持つフィールドをモデルオブジェクトとして扱うことを指示するアノテーションです。
+ * {@code @Model} アノテーションが付加されたフィールドは、ビューマネージャによって
+ * 監視可能な Bean としてインスタンス化され、UI コンポーネントとのバインディング
+ * 対象となります。
+ * <p>
+ * 任意の数のフィールドに {@code @Model} アノテーションを付加することができます。
+ * 
  * @author kaiseh
  */
 
