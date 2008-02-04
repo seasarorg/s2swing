@@ -22,6 +22,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * ビューの初期化メソッドを明示するアノテーションです。 初期化メソッドは、
+ * ビューマネージャによって、モデルバインディングの直前に呼び出されます。
+ * <p>
+ * 通常、この初期化メソッド内でロジックを実行し、モデルオブジェクトに初期値を代入します。
+ * 
  * @author kaiseh
  */
 

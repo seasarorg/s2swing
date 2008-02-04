@@ -29,7 +29,7 @@ public interface ViewDesc {
     
     List<Field> getViewManagerFields();
     
-    List<ActionSourceDesc> getActionSourceDescs();
+    List<ActionTargetDesc> getActionTargetDescs();
 
     List<Field> getModelFields();
 

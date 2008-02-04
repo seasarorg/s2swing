@@ -24,6 +24,9 @@ import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.util.StringUtil;
 
 /**
+ * JavaBeans の setter メソッド内に {@code firePropertyChange} の呼び出しを
+ * 埋め込むインターセプタです。
+ * 
  * @author kaiseh
  */
 

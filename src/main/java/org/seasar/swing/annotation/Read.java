@@ -24,6 +24,8 @@ import java.lang.annotation.Target;
 import org.seasar.swing.binding.BindingType;
 
 /**
+ * モデルオブジェクトのプロパティが、UI コンポーネントに継続的に読み出されることを許可します。
+ * 
  * @author kaiseh
  */
 
@@ -31,9 +33,19 @@ import org.seasar.swing.binding.BindingType;
 @Target(ElementType.FIELD)
 @BindingDescription(binding = BindingType.READ)
 public @interface Read {
+    /**
+     * バインディング対象となる UI コンポーネント名を指定します。指定を省略した場合は、
+     * モデルクラスのプロパティ名が選択されます。
+     * 
+     * @return
+     */
     String target() default "";
 
+    /**
+     * バインディング対象となる UI コンポーネントのプロパティ名を指定します。 指定を省略した場合は、UI
+     * コンポーネントの種類に応じて、適切なデフォルトプロパティ名が選択されます。
+     * 
+     * @return
+     */
     String targetProperty() default "";
-
-    boolean dependent() default false;
 }

@@ -21,8 +21,8 @@ import java.util.List;
 import javax.swing.JList;
 
 import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.ObjectProperty;
 import org.jdesktop.beansbinding.Property;
-import org.jdesktop.swingbinding.SwingBindings;
 import org.seasar.swing.binding.AbstractBinder;
 import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.desc.BindingDesc;
@@ -68,9 +68,9 @@ public class JListBinder extends AbstractBinder {
                 .getPropertyName();
         Property sourceProp = createProperty(sourcePropName);
 
-        Binding binding = SwingBindings.createJListBinding(bindingDesc
-                .getBindingType().getUpdateStrategy(), source, sourceProp,
-                (JList) target);
+        Binding binding = new S2JListBinding(bindingDesc.getBindingType()
+                .getUpdateStrategy(), source, sourceProp, target,
+                ObjectProperty.create(), null);
 
         setupBindingDefault(binding, bindingDesc, targetPropertyName);
 

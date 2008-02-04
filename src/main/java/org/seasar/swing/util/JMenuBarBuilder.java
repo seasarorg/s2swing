@@ -16,41 +16,39 @@
 
 package org.seasar.swing.util;
 
-import java.util.AbstractList;
-import java.util.List;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.framework.util.ArrayMap;
 
 /**
  * @author kaiseh
  */
 
-public class CollectionsUtils {
-    private static class ArrayMapUnmodifiableList<T> extends AbstractList<T> {
-        private ArrayMap map;
+public class JMenuBarBuilder {
+    private JMenuBar menuBar;
 
-        public ArrayMapUnmodifiableList(ArrayMap map) {
-            this.map = map;
+    public JMenuBarBuilder(JMenuBar menuBar) {
+        if (menuBar == null) {
+            throw new EmptyRuntimeException("menuBar");
         }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public T get(int index) {
-            return (T) map.get(index);
-        }
-
-        @Override
-        public int size() {
-            return map.size();
-        }
+        this.menuBar = menuBar;
     }
 
-    public static <T> List<T> unmodifiableList(ArrayMap map,
-            Class<T> elementClass) {
-        if (map == null) {
-            throw new EmptyRuntimeException("map");
+    public JMenuBuilder menu(JMenu menu) {
+        return new JMenuBuilder(menu);
+    }
+
+    public JMenuBarBuilder add(Object... items) {
+        for (Object item : items) {
+            if (item instanceof JMenu) {
+                menuBar.add((JMenu) item);
+            } else if (item instanceof JMenuBuilder) {
+                menuBar.add(((JMenuBuilder) item).getMenu());
+            } else {
+                throw new IllegalArgumentException("Illegal item: " + item);
+            }
         }
-        return new ArrayMapUnmodifiableList<T>(map);
+        return this;
     }
 }

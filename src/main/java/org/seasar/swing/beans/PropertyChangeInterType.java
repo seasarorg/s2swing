@@ -24,6 +24,8 @@ import javassist.NotFoundException;
 import org.seasar.framework.aop.intertype.AbstractInterType;
 
 /**
+ * JavaBeans にプロパティの変更監視用のメソッドを付加するインタータイプです。
+ * 
  * @author kaiseh
  */
 

@@ -48,7 +48,7 @@ public class S2JListAdapterProvider implements BeanAdapterProvider {
         private JListAdapterProvider.Adapter baseAdapter;
         private JList list;
         private Handler handler;
-        private Object cachedElementOrElements;
+        private Object cachedSelectedObject;
 
         public Adapter(JListAdapterProvider.Adapter base, JList list,
                 String property) {
@@ -60,6 +60,10 @@ public class S2JListAdapterProvider implements BeanAdapterProvider {
         private boolean isPlural() {
             return property == SELECTED_ELEMENTS
                     || property == SELECTED_ELEMENTS_IA;
+        }
+
+        private Object getSelectedObject() {
+            return isPlural() ? getSelectedElements() : getSelectedElement();
         }
 
         public Object getSelectedElement() {
@@ -120,8 +124,7 @@ public class S2JListAdapterProvider implements BeanAdapterProvider {
         @Override
         protected void listeningStarted() {
             handler = new Handler();
-            cachedElementOrElements = isPlural() ? getSelectedElements()
-                    : getSelectedElement();
+            cachedSelectedObject = getSelectedObject();
             list.addPropertyChangeListener("model", handler);
             list.addPropertyChangeListener("selectionModel", handler);
             list.getSelectionModel().addListSelectionListener(handler);
@@ -132,18 +135,17 @@ public class S2JListAdapterProvider implements BeanAdapterProvider {
             list.getSelectionModel().removeListSelectionListener(handler);
             list.removePropertyChangeListener("model", handler);
             list.removePropertyChangeListener("selectionModel", handler);
-            cachedElementOrElements = null;
+            cachedSelectedObject = null;
             handler = null;
         }
 
         private class Handler implements ListSelectionListener,
                 PropertyChangeListener {
             private void listSelectionChanged() {
-                Object oldElementOrElements = cachedElementOrElements;
-                cachedElementOrElements = isPlural() ? getSelectedElements()
-                        : getSelectedElement();
-                firePropertyChange(oldElementOrElements,
-                        cachedElementOrElements);
+                Object oldSelectedObject = cachedSelectedObject;
+                cachedSelectedObject = getSelectedObject();
+                System.out.println("propChange: " + cachedSelectedObject);
+                firePropertyChange(oldSelectedObject, cachedSelectedObject);
             }
 
             public void valueChanged(ListSelectionEvent e) {
@@ -155,7 +157,7 @@ public class S2JListAdapterProvider implements BeanAdapterProvider {
             }
 
             public void propertyChange(PropertyChangeEvent pce) {
-                String propertyName = pce.getPropertyName();
+                String propertyName = pce.getPropertyName().intern();
                 if (propertyName == "selectionModel") {
                     ((ListSelectionModel) pce.getOldValue())
                             .removeListSelectionListener(handler);

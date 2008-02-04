@@ -27,12 +27,12 @@ import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.ArrayMap;
-import org.seasar.swing.annotation.ActionSource;
+import org.seasar.swing.annotation.ActionTarget;
 import org.seasar.swing.annotation.Initializer;
 import org.seasar.swing.annotation.Model;
 import org.seasar.swing.application.ViewManager;
 import org.seasar.swing.binding.BindingTarget;
-import org.seasar.swing.desc.ActionSourceDesc;
+import org.seasar.swing.desc.ActionTargetDesc;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.util.CollectionsUtils;
@@ -48,7 +48,7 @@ public class ViewDescImpl implements ViewDesc {
 
     private Method initializer;
     private List<Field> viewManagerFields;
-    private List<ActionSourceDesc> actionSourceDescs;
+    private List<ActionTargetDesc> actionTargetDescs;
     private ArrayMap modelFields;
     private List<Field> componentFields;
     private List<Field> bindingTargetFields;
@@ -63,7 +63,7 @@ public class ViewDescImpl implements ViewDesc {
 
         setupInitializer();
         setupViewManagerFields();
-        setupActionSourceDescs();
+        setupActionTargetDescs();
         setupModelFields();
         setupComponentFields();
         setupBindingTargetFields();
@@ -97,17 +97,17 @@ public class ViewDescImpl implements ViewDesc {
         }
     }
 
-    private void setupActionSourceDescs() {
-        actionSourceDescs = new ArrayList<ActionSourceDesc>();
+    private void setupActionTargetDescs() {
+        actionTargetDescs = new ArrayList<ActionTargetDesc>();
         for (int i = 0; i < beanDesc.getFieldSize(); i++) {
             Field field = beanDesc.getField(i);
-            ActionSource actionSource = field.getAnnotation(ActionSource.class);
-            if (actionSource == null) {
+            ActionTarget target = field.getAnnotation(ActionTarget.class);
+            if (target == null) {
                 continue;
             }
-            String actionName = actionSource.value();
-            ActionSourceDesc desc = new ActionSourceDescImpl(field, actionName);
-            actionSourceDescs.add(desc);
+            String actionName = target.value();
+            ActionTargetDesc desc = new ActionTargetDescImpl(field, actionName);
+            actionTargetDescs.add(desc);
         }
     }
 
@@ -168,8 +168,8 @@ public class ViewDescImpl implements ViewDesc {
         return Collections.unmodifiableList(viewManagerFields);
     }
 
-    public List<ActionSourceDesc> getActionSourceDescs() {
-        return Collections.unmodifiableList(actionSourceDescs);
+    public List<ActionTargetDesc> getActionTargetDescs() {
+        return Collections.unmodifiableList(actionTargetDescs);
     }
 
     public List<Field> getModelFields() {

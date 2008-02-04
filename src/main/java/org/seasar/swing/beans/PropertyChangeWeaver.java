@@ -24,10 +24,18 @@ import org.seasar.framework.aop.InterType;
 import org.seasar.framework.aop.javassist.AspectWeaver;
 
 /**
+ * JavaBeans クラスにプロパティ変更監視機構を付加した継承クラスを動的に生成します。
+ * 
  * @author kaiseh
  */
 
 public class PropertyChangeWeaver {
+    /**
+     * 指定されたクラスにプロパティ変更監視機構を付加した継承クラスを動的に生成します。
+     * 
+     * @param beanClass JavaBean クラス
+     * @return 生成されたクラス
+     */
     public Class<?> generateClass(Class<?> beanClass) {
         InterType[] interTypes = new InterType[] { new PropertyChangeInterType() };
         MethodInterceptor[] interceptors = new MethodInterceptor[] { new PropertyChangeInterceptor() };

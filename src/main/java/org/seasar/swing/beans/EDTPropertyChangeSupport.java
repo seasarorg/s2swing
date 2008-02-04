@@ -22,6 +22,8 @@ import java.beans.PropertyChangeSupport;
 import javax.swing.SwingUtilities;
 
 /**
+ * Swing のイベントディスパッチスレッド内における JavaBeans プロパティの変更監視をサポートします。
+ * 
  * @author kaiseh
  */
 
