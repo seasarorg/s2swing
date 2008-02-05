@@ -27,12 +27,13 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 import org.seasar.swing.annotation.ActionTarget;
+import org.seasar.swing.application.ViewObject;
 
 /**
  * @author kaiseh
  */
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ViewObject {
     private static final long serialVersionUID = 1L;
 
     private JMenu fileMenu;
@@ -48,7 +49,7 @@ public class MainFrame extends JFrame {
     @ActionTarget("about")
     private JButton aboutButton;
 
-    public MainFrame() {
+    public void initializeComponents() {
         JMenuBar menuBar = new JMenuBar();
         fileMenu = new JMenu();
         helpMenu = new JMenu();
@@ -68,6 +69,9 @@ public class MainFrame extends JFrame {
         getContentPane().add(aboutButton);
     }
 
+    public void initializeModels() {
+    }
+
     @Action
     public void exit() {
         ActionApplication1.getInstance().exit();
@@ -75,7 +79,6 @@ public class MainFrame extends JFrame {
 
     @Action
     public void about() {
-        JOptionPane.showMessageDialog(this,
-                "Action Example (1) Version 1.0");
+        JOptionPane.showMessageDialog(this, "Action Example (1) Version 1.0");
     }
 }

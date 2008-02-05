@@ -28,15 +28,15 @@ import javax.swing.JTextField;
 import org.jdesktop.application.Action;
 import org.jdesktop.layout.GroupLayout;
 import org.seasar.swing.annotation.ActionTarget;
-import org.seasar.swing.annotation.Initializer;
 import org.seasar.swing.annotation.Model;
 import org.seasar.swing.application.ViewManager;
+import org.seasar.swing.application.ViewObject;
 
 /**
  * @author kaiseh
  */
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ViewObject {
     private static final long serialVersionUID = 1L;
 
     private JLabel hintLabel;
@@ -54,7 +54,7 @@ public class MainFrame extends JFrame {
 
     private ViewManager viewManager;
 
-    public MainFrame() {
+    public void initializeComponents() {
         hintLabel = new JLabel();
         usernameLabel = new JLabel();
         passwordLabel = new JLabel();
@@ -91,8 +91,7 @@ public class MainFrame extends JFrame {
                 .add(loginButton));
     }
 
-    @Initializer
-    public void initialize() {
+    public void initializeModels() {
         accountModel.setUsername("guest");
     }
 

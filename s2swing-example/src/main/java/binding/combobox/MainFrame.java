@@ -28,14 +28,14 @@ import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 import org.jdesktop.layout.GroupLayout;
 import org.seasar.swing.annotation.ActionTarget;
-import org.seasar.swing.annotation.Initializer;
 import org.seasar.swing.annotation.Model;
+import org.seasar.swing.application.ViewObject;
 
 /**
  * @author kaiseh
  */
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ViewObject {
     private static final long serialVersionUID = 1L;
 
     private JLabel jobLabel;
@@ -48,11 +48,11 @@ public class MainFrame extends JFrame {
     @Model
     private PersonModel personModel;
 
-    public MainFrame() {
+    public void initializeComponents() {
         jobLabel = new JLabel();
         job = new JComboBox();
         displayButton = new JButton();
-        
+
         Container contentPane = getContentPane();
         GroupLayout layout = new GroupLayout(contentPane);
         layout.setAutocreateGaps(true);
@@ -71,9 +71,8 @@ public class MainFrame extends JFrame {
                         .add(job))
                 .add(displayButton));
     }
-
-    @Initializer
-    public void initialize() {
+    
+    public void initializeModels() {
         personModel.setJobItems(Arrays.asList(
                 "技術職", "事務職", "販売職", "自営業", 
                 "教員・講師", "学生", "主婦", "その他"));
