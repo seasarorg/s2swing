@@ -105,7 +105,7 @@ public class MenuBuilder extends Builder {
     /**
      * メニュー項目を起点として、メニュー階層を構築します。
      * 
-     * @param popupMenu メニュー項目
+     * @param menuItem メニュー項目
      * @param children メニュー項目の子要素となる項目またはノードまたはアクション名の配列
      */
     public void build(JMenuItem menuItem, Object... children) {

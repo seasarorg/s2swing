@@ -132,6 +132,7 @@ public abstract class ObservableBeans {
      * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
      * 
      * @param bean JavaBean
+     * @param propertyName プロパティ名
      * @param listener リスナ
      */
     public static void addPropertyChangeListener(Object bean,
@@ -175,6 +176,7 @@ public abstract class ObservableBeans {
      * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
      * 
      * @param bean JavaBean
+     * @param propertyName プロパティ名
      * @param listener リスナ
      */
     public static void removePropertyChangeListener(Object bean,
@@ -198,7 +200,9 @@ public abstract class ObservableBeans {
      * そのメソッドを呼び出します。メソッドが存在しない場合は例外が発生します。
      * 
      * @param bean JavaBean
-     * @param listener リスナ
+     * @param propertyName プロパティ名
+     * @param oldValue プロパティの以前の値
+     * @param newValue プロパティの新しい値
      */
     public static void firePropertyChange(Object bean, String propertyName,
             Object oldValue, Object newValue) {

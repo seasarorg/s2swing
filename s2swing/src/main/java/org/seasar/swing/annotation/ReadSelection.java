@@ -40,16 +40,12 @@ public @interface ReadSelection {
     /**
      * バインディング対象となる UI コンポーネント名を指定します。指定を省略した場合は、
      * モデルクラスのプロパティ名が選択されます。
-     * 
-     * @return
      */
     String target() default "";
 
     /**
      * バインディング対象となる UI コンポーネントのプロパティ名を指定します。 指定を省略した場合は、UI
      * コンポーネントの種類に応じて、適切なデフォルトプロパティ名が選択されます。
-     * 
-     * @return
      */
     String targetProperty() default "";
 }
