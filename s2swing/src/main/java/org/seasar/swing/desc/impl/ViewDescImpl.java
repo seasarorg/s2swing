@@ -28,7 +28,6 @@ import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.ArrayMap;
 import org.seasar.swing.annotation.ActionTarget;
-import org.seasar.swing.annotation.Initializer;
 import org.seasar.swing.annotation.Model;
 import org.seasar.swing.application.ViewManager;
 import org.seasar.swing.binding.BindingTarget;
@@ -61,30 +60,12 @@ public class ViewDescImpl implements ViewDesc {
         this.viewClass = viewClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(viewClass);
 
-        setupInitializer();
         setupViewManagerFields();
         setupActionTargetDescs();
         setupModelFields();
         setupComponentFields();
         setupBindingTargetFields();
         setupHasModelValidProperty();
-    }
-
-    private void setupInitializer() {
-        for (Method method : viewClass.getMethods()) {
-            if (!method.isAnnotationPresent(Initializer.class)) {
-                continue;
-            }
-            if (initializer != null) {
-                throw new IllegalRegistrationException("ESWI0101", viewClass
-                        .getName(), initializer.getName(), method.getName());
-            }
-            if (method.getParameterTypes().length > 0) {
-                throw new IllegalRegistrationException("ESWI0101", viewClass
-                        .getName(), method.getName());
-            }
-            initializer = method;
-        }
     }
 
     private void setupViewManagerFields() {

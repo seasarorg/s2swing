@@ -14,27 +14,12 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc;
-
-import java.lang.reflect.Field;
-import java.util.List;
+package org.seasar.swing.builder;
 
 /**
  * @author kaiseh
  */
 
-public interface ViewDesc {
-    List<Field> getViewManagerFields();
-    
-    List<ActionTargetDesc> getActionTargetDescs();
-
-    List<Field> getModelFields();
-
-    Field getModelField(Class<?> modelClass);
-
-    List<Field> getComponentFields();
-
-    List<Field> getBindingTargetFields();
-
-    boolean hasModelValidProperty();
+public interface MenuObjectNode {
+    void build(Object parent);
 }

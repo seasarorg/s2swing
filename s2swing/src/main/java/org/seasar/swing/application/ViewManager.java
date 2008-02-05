@@ -19,6 +19,7 @@ package org.seasar.swing.application;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -36,6 +37,8 @@ import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.framework.util.ClassUtil;
+import org.seasar.framework.util.ConstructorUtil;
 import org.seasar.framework.util.FieldUtil;
 import org.seasar.framework.util.MethodUtil;
 import org.seasar.swing.beans.ObservableBeans;
@@ -115,18 +118,38 @@ public class ViewManager extends AbstractBean {
 
     public void configure() {
         autoInjectViewManager();
+
+        executeComponentInitializer();
+
         autoInjectComponentNames();
         autoInjectBindingTargetNames();
         resourceMap.injectComponents(rootComponent);
         autoBindActions();
         autoInjectModels();
-        executeInitializer();
+
+        executeModelInitializer();
+
         autoBindModelFields(rootComponent);
     }
 
     public void reconfigure(Component component) {
         resourceMap.injectComponents(component);
         autoBindModelFields(component);
+    }
+
+    public void createComponents() {
+        for (Field field : viewDesc.getComponentFields()) {
+            Object component = FieldUtil.get(field, view);
+            if (component != null) {
+                continue;
+            }
+            Constructor<?> cons = ClassUtil.getConstructor(field.getType(),
+                    new Class<?>[0]);
+            if (cons != null) {
+                component = ConstructorUtil.newInstance(cons, new Object[0]);
+                FieldUtil.set(field, view, component);
+            }
+        }
     }
 
     protected ApplicationContext getContext() {
@@ -176,22 +199,27 @@ public class ViewManager extends AbstractBean {
             if (source == null) {
                 continue;
             }
-            BeanDesc objectDesc = BeanDescFactory
+            BeanDesc sourceDesc = BeanDescFactory
                     .getBeanDesc(source.getClass());
-            Method method = objectDesc.getMethodNoException("setAction",
+            Method method = sourceDesc.getMethodNoException("setAction",
                     new Class[] { Action.class });
             if (method != null) {
                 MethodUtil.invoke(method, source, new Object[] { action });
+            } else {
+                // TODO warn
             }
         }
     }
 
     protected void autoInjectModels() {
         for (Field field : viewDesc.getModelFields()) {
-            Object model = ObservableBeans.create(field.getType());
-            ObservableBeans.addPropertyChangeListener(model,
-                    new ModelPropertyChangeListener());
-            FieldUtil.set(field, view, model);
+            Object model = FieldUtil.get(field, view);
+            if (model == null) {
+                model = ObservableBeans.create(field.getType());
+                ObservableBeans.addPropertyChangeListener(model,
+                        new ModelPropertyChangeListener());
+                FieldUtil.set(field, view, model);
+            }
         }
     }
 
@@ -260,9 +288,15 @@ public class ViewManager extends AbstractBean {
         return binding;
     }
 
-    protected void executeInitializer() {
-        if (viewDesc.getInitializer() != null) {
-            MethodUtil.invoke(viewDesc.getInitializer(), view, new Object[0]);
+    protected void executeComponentInitializer() {
+        if (view instanceof ViewObject) {
+            ((ViewObject) view).initializeComponents();
+        }
+    }
+
+    protected void executeModelInitializer() {
+        if (view instanceof ViewObject) {
+            ((ViewObject) view).initializeModels();
         }
     }
 

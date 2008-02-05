@@ -14,27 +14,24 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc;
+package org.seasar.swing.builder;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 
 /**
  * @author kaiseh
  */
 
-public interface ViewDesc {
-    List<Field> getViewManagerFields();
-    
-    List<ActionTargetDesc> getActionTargetDescs();
-
-    List<Field> getModelFields();
-
-    Field getModelField(Class<?> modelClass);
-
-    List<Field> getComponentFields();
-
-    List<Field> getBindingTargetFields();
-
-    boolean hasModelValidProperty();
+public class SeparatorNode implements MenuObjectNode {
+    public void build(Object parent) {
+        if (parent instanceof JMenu) {
+            ((JMenu) parent).addSeparator();
+        } else if (parent instanceof JPopupMenu) {
+            ((JPopupMenu) parent).addSeparator();
+        } else {
+            throw new IllegalArgumentException(
+                    "Parent is neither JMenu nor JPopupMenu: " + parent);
+        }
+    }
 }

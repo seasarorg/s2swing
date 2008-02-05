@@ -14,23 +14,28 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.annotation;
+package org.seasar.swing.builder;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.awt.Component;
 
 /**
- * ビューの初期化メソッドを明示するアノテーションです。 初期化メソッドは、
- * ビューマネージャによって、モデルバインディングの直前に呼び出されます。
- * <p>
- * 通常、この初期化メソッド内でロジックを実行し、モデルオブジェクトに初期値を代入します。
- * 
  * @author kaiseh
  */
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Initializer {
+public abstract class AbstractComponentNode implements ComponentObjectNode {
+    private Component component;
+    private Object constraint;
+
+    public AbstractComponentNode(Component component, Object constraint) {
+        this.component = component;
+        this.constraint = constraint;
+    }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public Object getConstraint() {
+        return constraint;
+    }
 }
