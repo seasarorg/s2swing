@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * アクション名を指定することによって、Swing コンポーネントとアクションを結び付けます。
+ * UI コンポーネントとアクションを結び付けるアノテーションです。
  * <p>
  * 以下の例では、{@code okButton} ボタンと {@code ok} アクションが結び付けられます。
  * 
