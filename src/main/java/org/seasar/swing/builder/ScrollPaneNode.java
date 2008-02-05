@@ -23,6 +23,9 @@ import javax.swing.JScrollPane;
 import org.seasar.framework.exception.EmptyRuntimeException;
 
 /**
+ * {@code JScrollPane} を示すノードです。
+ * 通常、このクラスは {@link ComponentBuilder} のヘルパメソッドによってインスタンス化されます。
+ * 
  * @author kaiseh
  */
 

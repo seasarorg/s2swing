@@ -17,6 +17,9 @@
 package org.seasar.swing.builder;
 
 /**
+ * レイアウト制約を示すオブジェクトです。
+ * {@link TabbedPaneNode} のオーバーロード曖昧性を回避するために用いられます。
+ * 
  * @author kaiseh
  */
 
@@ -27,6 +30,11 @@ public class ComponentConstraint {
         this.constraint = constraint;
     }
 
+    /**
+     * レイアウト制約を返します。
+     * 
+     * @return レイアウト制約
+     */
     public Object getConstraint() {
         return constraint;
     }

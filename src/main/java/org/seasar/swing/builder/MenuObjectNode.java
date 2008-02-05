@@ -17,9 +17,16 @@
 package org.seasar.swing.builder;
 
 /**
+ * メニュービルダで使用するノードの共通インターフェイスです。
+ * 
  * @author kaiseh
  */
 
 public interface MenuObjectNode {
+    /**
+     * このノードに対応するメニュー要素を構築します。
+     * 
+     * @param parent 親メニュー要素
+     */
     void build(Object parent);
 }

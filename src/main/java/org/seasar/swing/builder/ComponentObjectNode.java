@@ -19,11 +19,28 @@ package org.seasar.swing.builder;
 import java.awt.Component;
 
 /**
+ * コンポーネントビルダで使用するノードの共通インターフェイスです。
+ * 
  * @author kaiseh
  */
 
 public interface ComponentObjectNode {
+    /**
+     * このノードに対応するコンポーネントを返します。
+     * 
+     * @return コンポーネント
+     */
     Component getComponent();
+
+    /**
+     * このノードに対応するコンポーネントのレイアウト制約を返します。
+     * 
+     * @return レイアウト制約
+     */
     Object getConstraint();
+
+    /**
+     * このノードに対応するコンポーネントの子要素を構築します。
+     */
     void buildChildren();
 }

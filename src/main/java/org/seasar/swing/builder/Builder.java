@@ -20,6 +20,8 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 
 /**
+ * UI ビルダの基底クラスです。
+ * 
  * @author kaiseh
  */
 

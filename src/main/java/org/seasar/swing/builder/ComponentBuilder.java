@@ -27,6 +27,25 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
 /**
+ * {@code ComponentBuilder} を使用すると、Swing のコンポーネント階層を簡潔な記述で構築することができます。
+ * <p>
+ * 以下のコードは、{@code ComponentBuilder} の使用方法の一例を示しています。
+ * 
+ * <pre>
+ * ComponentBuilder b = new ComponentBuilder();
+ * b.build(contentPane,
+ *     b.component(toolBar, BorderLayout.NORTH,
+ *         b.button("newFile"),
+ *         b.button("openFile")
+ *     ),
+ *     b.splitPane(BorderLayout.CENTER,
+ *         b.scrollPane(tree),      // left component
+ *         b.scrollPane(editorPane) // right component
+ *     ),
+ *     b.component(statusBar, BorderLayout.SOUTH)
+ * );
+ * </pre>
+ * 
  * @author kaiseh
  */
 
