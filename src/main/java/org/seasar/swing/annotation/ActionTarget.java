@@ -45,8 +45,6 @@ import java.lang.annotation.Target;
 public @interface ActionTarget {
     /**
      * バインディング対象のアクション名です。
-     * 
-     * @return
      */
     String value();
 }

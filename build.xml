@@ -91,8 +91,8 @@
     </junit>
   </target>
 
-  <target name="javadoc" description="Generates the Javadoc of the application">
-    <javadoc sourcepath="${build.srcDir.0}" 
+  <target name="javadoc" depends="compile" description="Generates the Javadoc of the application">
+    <javadoc sourcepath="${build.srcDir.0}"
              packagenames="*" 
              destdir="${reporting.outputDirectory}/apidocs" 
              access="protected" 
@@ -111,7 +111,12 @@
              serialwarn="false" 
              charset="UTF-8" 
              linksource="false" 
-             breakiterator="false"/>
+             breakiterator="false">
+      <classpath>
+        <pathelement location="${build.outputDir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </javadoc>
   </target>
 
   <target name="package" depends="compile" description="Package the application">
