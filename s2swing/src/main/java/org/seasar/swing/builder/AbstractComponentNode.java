@@ -19,6 +19,8 @@ package org.seasar.swing.builder;
 import java.awt.Component;
 
 /**
+ * コンポーネントビルダで使用するノードの抽象基底クラスです。
+ * 
  * @author kaiseh
  */
 

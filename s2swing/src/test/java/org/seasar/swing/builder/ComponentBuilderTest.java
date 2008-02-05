@@ -22,6 +22,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -65,5 +66,19 @@ public class ComponentBuilderTest extends TestCase {
                 ),
                 b.component(statusBar, BorderLayout.SOUTH)
         );
+        
+        assertEquals(toolBar, frame.getContentPane().getComponent(0));
+        assertEquals(mainPanel, frame.getContentPane().getComponent(1));
+        assertEquals(statusBar, frame.getContentPane().getComponent(2));
+        
+        assertEquals(splitPane, mainPanel.getComponent(0));
+        assertEquals(tree, ((JScrollPane)splitPane.getLeftComponent()).getViewport().getComponent(0));
+        assertEquals(tabbedPane, splitPane.getRightComponent());
+        
+        assertEquals("Tab 1", tabbedPane.getTitleAt(0));
+        assertEquals("Tab 2", tabbedPane.getTitleAt(1));
+        
+        assertEquals(editorPane, tabbedPane.getComponentAt(0));
+        assertEquals(table, tabbedPane.getComponentAt(1));
     }
 }

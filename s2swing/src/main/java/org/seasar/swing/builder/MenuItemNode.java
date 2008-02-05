@@ -24,6 +24,9 @@ import javax.swing.JPopupMenu;
 import org.seasar.framework.exception.EmptyRuntimeException;
 
 /**
+ * メニュー項目を示すノードです。
+ * 通常、このクラスは {@link MenuBuilder} のヘルパメソッドによってインスタンス化されます。
+ * 
  * @author kaiseh
  */
 
