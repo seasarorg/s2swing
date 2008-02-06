@@ -14,24 +14,49 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.application;
+package org.seasar.swing.component;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.FrameView;
+import java.awt.GraphicsConfiguration;
+import java.awt.HeadlessException;
+
+import javax.swing.JFrame;
+
+import org.seasar.swing.application.ViewManager;
+import org.seasar.swing.application.ViewManagerHolder;
+import org.seasar.swing.application.ViewObject;
 
 /**
- * {@code FrameView} に S2Swing の機構を付加したクラスです。
- * 
+ * S2Swing のビュー機構を組み込んだ、{@code JFrame} の薄いラッパーです。
+ *
  * @author kaiseh
  */
 
-public abstract class S2FrameView extends FrameView implements ViewObject,
+public abstract class S2Frame extends JFrame implements ViewObject,
         ViewManagerHolder {
     protected ViewManager viewManager;
 
-    public S2FrameView() {
-        super(Application.getInstance());
-        viewManager = new ViewManager(this, getFrame());
+    public S2Frame() throws HeadlessException {
+        super();
+        setup();
+    }
+
+    public S2Frame(GraphicsConfiguration gc) {
+        super(gc);
+        setup();
+    }
+
+    public S2Frame(String title, GraphicsConfiguration gc) {
+        super(title, gc);
+        setup();
+    }
+
+    public S2Frame(String title) throws HeadlessException {
+        super(title);
+        setup();
+    }
+
+    private void setup() {
+        viewManager = new ViewManager(this, this);
     }
 
     public ViewManager getViewManager() {

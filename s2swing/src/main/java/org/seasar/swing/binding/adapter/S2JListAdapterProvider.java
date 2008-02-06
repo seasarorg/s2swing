@@ -144,7 +144,6 @@ public class S2JListAdapterProvider implements BeanAdapterProvider {
             private void listSelectionChanged() {
                 Object oldSelectedObject = cachedSelectedObject;
                 cachedSelectedObject = getSelectedObject();
-                System.out.println("propChange: " + cachedSelectedObject);
                 firePropertyChange(oldSelectedObject, cachedSelectedObject);
             }
 

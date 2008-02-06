@@ -21,7 +21,22 @@ package org.seasar.swing.application;
  */
 
 public interface ViewObject {
+    /**
+     * {@link ViewManager} によって、ビューオブジェクトの
+     * UI コンポーネント初期化フェーズに呼び出されるメソッドです。
+     * <p>
+     * メソッドの開始時点において、ビューオブジェクト内の {@link ViewManager} フィールドが
+     * 代入済みであることが保証されます。
+     * 通常、アプリケーションコード側でこのメソッドをオーバーライドし、UI コンポーネント階層を構築します。
+     */
     void initializeComponents();
 
+    /**
+     * {@link ViewManager} によって、ビューオブジェクトのモデル初期化フェーズに呼び出されるメソッドです。
+     * <p>
+     * メソッドの開始時点において、ビューオブジェクト内で {@link Model} アノテーションを持つ
+     * フィールドがインスタンス化済みであることが保証されます。
+     * 通常、アプリケーションコード側でこのメソッドをオーバーライドし、モデルに初期値を代入します。
+     */
     void initializeModels();
 }

@@ -16,15 +16,12 @@
 
 package org.seasar.swing.application;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.View;
-
 /**
+ * {@link ViewManager} を保持することを示すインターフェイスです。
+ * 
  * @author kaiseh
  */
 
-public class S2View extends View {
-    public S2View() {
-        super(Application.getInstance());
-    }
+public interface ViewManagerHolder {
+    ViewManager getViewManager();
 }
