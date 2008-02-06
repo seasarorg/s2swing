@@ -28,8 +28,8 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.View;
 
 /**
- * {@code SingleFrameApplication} に S2Swing の機構を付加した基本クラスです。
- * S2Swing のアプリケーションは、通常このクラスを継承します。
+ * {@code SingleFrameApplication} に S2Swing の機構を付加した基本クラスです。 S2Swing
+ * のアプリケーションは、通常このクラスを継承します。
  * 
  * @author kaiseh
  */
@@ -51,8 +51,12 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
     }
 
     protected void configure(Object view, Component rootComponent) {
-        ViewManager manager = createViewManager(view, rootComponent);
-        manager.configure();
+        if (view instanceof ViewManagerHolder) {
+            ((ViewManagerHolder) view).getViewManager().configure();
+        } else {
+            ViewManager manager = createViewManager(view, rootComponent);
+            manager.configure();
+        }
     }
 
     protected ViewManager createViewManager(Object view, Component rootComponent) {
@@ -90,11 +94,7 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
 
     @Override
     public void show(View view) {
-        if (view instanceof S2FrameView) {
-            ((S2FrameView) view).getViewManager().configure();
-        } else {
-            configure(view, view.getRootPane().getParent());
-        }
+        configure(view, view.getRootPane().getParent());
         super.show(view);
         view.getRootPane().getParent().setVisible(true);
         windowShown = true;

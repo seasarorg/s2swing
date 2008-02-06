@@ -1,0 +1,23 @@
+# specific binders (Swing)
+
+org.seasar.swing.binding.ui.JCheckBoxBinder
+org.seasar.swing.binding.ui.JComboBoxBinder
+org.seasar.swing.binding.ui.JComboBoxSelectionBinder
+org.seasar.swing.binding.ui.JLabelBinder
+org.seasar.swing.binding.ui.JListBinder
+org.seasar.swing.binding.ui.JListSelectionBinder
+org.seasar.swing.binding.ui.JSliderBinder
+org.seasar.swing.binding.ui.JSpinnerBinder
+org.seasar.swing.binding.ui.JTextComponentBinder
+
+# general binder (Swing)
+
+org.seasar.swing.binding.ui.JComponentBinder
+
+# specific binder (Additional)
+
+org.seasar.swing.binding.ui.S2ButtonGroupBinder
+
+# general binder (Additional)
+
+org.seasar.swing.binding.ui.BindingTargetBinder
