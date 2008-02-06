@@ -83,17 +83,17 @@ public abstract class AbstractBinder implements Binder {
         return ELProperty.create("${" + exprContent + "}");
     }
 
-    protected Class<?> getAdaptedTargetClass() {
+    protected Class<?> getTargetAdapterClass() {
         return null;
     }
 
     protected PropertyDesc getTargetPropertyDesc(Object target,
             String targetPropertyName) {
         PropertyDesc targetPropDesc = null;
-        Class<?> targetAdaptedClass = getAdaptedTargetClass();
-        if (targetAdaptedClass != null) {
+        Class<?> targetAdapterClass = getTargetAdapterClass();
+        if (targetAdapterClass != null) {
             BeanDesc targetDesc = BeanDescFactory
-                    .getBeanDesc(targetAdaptedClass);
+                    .getBeanDesc(targetAdapterClass);
             if (targetDesc.hasPropertyDesc(targetPropertyName)) {
                 targetPropDesc = targetDesc.getPropertyDesc(targetPropertyName);
             }

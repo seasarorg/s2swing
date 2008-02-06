@@ -22,6 +22,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.seasar.swing.application.ViewManager;
+
 /**
  * {@code MenuBuilder} を使用すると、Swing のメニュー階層を簡潔な記述で構築することができます。
  * <p>
@@ -55,6 +57,10 @@ public class MenuBuilder extends Builder {
 
     public MenuBuilder(ActionMap actionMap) {
         super(actionMap);
+    }
+
+    public MenuBuilder(ViewManager viewManager) {
+        super(viewManager);
     }
 
     private MenuObjectNode[] toNodes(Object... objects) {
@@ -161,7 +167,7 @@ public class MenuBuilder extends Builder {
      * 
      * @return ノード
      */
-    public SeparatorNode separator() {
-        return new SeparatorNode();
+    public MenuSeparatorNode separator() {
+        return new MenuSeparatorNode();
     }
 }

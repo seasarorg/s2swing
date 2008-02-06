@@ -18,6 +18,7 @@ package org.seasar.swing.binding.ui;
 
 import javax.swing.JSpinner;
 
+import org.jdesktop.swingbinding.adapters.JSpinnerAdapterProvider;
 import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.binding.SimpleBinder;
 
@@ -28,5 +29,10 @@ import org.seasar.swing.binding.SimpleBinder;
 public class JSpinnerBinder extends SimpleBinder {
     public JSpinnerBinder() {
         super(JSpinner.class, "value", PropertyType.VALUE);
+    }
+
+    @Override
+    protected Class<?> getTargetAdapterClass() {
+        return JSpinnerAdapterProvider.Adapter.class;
     }
 }

@@ -26,7 +26,7 @@ import javax.swing.JPopupMenu;
  * @author kaiseh
  */
 
-public class SeparatorNode implements MenuObjectNode {
+public class MenuSeparatorNode implements MenuObjectNode {
     public void build(Object parent) {
         if (parent instanceof JMenu) {
             ((JMenu) parent).addSeparator();

@@ -26,7 +26,7 @@ import org.seasar.swing.application.ViewManagerHolder;
 import org.seasar.swing.application.ViewObject;
 
 /**
- * S2Swing のビュー機構を組み込んだ、{@code JFrame} の薄いラッパーです。
+ * S2Swing のビュー機構を組み込んだ、{@code JFrame} の薄いラッパークラスです。
  *
  * @author kaiseh
  */

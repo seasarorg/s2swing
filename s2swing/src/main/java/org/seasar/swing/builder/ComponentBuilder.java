@@ -25,6 +25,9 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+
+import org.seasar.swing.application.ViewManager;
 
 /**
  * {@code ComponentBuilder} を使用すると、Swing のコンポーネント階層を簡潔な記述で構築することができます。
@@ -58,6 +61,10 @@ public class ComponentBuilder extends Builder {
         super(actionMap);
     }
 
+    public ComponentBuilder(ViewManager viewManager) {
+        super(viewManager);
+    }
+
     private ComponentObjectNode[] toNodes(Object... objects) {
         ComponentObjectNode[] nodes = new ComponentObjectNode[objects.length];
         for (int i = 0; i < objects.length; i++) {
@@ -89,6 +96,17 @@ public class ComponentBuilder extends Builder {
 
     public ComponentNode button(String actionName) {
         return component(new JButton(getAction(actionName)));
+    }
+
+    public ComponentNode toolButton(String actionName) {
+        JButton button = new JButton(getAction(actionName));
+        button.setText(null);
+        button.setFocusable(false);
+        return component(button);
+    }
+
+    public ComponentNode toolSeparator() {
+        return component(new JToolBar.Separator());
     }
 
     public ScrollPaneNode scrollPane(Component view) {

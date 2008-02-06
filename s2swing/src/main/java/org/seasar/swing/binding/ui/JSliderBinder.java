@@ -18,6 +18,7 @@ package org.seasar.swing.binding.ui;
 
 import javax.swing.JSlider;
 
+import org.jdesktop.swingbinding.adapters.JSliderAdapterProvider;
 import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.binding.SimpleBinder;
 
@@ -28,5 +29,10 @@ import org.seasar.swing.binding.SimpleBinder;
 public class JSliderBinder extends SimpleBinder {
     public JSliderBinder() {
         super(JSlider.class, "value", PropertyType.VALUE);
+    }
+
+    @Override
+    protected Class<?> getTargetAdapterClass() {
+        return JSliderAdapterProvider.Adapter.class;
     }
 }
