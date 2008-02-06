@@ -104,7 +104,7 @@ public class ObservableBeansTest extends TestCase {
     public void testIsObservable() throws Exception {
         assertFalse(ObservableBeans.isObservable(Aaa.class));
         assertTrue(ObservableBeans.isObservable(Bbb.class));
-        assertTrue(ObservableBeans.isObservable(ObservableBeans.create(Aaa.class)
+        assertTrue(ObservableBeans.isObservable(ObservableBeans.createBean(Aaa.class)
                 .getClass()));
         try {
             ObservableBeans.isObservable(null);
@@ -115,8 +115,8 @@ public class ObservableBeansTest extends TestCase {
     public void testCreate() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                final Aaa aaa1 = ObservableBeans.create(Aaa.class);
-                final Aaa aaa2 = ObservableBeans.create(Aaa.class);
+                final Aaa aaa1 = ObservableBeans.createBean(Aaa.class);
+                final Aaa aaa2 = ObservableBeans.createBean(Aaa.class);
 
                 Binding<?, ?, ?, ?> binding = Bindings.createAutoBinding(
                         UpdateStrategy.READ_WRITE, aaa1, ELProperty
@@ -142,8 +142,8 @@ public class ObservableBeansTest extends TestCase {
                 assertEquals("foo", aaa1.getName());
                 assertEquals("bar", aaa2.getName());
 
-                final Bbb bbb1 = ObservableBeans.create(Bbb.class);
-                final Bbb bbb2 = ObservableBeans.create(Bbb.class);
+                final Bbb bbb1 = ObservableBeans.createBean(Bbb.class);
+                final Bbb bbb2 = ObservableBeans.createBean(Bbb.class);
 
                 binding = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE,
                         bbb1, ELProperty.create("${name}"), bbb2, ELProperty
@@ -157,7 +157,7 @@ public class ObservableBeansTest extends TestCase {
                 assertEquals("foo", bbb2.getName());
 
                 try {
-                    ObservableBeans.create(null);
+                    ObservableBeans.createBean(null);
                     fail();
                 } catch (EmptyRuntimeException e) {
                 }
@@ -175,7 +175,7 @@ public class ObservableBeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 ObservableBeans.addPropertyChangeListener(aaa, listener);
 
                 aaa.setName("foo");
@@ -211,7 +211,7 @@ public class ObservableBeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 ObservableBeans.addPropertyChangeListener(aaa, "name", listener);
 
                 aaa.setName("foo");
@@ -257,7 +257,7 @@ public class ObservableBeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 ObservableBeans.addPropertyChangeListener(aaa, listener);
 
                 ObservableBeans.removePropertyChangeListener(aaa, listener);
@@ -294,7 +294,7 @@ public class ObservableBeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 ObservableBeans.addPropertyChangeListener(aaa, "name", listener);
 
                 ObservableBeans.removePropertyChangeListener(aaa, "name", listener);
@@ -334,7 +334,7 @@ public class ObservableBeansTest extends TestCase {
 
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 ObservableBeans.addPropertyChangeListener(aaa, "name", listener);
 
                 ObservableBeans.firePropertyChange(aaa, "name", "foo", null);

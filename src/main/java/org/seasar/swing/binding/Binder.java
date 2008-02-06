@@ -27,10 +27,5 @@ import org.seasar.swing.desc.BindingDesc;
 public interface Binder {
     boolean accepts(BindingDesc bindingDesc, Object target);
 
-    String getTargetPropertyName(BindingDesc bindingDesc);
-
-    Class<?> getAdaptedTargetClass();
-
-    Binding createBinding(BindingDesc bindingDesc,
-            Object source, Object target, String targetPropertyName);
+    Binding createBinding(BindingDesc bindingDesc, Object source, Object target);
 }

@@ -30,7 +30,7 @@ import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadWriteSelection;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
  * @author kaiseh
@@ -86,25 +86,23 @@ public class BindingManagerTest extends TestCase {
             public void run() {
                 BindingManager manager = new BindingManager();
 
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JComboBox comboBox = new JComboBox();
 
-                BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc valueDesc = new DefaultBindingDesc(Aaa.class,
                         "fooItems");
-                BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc selectionDesc = new DefaultBindingDesc(Aaa.class,
                         "foo");
 
                 Binder valueBinder = BinderFactory.getBinder(valueDesc,
                         comboBox);
                 Binding valueBinding = valueBinder.createBinding(valueDesc,
-                        aaa, comboBox, valueBinder
-                                .getTargetPropertyName(valueDesc));
+                        aaa, comboBox);
 
                 Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
                         comboBox);
                 Binding selectionBinding = selectionBinder.createBinding(
-                        selectionDesc, aaa, comboBox, selectionBinder
-                                .getTargetPropertyName(selectionDesc));
+                        selectionDesc, aaa, comboBox);
 
                 manager.addBinding(valueBinding, valueDesc);
                 manager.addBinding(selectionBinding, selectionDesc);
@@ -141,25 +139,23 @@ public class BindingManagerTest extends TestCase {
             public void run() {
                 BindingManager manager = new BindingManager();
 
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JComboBox comboBox = new JComboBox();
 
-                BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc valueDesc = new DefaultBindingDesc(Aaa.class,
                         "barItems");
-                BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc selectionDesc = new DefaultBindingDesc(Aaa.class,
                         "bar");
 
                 Binder valueBinder = BinderFactory.getBinder(valueDesc,
                         comboBox);
                 Binding valueBinding = valueBinder.createBinding(valueDesc,
-                        aaa, comboBox, valueBinder
-                                .getTargetPropertyName(valueDesc));
+                        aaa, comboBox);
 
                 Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
                         comboBox);
                 Binding selectionBinding = selectionBinder.createBinding(
-                        selectionDesc, aaa, comboBox, selectionBinder
-                                .getTargetPropertyName(selectionDesc));
+                        selectionDesc, aaa, comboBox);
 
                 manager.addBinding(valueBinding, valueDesc);
                 manager.addBinding(selectionBinding, selectionDesc);
@@ -190,24 +186,22 @@ public class BindingManagerTest extends TestCase {
             public void run() {
                 BindingManager manager = new BindingManager();
 
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JList list = new JList();
 
-                BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc valueDesc = new DefaultBindingDesc(Aaa.class,
                         "fooItems");
-                BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc selectionDesc = new DefaultBindingDesc(Aaa.class,
                         "foo");
 
                 Binder valueBinder = BinderFactory.getBinder(valueDesc, list);
                 Binding valueBinding = valueBinder
-                        .createBinding(valueDesc, aaa, list, valueBinder
-                                .getTargetPropertyName(valueDesc));
+                        .createBinding(valueDesc, aaa, list);
 
                 Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
                         list);
                 Binding selectionBinding = selectionBinder.createBinding(
-                        selectionDesc, aaa, list, selectionBinder
-                                .getTargetPropertyName(selectionDesc));
+                        selectionDesc, aaa, list);
 
                 manager.addBinding(valueBinding, valueDesc);
                 manager.addBinding(selectionBinding, selectionDesc);
@@ -244,24 +238,22 @@ public class BindingManagerTest extends TestCase {
             public void run() {
                 BindingManager manager = new BindingManager();
 
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JList list = new JList();
 
-                BindingDesc valueDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc valueDesc = new DefaultBindingDesc(Aaa.class,
                         "barItems");
-                BindingDesc selectionDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc selectionDesc = new DefaultBindingDesc(Aaa.class,
                         "bar");
 
                 Binder valueBinder = BinderFactory.getBinder(valueDesc, list);
                 Binding valueBinding = valueBinder
-                        .createBinding(valueDesc, aaa, list, valueBinder
-                                .getTargetPropertyName(valueDesc));
+                        .createBinding(valueDesc, aaa, list);
 
                 Binder selectionBinder = BinderFactory.getBinder(selectionDesc,
                         list);
                 Binding selectionBinding = selectionBinder.createBinding(
-                        selectionDesc, aaa, list, selectionBinder
-                                .getTargetPropertyName(selectionDesc));
+                        selectionDesc, aaa, list);
 
                 manager.addBinding(valueBinding, valueDesc);
                 manager.addBinding(selectionBinding, selectionDesc);

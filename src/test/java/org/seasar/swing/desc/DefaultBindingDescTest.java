@@ -14,7 +14,7 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc.impl;
+package org.seasar.swing.desc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -30,6 +30,7 @@ import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.converter.annotation.Converter;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
 import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.DefaultBindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.validator.MinLengthConstraint;
 import org.seasar.swing.validator.RequiredConstraint;
@@ -41,34 +42,48 @@ import org.seasar.swing.validator.annotation.Required;
  * @author kaiseh
  */
 
-public class BindingDescImplTest extends TestCase {
-    public static class Dummy implements org.seasar.swing.validator.Constraint {
+public class DefaultBindingDescTest extends TestCase {
+    public static class DummyConstraint implements
+            org.seasar.swing.validator.Constraint {
         public String arg0;
         public String arg1;
-        
-        public Dummy(String arg0, String arg1) {
+
+        public DummyConstraint(String arg0, String arg1) {
             this.arg0 = arg0;
             this.arg1 = arg1;
         }
-        
+
         public String getViolationMessage(BindingDesc desc, Object value) {
             return null;
         }
-        
+
         public boolean isSatisfied(Object value) {
             return false;
         }
-        
+
         public void read(Annotation annotation) {
+        }
+    }
+
+    public static class DummyConverter extends
+            org.jdesktop.beansbinding.Converter<Object, Object> {
+        @Override
+        public Object convertForward(Object value) {
+            return null;
+        }
+
+        @Override
+        public Object convertReverse(Object value) {
+            return null;
         }
     }
 
     public static class Aaa {
         @ReadWrite
-        @Converter(name = "xxx")
+        @Converter(type = DummyConverter.class)
         @Required
         @MinLength(10)
-        @Constraint(type = Dummy.class, args = {"111", "222"})
+        @Constraint(type = DummyConstraint.class, args = { "111", "222" })
         public String aaa; // valid
 
         @ReadSelection(target = "yyy", targetProperty = "zzz")
@@ -79,9 +94,9 @@ public class BindingDescImplTest extends TestCase {
         public String ccc; // duplicate binding types
 
         @DateTimeConverter("yyyy-MM-dd")
-        @Converter(name = "xxx")
+        @Converter(type = DummyConverter.class)
         public String ddd; // duplicate converters
-        
+
         public String eee; // valid (no annotations)
 
         public String getAaa() {
@@ -126,26 +141,31 @@ public class BindingDescImplTest extends TestCase {
     }
 
     public void test() throws Exception {
-        BindingDescImpl desc = new BindingDescImpl(Aaa.class, "aaa");
+        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
 
         assertEquals(Aaa.class, desc.getSourceClass());
-        assertEquals(Aaa.class.getField("aaa"), desc.getSourcePropertyDesc().getField());
+        assertEquals(Aaa.class.getField("aaa"), desc.getSourcePropertyDesc()
+                .getField());
         assertEquals(BindingType.READ_WRITE, desc.getBindingType());
         assertEquals(PropertyType.VALUE, desc.getTargetPropertyType());
         assertNull(desc.getTargetName());
         assertNull(desc.getTargetPropertyName());
 
         assertEquals(3, desc.getConstraints().size());
-        assertEquals(RequiredConstraint.class, desc.getConstraints().get(0).getClass());
+        assertEquals(RequiredConstraint.class, desc.getConstraints().get(0)
+                .getClass());
         assertEquals(MinLengthConstraint.class, desc.getConstraints().get(1)
                 .getClass());
-        assertEquals(Dummy.class, desc.getConstraints().get(2).getClass());
+        assertEquals(DummyConstraint.class, desc.getConstraints().get(2)
+                .getClass());
         assertEquals(10, ((MinLengthConstraint) desc.getConstraints().get(1))
                 .getMinLength());
-        assertEquals("111", ((Dummy)desc.getConstraints().get(2)).arg0);
-        assertEquals("222", ((Dummy)desc.getConstraints().get(2)).arg1);
+        assertEquals("111",
+                ((DummyConstraint) desc.getConstraints().get(2)).arg0);
+        assertEquals("222",
+                ((DummyConstraint) desc.getConstraints().get(2)).arg1);
 
-        desc = new BindingDescImpl(Aaa.class, "bbb");
+        desc = new DefaultBindingDesc(Aaa.class, "bbb");
 
         assertEquals(BindingType.READ, desc.getBindingType());
         assertEquals(PropertyType.SELECTION, desc.getTargetPropertyType());
@@ -153,31 +173,31 @@ public class BindingDescImplTest extends TestCase {
         assertEquals("zzz", desc.getTargetPropertyName());
 
         try {
-            new BindingDescImpl(Aaa.class, "ccc");
+            new DefaultBindingDesc(Aaa.class, "ccc");
             fail();
         } catch (IllegalRegistrationException e) {
         }
 
         try {
-            new BindingDescImpl(Aaa.class, "ddd");
+            new DefaultBindingDesc(Aaa.class, "ddd");
             fail();
         } catch (IllegalRegistrationException e) {
         }
 
-        desc = new BindingDescImpl(Aaa.class, "eee");
+        desc = new DefaultBindingDesc(Aaa.class, "eee");
         assertEquals(BindingType.NONE, desc.getBindingType());
         assertNull(desc.getTargetPropertyType());
         assertNull(desc.getTargetName());
         assertNull(desc.getTargetPropertyName());
 
         try {
-            new BindingDescImpl(Aaa.class, (Field)null);
+            new DefaultBindingDesc(Aaa.class, (Field) null);
             fail();
         } catch (EmptyRuntimeException e) {
         }
 
         try {
-            new BindingDescImpl(null, "aaa");
+            new DefaultBindingDesc(null, "aaa");
             fail();
         } catch (EmptyRuntimeException e) {
         }

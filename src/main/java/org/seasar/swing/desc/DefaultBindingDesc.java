@@ -14,7 +14,7 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc.impl;
+package org.seasar.swing.desc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jdesktop.beansbinding.Converter;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
@@ -35,7 +36,7 @@ import org.seasar.swing.annotation.ConstraintTarget;
 import org.seasar.swing.annotation.ConverterTarget;
 import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
-import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.converter.ConverterFactory;
 import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.resolver.ComponentResolver;
 import org.seasar.swing.util.AnnotationUtils;
@@ -45,7 +46,7 @@ import org.seasar.swing.validator.Constraint;
  * @author kaiseh
  */
 
-public class BindingDescImpl implements BindingDesc {
+public class DefaultBindingDesc implements BindingDesc {
     private Class<?> sourceClass;
     private Field sourceField;
 
@@ -53,10 +54,10 @@ public class BindingDescImpl implements BindingDesc {
     private PropertyDesc sourcePropertyDesc;
     private String targetName;
     private String targetPropertyName;
-    private Annotation converterAnnotation;
+    private Converter<?, ?> converter;
     private List<Constraint> constraints;
 
-    public BindingDescImpl(Class<?> modelClass, Field sourceField) {
+    public DefaultBindingDesc(Class<?> modelClass, Field sourceField) {
         if (modelClass == null) {
             throw new EmptyRuntimeException("modelClass");
         }
@@ -65,13 +66,10 @@ public class BindingDescImpl implements BindingDesc {
         }
         this.sourceClass = modelClass;
         this.sourceField = sourceField;
-        BeanDesc beanDesc = BeanDescFactory.getBeanDesc(modelClass);
-        this.sourcePropertyDesc = beanDesc.getPropertyDesc(sourceField
-                .getName());
         initialize();
     }
 
-    public BindingDescImpl(Class<?> modelClass, PropertyDesc sourcePropertyDesc) {
+    public DefaultBindingDesc(Class<?> modelClass, PropertyDesc sourcePropertyDesc) {
         if (modelClass == null) {
             throw new EmptyRuntimeException("modelClass");
         }
@@ -84,11 +82,10 @@ public class BindingDescImpl implements BindingDesc {
         }
         this.sourceClass = modelClass;
         this.sourceField = sourcePropertyDesc.getField();
-        this.sourcePropertyDesc = sourcePropertyDesc;
         initialize();
     }
 
-    public BindingDescImpl(Class<?> modelClass, String sourceFieldName) {
+    public DefaultBindingDesc(Class<?> modelClass, String sourceFieldName) {
         if (modelClass == null) {
             throw new EmptyRuntimeException("modelClass");
         }
@@ -98,13 +95,12 @@ public class BindingDescImpl implements BindingDesc {
         this.sourceClass = modelClass;
         BeanDesc beanDesc = BeanDescFactory.getBeanDesc(modelClass);
         this.sourceField = beanDesc.getField(sourceFieldName);
-        this.sourcePropertyDesc = beanDesc.getPropertyDesc(sourceFieldName);
         initialize();
     }
 
     private void initialize() {
         setupMain();
-        setupConverterAnnotation();
+        setupConverter();
         setupConstraints();
     }
 
@@ -136,19 +132,21 @@ public class BindingDescImpl implements BindingDesc {
         }
     }
 
-    private void setupConverterAnnotation() {
+    private void setupConverter() {
+        Annotation registeredAnnotation = null;
         for (Annotation annotation : sourceField.getAnnotations()) {
             ConverterTarget target = annotation.annotationType().getAnnotation(
                     ConverterTarget.class);
             if (target == null) {
                 continue;
             }
-            if (converterAnnotation != null) {
+            if (registeredAnnotation != null) {
                 throw new IllegalRegistrationException("ESWI0105", sourceClass
-                        .getName(), sourceField.getName(), converterAnnotation
+                        .getName(), sourceField.getName(), registeredAnnotation
                         .annotationType(), annotation.annotationType());
             }
-            converterAnnotation = annotation;
+            converter = ConverterFactory.createConverter(annotation);
+            registeredAnnotation = annotation;
         }
     }
 
@@ -223,8 +221,8 @@ public class BindingDescImpl implements BindingDesc {
                 : null;
     }
 
-    public Annotation getConverterAnnotation() {
-        return converterAnnotation;
+    public Converter<?, ?> getConverter() {
+        return converter;
     }
 
     public List<Constraint> getConstraints() {

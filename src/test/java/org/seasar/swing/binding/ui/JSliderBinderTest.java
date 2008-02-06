@@ -31,7 +31,7 @@ import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
  * @author kaiseh
@@ -126,24 +126,24 @@ public class JSliderBinderTest extends TestCase {
         JSliderBinder binder = new JSliderBinder();
         JSlider slider = new JSlider();
 
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int1"),
                 slider));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int2"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int2"),
                 slider));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int3"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int3"),
                 slider));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "double1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "double1"),
                 slider));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "integer1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "integer1"),
                 slider));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "bigInt1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "bigInt1"),
                 slider));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 slider));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "invalid"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
                 slider));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "int1"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "int1"),
                 new JTextField()));
     }
 
@@ -151,15 +151,14 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSlider slider = new JSlider();
 
                 slider.setMinimum(0);
                 slider.setMaximum(100);
                 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "int1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        slider, binder.getTargetPropertyName(bindingDesc));
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "int1");
+                Binding binding = binder.createBinding(bindingDesc, aaa, slider);
                 binding.bind();
 
                 aaa.setInt1(10);
@@ -169,9 +168,8 @@ public class JSliderBinderTest extends TestCase {
                 assertEquals(10, aaa.getInt1());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "int2");
-                binding = binder.createBinding(bindingDesc, aaa, slider,
-                        binder.getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "int2");
+                binding = binder.createBinding(bindingDesc, aaa, slider);
 
                 aaa.setInt2(60);
                 binding.bind();
@@ -184,9 +182,8 @@ public class JSliderBinderTest extends TestCase {
                 assertEquals(70, aaa.getInt2());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "int3");
-                binding = binder.createBinding(bindingDesc, aaa, slider,
-                        binder.getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "int3");
+                binding = binder.createBinding(bindingDesc, aaa, slider);
                 binding.bind();
 
                 aaa.setInt3(10);
@@ -208,13 +205,12 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSlider slider = new JSlider();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "double1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        slider, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, slider);
                 binding.bind();
 
                 aaa.setDouble1(10.1);
@@ -230,13 +226,12 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSlider slider = new JSlider();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "integer1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        slider, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, slider);
 
                 aaa.setInteger1(10);
                 binding.bind();
@@ -252,13 +247,12 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSlider slider = new JSlider();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "bigInt1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        slider, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, slider);
                 binding.bind();
 
                 aaa.setBigInt1(new BigInteger("10"));
@@ -274,13 +268,12 @@ public class JSliderBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSliderBinder binder = new JSliderBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSlider slider = new JSlider();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "string1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        slider, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, slider);
                 binding.bind();
 
                 aaa.setString1("10");

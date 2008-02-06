@@ -30,7 +30,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.beans.ObservableBeans;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
 /**
@@ -86,18 +86,18 @@ public class JComboBoxBinderTest extends TestCase {
         JComboBox comboBox = new JComboBox();
 
         assertTrue(binder
-                .accepts(new BindingDescImpl(Aaa.class, "list1"), comboBox));
+                .accepts(new DefaultBindingDesc(Aaa.class, "list1"), comboBox));
 
         // java.util.List を実装していなくても accepts() は通す
         // (createBinding() の時点でエラーにする)
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string"),
                 comboBox));
         assertTrue(binder
-                .accepts(new BindingDescImpl(Aaa.class, "array"), comboBox));
+                .accepts(new DefaultBindingDesc(Aaa.class, "array"), comboBox));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "list1"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "list1"),
                 new JTextField()));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "list2"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "list2"),
                 comboBox));
     }
 
@@ -108,10 +108,10 @@ public class JComboBoxBinderTest extends TestCase {
                 JComboBoxBinder binder = new JComboBoxBinder();
                 JComboBox comboBox = new JComboBox();
 
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
 
-                Binding binding = binder.createBinding(new BindingDescImpl(
-                        Aaa.class, "list1"), aaa, comboBox, null);
+                Binding binding = binder.createBinding(new DefaultBindingDesc(
+                        Aaa.class, "list1"), aaa, comboBox);
                 binding.bind();
 
                 aaa.setList1(Arrays.asList("aaa", "bbb", "ccc"));
@@ -133,22 +133,22 @@ public class JComboBoxBinderTest extends TestCase {
                 binding.unbind();
 
                 try {
-                    binder.createBinding(new BindingDescImpl(Aaa.class,
-                            "string"), aaa, comboBox, null);
+                    binder.createBinding(new DefaultBindingDesc(Aaa.class,
+                            "string"), aaa, comboBox);
                     fail();
                 } catch (IllegalRegistrationException e) {
                 }
 
                 try {
-                    binder.createBinding(new BindingDescImpl(Aaa.class,
-                            "array"), aaa, comboBox, null);
+                    binder.createBinding(new DefaultBindingDesc(Aaa.class,
+                            "array"), aaa, comboBox);
                     fail();
                 } catch (IllegalRegistrationException e) {
                 }
 
                 try {
-                    binder.createBinding(new BindingDescImpl(Aaa.class,
-                            "list2"), aaa, comboBox, null);
+                    binder.createBinding(new DefaultBindingDesc(Aaa.class,
+                            "list2"), aaa, comboBox);
                     fail();
                 } catch (IllegalArgumentException e) {
                 }

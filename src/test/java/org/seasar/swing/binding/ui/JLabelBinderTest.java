@@ -33,7 +33,7 @@ import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
  * @author kaiseh
@@ -109,18 +109,18 @@ public class JLabelBinderTest extends TestCase {
         JLabelBinder binder = new JLabelBinder();
         JLabel label = new JLabel();
 
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 label));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string2"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string2"),
                 label));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string3"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string3"),
                 label));
         assertTrue(binder
-                .accepts(new BindingDescImpl(Aaa.class, "int1"), label));
+                .accepts(new DefaultBindingDesc(Aaa.class, "int1"), label));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "invalid"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
                 label));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 new JTextField()));
     }
 
@@ -128,13 +128,12 @@ public class JLabelBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JLabelBinder binder = new JLabelBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JLabel label = new JLabel();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "string1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, label,
-                        binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, label);
                 binding.bind();
 
                 aaa.setString1("aaa");
@@ -144,9 +143,8 @@ public class JLabelBinderTest extends TestCase {
                 assertEquals("aaa", aaa.getString1());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "string2");
-                binding = binder.createBinding(bindingDesc, aaa, label, binder
-                        .getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "string2");
+                binding = binder.createBinding(bindingDesc, aaa, label);
 
                 aaa.setString2("ccc");
                 binding.bind();
@@ -159,9 +157,8 @@ public class JLabelBinderTest extends TestCase {
                 assertEquals("ddd", aaa.getString2());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "string3");
-                binding = binder.createBinding(bindingDesc, aaa, label, binder
-                        .getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "string3");
+                binding = binder.createBinding(bindingDesc, aaa, label);
                 binding.bind();
 
                 aaa.setString3("aaa");
@@ -189,12 +186,11 @@ public class JLabelBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JLabelBinder binder = new JLabelBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JLabel label = new JLabel();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "int1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, label,
-                        binder.getTargetPropertyName(bindingDesc));
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "int1");
+                Binding binding = binder.createBinding(bindingDesc, aaa, label);
                 binding.bind();
 
                 assertEquals("0", label.getText());
@@ -225,13 +221,12 @@ public class JLabelBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JLabelBinder binder = new JLabelBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JLabel label = new JLabel();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "date1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, label,
-                        binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, label);
                 binding.bind();
 
                 assertNull(label.getText());

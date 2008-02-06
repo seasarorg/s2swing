@@ -16,9 +16,9 @@
 
 package org.seasar.swing.desc;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
+import org.jdesktop.beansbinding.Converter;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
@@ -41,7 +41,7 @@ public interface BindingDesc {
 
     PropertyType getTargetPropertyType();
 
-    Annotation getConverterAnnotation();
-    
+    Converter<?, ?> getConverter();
+
     List<Constraint> getConstraints();
 }

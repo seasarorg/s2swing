@@ -14,19 +14,24 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.binding.ui;
-
-import javax.swing.JComponent;
-
-import org.seasar.swing.binding.PropertyType;
-import org.seasar.swing.binding.SimpleBinder;
+package org.seasar.swing.exception;
 
 /**
  * @author kaiseh
  */
 
-public class JComponentBinder extends SimpleBinder {
-    public JComponentBinder() {
-        super(JComponent.class, null, PropertyType.VALUE);
+public class BindingException extends SwingRuntimeException {
+    private static final long serialVersionUID = 4935918010288694652L;
+
+    public BindingException(String messageCode, Object... args) {
+        super(messageCode, args);
+    }
+
+    public BindingException(String messageCode, Object[] args, Throwable cause) {
+        super(messageCode, args, cause);
+    }
+
+    public BindingException(String messageCode) {
+        super(messageCode);
     }
 }

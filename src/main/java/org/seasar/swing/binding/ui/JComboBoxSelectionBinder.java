@@ -38,7 +38,8 @@ public class JComboBoxSelectionBinder extends AbstractBinder {
         return S2JComboBoxAdapterProvider.SELECTED_ITEM;
     }
 
-    public Class<?> getAdaptedTargetClass() {
+    @Override
+    protected Class<?> getAdaptedTargetClass() {
         return S2JComboBoxAdapterProvider.Adapter.class;
     }
 }

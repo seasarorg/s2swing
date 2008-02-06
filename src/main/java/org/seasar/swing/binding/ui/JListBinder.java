@@ -43,13 +43,10 @@ public class JListBinder extends AbstractBinder {
         return null;
     }
 
-    public Class<?> getAdaptedTargetClass() {
-        return JList.class;
-    }
-
+    @Override
     @SuppressWarnings("unchecked")
     public Binding createBinding(BindingDesc bindingDesc, Object source,
-            Object target, String targetPropertyName) {
+            Object target) {
         if (!accepts(bindingDesc, target)) {
             throw new IllegalArgumentException(
                     "Specified parameters cannot be accepted.");
@@ -72,7 +69,7 @@ public class JListBinder extends AbstractBinder {
                 .getUpdateStrategy(), source, sourceProp, target,
                 ObjectProperty.create(), null);
 
-        setupBindingDefault(binding, bindingDesc, targetPropertyName);
+        setupBindingDefault(binding, bindingDesc, target, null);
 
         return binding;
     }

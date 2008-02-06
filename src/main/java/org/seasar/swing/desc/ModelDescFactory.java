@@ -16,7 +16,6 @@
 
 package org.seasar.swing.desc;
 
-import org.seasar.swing.desc.impl.ModelDescImpl;
 import org.seasar.swing.factory.CacheFactoryBase;
 
 /**
@@ -29,7 +28,7 @@ public abstract class ModelDescFactory {
                 modelClass, ModelDesc.class);
         if (desc == null) {
             desc = CacheFactoryBase.put(ModelDescFactory.class, modelClass,
-                    new ModelDescImpl(modelClass));
+                    new DefaultModelDesc(modelClass));
         }
         return desc;
     }

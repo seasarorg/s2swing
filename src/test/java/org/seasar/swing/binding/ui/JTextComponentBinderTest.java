@@ -36,7 +36,7 @@ import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
  * @author kaiseh
@@ -115,25 +115,25 @@ public class JTextComponentBinderTest extends TestCase {
         JPasswordField passwordField = new JPasswordField();
         JEditorPane editorPane = new JEditorPane();
 
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 textField));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 textArea));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 passwordField));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 editorPane));
 
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string2"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string2"),
                 textField));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string3"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string3"),
                 textField));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int1"),
                 textField));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "invalid"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
                 textField));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 new JButton()));
     }
 
@@ -141,13 +141,12 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JTextField textField = new JTextField();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "string1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        textField, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, textField);
                 binding.bind();
 
                 aaa.setString1("aaa");
@@ -157,9 +156,8 @@ public class JTextComponentBinderTest extends TestCase {
                 assertEquals("aaa", aaa.getString1());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "string2");
-                binding = binder.createBinding(bindingDesc, aaa, textField,
-                        binder.getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "string2");
+                binding = binder.createBinding(bindingDesc, aaa, textField);
 
                 aaa.setString2("ccc");
                 binding.bind();
@@ -172,9 +170,8 @@ public class JTextComponentBinderTest extends TestCase {
                 assertEquals("ddd", aaa.getString2());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "string3");
-                binding = binder.createBinding(bindingDesc, aaa, textField,
-                        binder.getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "string3");
+                binding = binder.createBinding(bindingDesc, aaa, textField);
                 binding.bind();
 
                 aaa.setString3("aaa");
@@ -204,12 +201,11 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JTextField textField = new JTextField();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "int1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        textField, binder.getTargetPropertyName(bindingDesc));
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "int1");
+                Binding binding = binder.createBinding(bindingDesc, aaa, textField);
                 binding.bind();
 
                 assertEquals("0", textField.getText());
@@ -237,13 +233,12 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JTextField textField = new JTextField();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "date1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        textField, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, textField);
                 binding.bind();
 
                 assertEquals("", textField.getText());

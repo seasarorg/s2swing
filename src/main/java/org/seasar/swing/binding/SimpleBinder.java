@@ -48,10 +48,6 @@ public class SimpleBinder extends AbstractBinder {
         return false;
     }
 
-    public Class<?> getAdaptedTargetClass() {
-        return targetClass;
-    }
-
     @Override
     protected String getDefaultTargetPropertyName(BindingDesc bindingDesc) {
         return defaultTargetPropertyName;

@@ -29,10 +29,10 @@ import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.converter.ConverterChain;
-import org.seasar.swing.converter.ConverterFactory;
 import org.seasar.swing.converter.DefaultConverter;
 import org.seasar.swing.converter.NotEnteredConverter;
 import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.exception.BindingException;
 import org.seasar.swing.validator.BindingValidator;
 
 /**
@@ -41,7 +41,7 @@ import org.seasar.swing.validator.BindingValidator;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractBinder implements Binder {
-    public String getTargetPropertyName(BindingDesc bindingDesc) {
+    protected String getTargetPropertyName(BindingDesc bindingDesc) {
         if (!StringUtil.isEmpty(bindingDesc.getTargetPropertyName())) {
             return bindingDesc.getTargetPropertyName();
         }
@@ -52,9 +52,9 @@ public abstract class AbstractBinder implements Binder {
             BindingDesc bindingDesc);
 
     public Binding createBinding(BindingDesc bindingDesc, Object source,
-            Object target, String targetPropertyName) {
-        if (targetPropertyName == null) {
-            throw new EmptyRuntimeException("targetPropertyName");
+            Object target) {
+        if (target == null) {
+            throw new EmptyRuntimeException("target");
         }
         if (!accepts(bindingDesc, target)) {
             throw new IllegalArgumentException(
@@ -66,11 +66,15 @@ public abstract class AbstractBinder implements Binder {
         String sourcePropertyName = bindingDesc.getSourcePropertyDesc()
                 .getPropertyName();
 
+        String targetPropertyName = getTargetPropertyName(bindingDesc);
+        if (targetPropertyName == null) {
+            throw new BindingException("ESWI0201", target.getClass().getName());
+        }
         Binding binding = Bindings.createAutoBinding(strategy, source,
                 createProperty(sourcePropertyName), target,
                 createProperty(targetPropertyName));
 
-        setupBindingDefault(binding, bindingDesc, targetPropertyName);
+        setupBindingDefault(binding, bindingDesc, target, targetPropertyName);
 
         return binding;
     }
@@ -79,42 +83,58 @@ public abstract class AbstractBinder implements Binder {
         return ELProperty.create("${" + exprContent + "}");
     }
 
+    protected Class<?> getAdaptedTargetClass() {
+        return null;
+    }
+
+    protected PropertyDesc getTargetPropertyDesc(Object target,
+            String targetPropertyName) {
+        PropertyDesc targetPropDesc = null;
+        Class<?> targetAdaptedClass = getAdaptedTargetClass();
+        if (targetAdaptedClass != null) {
+            BeanDesc targetDesc = BeanDescFactory
+                    .getBeanDesc(targetAdaptedClass);
+            if (targetDesc.hasPropertyDesc(targetPropertyName)) {
+                targetPropDesc = targetDesc.getPropertyDesc(targetPropertyName);
+            }
+        }
+        if (targetPropDesc == null) {
+            BeanDesc targetDesc = BeanDescFactory
+                    .getBeanDesc(target.getClass());
+            targetPropDesc = targetDesc.getPropertyDesc(targetPropertyName);
+        }
+        return targetPropDesc;
+    }
+
     protected void setupBindingDefault(Binding binding,
-            BindingDesc bindingDesc, String targetPropertyName) {
-        binding.setConverter(createConverter(bindingDesc, targetPropertyName));
+            BindingDesc bindingDesc, Object target, String targetPropertyName) {
+        binding.setConverter(createConverter(bindingDesc, target,
+                targetPropertyName));
         binding.setValidator(createValidator(bindingDesc));
 
         if (targetPropertyName != null) {
-            Class<?> targetAdaptedClass = getAdaptedTargetClass();
-            BeanDesc targetDesc = BeanDescFactory.getBeanDesc(targetAdaptedClass);
-            PropertyDesc targetPropDesc = targetDesc
-                    .getPropertyDesc(targetPropertyName);
+            PropertyDesc targetPropDesc = getTargetPropertyDesc(target,
+                    targetPropertyName);
             if (targetPropDesc.getPropertyType().isPrimitive()) {
                 binding.setSourceNullValue(targetPropDesc.convertIfNeed(null));
             }
         }
     }
 
-    protected Converter createConverter(BindingDesc bindingDesc,
+    protected Converter createConverter(BindingDesc bindingDesc, Object target,
             String targetPropertyName) {
         PropertyDesc sourcePropDesc = bindingDesc.getSourcePropertyDesc();
 
         ConverterChain chain = new ConverterChain();
 
-        if (bindingDesc.getConverterAnnotation() != null) {
-            Converter converter = ConverterFactory.createConverter(bindingDesc
-                    .getConverterAnnotation());
-            chain.add(converter);
+        if (bindingDesc.getConverter() != null) {
+            chain.add(bindingDesc.getConverter());
         } else {
             // note that targetPropertyName may be null
             // (ex. JComboBoxBinder, JListBinder)
             if (targetPropertyName != null) {
-                Class<?> targetAdaptedClass = getAdaptedTargetClass();
-                BeanDesc targetDesc = BeanDescFactory
-                        .getBeanDesc(targetAdaptedClass);
-                PropertyDesc targetPropDesc = targetDesc
-                        .getPropertyDesc(targetPropertyName);
-
+                PropertyDesc targetPropDesc = getTargetPropertyDesc(target,
+                        targetPropertyName);
                 Converter defaultConverter = new DefaultConverter(
                         sourcePropDesc, targetPropDesc);
                 chain.add(defaultConverter);

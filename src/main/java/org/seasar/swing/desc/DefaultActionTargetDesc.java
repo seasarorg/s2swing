@@ -14,22 +14,21 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc.impl;
+package org.seasar.swing.desc;
 
 import java.lang.reflect.Field;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.desc.ActionTargetDesc;
 
 /**
  * @author kaiseh
  */
 
-public class ActionTargetDescImpl implements ActionTargetDesc {
+public class DefaultActionTargetDesc implements ActionTargetDesc {
     private Field field;
     private String actionName;
 
-    public ActionTargetDescImpl(Field field, String actionName) {
+    public DefaultActionTargetDesc(Field field, String actionName) {
         if (field == null) {
             throw new EmptyRuntimeException("field");
         }
