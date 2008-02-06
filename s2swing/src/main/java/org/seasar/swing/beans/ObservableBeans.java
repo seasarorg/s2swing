@@ -81,15 +81,17 @@ public abstract class ObservableBeans {
     }
 
     /**
-     * 指定されたクラスの監視可能なインスタンスを作成します。このメソッドはクラスがすでに監視可能か
-     * どうかを調べ、そうでない場合は、監視用メソッドを追加した継承クラスを動的に作成します。
+     * 指定されたクラスの監視可能なインスタンスを作成します。クラスが監視用のメソッドを
+     * 備えていない場合は、監視用メソッドを追加した継承クラスを動的に作成し、その新規
+     * インスタンスを作成して返します。
+     * クラスがすでに監視可能である場合は、単にそのクラスの新規インスタンスを作成します。
      * 
      * @param beanClass JavaBean クラス
      * @return クラスがすでに監視可能である場合はそのインスタンス。そうでない場合は、
      * 監視可能となるようエンハンスされたインスタンス
      */
     @SuppressWarnings("unchecked")
-    public static <T> T create(Class<T> beanClass) {
+    public static <T> T createBean(Class<T> beanClass) {
         if (beanClass == null) {
             throw new EmptyRuntimeException("beanClass");
         }

@@ -30,7 +30,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.seasar.swing.annotation.Read;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.beans.ObservableBeans;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
 /**
@@ -86,18 +86,18 @@ public class JListBinderTest extends TestCase {
         JList list = new JList();
 
         assertTrue(binder
-                .accepts(new BindingDescImpl(Aaa.class, "list1"), list));
+                .accepts(new DefaultBindingDesc(Aaa.class, "list1"), list));
 
         // java.util.List を実装していなくても accepts() は通す
         // (createBinding() の時点でエラーにする)
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string"),
                 list));
         assertTrue(binder
-                .accepts(new BindingDescImpl(Aaa.class, "array"), list));
+                .accepts(new DefaultBindingDesc(Aaa.class, "array"), list));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "list1"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "list1"),
                 new JTextField()));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "list2"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "list2"),
                 list));
     }
 
@@ -106,11 +106,11 @@ public class JListBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JListBinder binder = new JListBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JList list = new JList();
 
-                Binding binding = binder.createBinding(new BindingDescImpl(
-                        Aaa.class, "list1"), aaa, list, null);
+                Binding binding = binder.createBinding(new DefaultBindingDesc(
+                        Aaa.class, "list1"), aaa, list);
                 binding.bind();
 
                 aaa.setList1(Arrays.asList("aaa", "bbb", "ccc"));
@@ -132,22 +132,22 @@ public class JListBinderTest extends TestCase {
                 binding.unbind();
 
                 try {
-                    binder.createBinding(new BindingDescImpl(Aaa.class,
-                            "string"), aaa, list, null);
+                    binder.createBinding(new DefaultBindingDesc(Aaa.class,
+                            "string"), aaa, list);
                     fail();
                 } catch (IllegalRegistrationException e) {
                 }
 
                 try {
-                    binder.createBinding(new BindingDescImpl(Aaa.class,
-                            "array"), aaa, list, null);
+                    binder.createBinding(new DefaultBindingDesc(Aaa.class,
+                            "array"), aaa, list);
                     fail();
                 } catch (IllegalRegistrationException e) {
                 }
 
                 try {
-                    binder.createBinding(new BindingDescImpl(Aaa.class,
-                            "list2"), aaa, list, null);
+                    binder.createBinding(new DefaultBindingDesc(Aaa.class,
+                            "list2"), aaa, list);
                     fail();
                 } catch (IllegalArgumentException e) {
                 }

@@ -18,7 +18,6 @@ package org.seasar.swing.desc;
 
 import javax.swing.text.ViewFactory;
 
-import org.seasar.swing.desc.impl.ViewDescImpl;
 import org.seasar.swing.factory.CacheFactoryBase;
 
 /**
@@ -31,7 +30,7 @@ public abstract class ViewDescFactory {
                 ViewDesc.class);
         if (desc == null) {
             desc = CacheFactoryBase.put(ViewFactory.class, viewClass,
-                    new ViewDescImpl(viewClass));
+                    new DefaultViewDesc(viewClass));
         }
         return desc;
     }

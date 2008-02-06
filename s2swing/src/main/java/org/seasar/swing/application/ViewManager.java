@@ -25,6 +25,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import org.jdesktop.application.AbstractBean;
 import org.jdesktop.application.Application;
@@ -49,10 +51,12 @@ import org.seasar.swing.binding.BindingStateListener;
 import org.seasar.swing.binding.BindingTarget;
 import org.seasar.swing.desc.ActionTargetDesc;
 import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.CustomBindingDesc;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.desc.ViewDescFactory;
+import org.seasar.swing.exception.BindingException;
 import org.seasar.swing.util.ListMap;
 import org.seasar.swing.util.SwingUtils;
 import org.seasar.swing.validator.S2Validator;
@@ -122,8 +126,8 @@ public class ViewManager extends AbstractBean {
         executeComponentInitializer();
 
         autoInjectComponentNames();
+        autoInjectComponentProperties();
         autoInjectBindingTargetNames();
-        resourceMap.injectComponents(rootComponent);
         autoBindActions();
         autoInjectModels();
 
@@ -152,6 +156,18 @@ public class ViewManager extends AbstractBean {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public void bind(CustomBindingDesc bindingDesc) {
+        Binder binder = BinderFactory.getBinder(bindingDesc, bindingDesc
+                .getTarget());
+        if (binder == null) {
+            throw new BindingException("ESWI0200");
+        }
+        Binding binding = binder.createBinding(bindingDesc, bindingDesc
+                .getSource(), bindingDesc.getTarget());
+        bindingManager.addBinding(binding, bindingDesc);
+    }
+
     protected ApplicationContext getContext() {
         return Application.getInstance().getContext();
     }
@@ -175,6 +191,25 @@ public class ViewManager extends AbstractBean {
             Component c = (Component) FieldUtil.get(field, view);
             if (c != null && c.getName() == null) {
                 c.setName(field.getName());
+            }
+        }
+    }
+
+    protected void autoInjectComponentProperties() {
+        resourceMap.injectComponents(rootComponent);
+
+        String windowTitle = resourceMap.getString("title");
+        if (windowTitle != null) {
+            if (rootComponent instanceof JFrame) {
+                JFrame frame = (JFrame) rootComponent;
+                if (frame.getTitle() == null) {
+                    frame.setTitle(windowTitle);
+                }
+            } else if (rootComponent instanceof JDialog) {
+                JDialog dialog = (JDialog) rootComponent;
+                if (dialog.getTitle() == null) {
+                    dialog.setTitle(windowTitle);
+                }
             }
         }
     }
@@ -215,7 +250,7 @@ public class ViewManager extends AbstractBean {
         for (Field field : viewDesc.getModelFields()) {
             Object model = FieldUtil.get(field, view);
             if (model == null) {
-                model = ObservableBeans.create(field.getType());
+                model = ObservableBeans.createBean(field.getType());
                 ObservableBeans.addPropertyChangeListener(model,
                         new ModelPropertyChangeListener());
                 FieldUtil.set(field, view, model);
@@ -237,8 +272,6 @@ public class ViewManager extends AbstractBean {
                 componentsMap.add(target.getName(), target);
             }
         }
-
-        // TODO 同一ターゲットプロパティのバインディング重複チェック
 
         for (Field modelField : viewDesc.getModelFields()) {
             Object source = FieldUtil.get(modelField, view);
@@ -282,10 +315,7 @@ public class ViewManager extends AbstractBean {
             // TODO warn
             return null;
         }
-        String targetPropName = binder.getTargetPropertyName(desc);
-        Binding binding = binder.createBinding(desc, source, target,
-                targetPropName);
-        return binding;
+        return binder.createBinding(desc, source, target);
     }
 
     protected void executeComponentInitializer() {

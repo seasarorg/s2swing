@@ -46,7 +46,8 @@ public class JListSelectionBinder extends AbstractBinder {
         }
     }
 
-    public Class<?> getAdaptedTargetClass() {
+    @Override
+    protected Class<?> getAdaptedTargetClass() {
         return S2JListAdapterProvider.Adapter.class;
     }
 }

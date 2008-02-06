@@ -14,7 +14,7 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.binding.ui;
+package org.seasar.swing.binding;
 
 import java.awt.Color;
 
@@ -29,21 +29,22 @@ import org.seasar.swing.annotation.ReadOnce;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.beans.ObservableBeans;
+import org.seasar.swing.binding.DefaultBinder;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
  * @author kaiseh
  */
 
 @SuppressWarnings("unchecked")
-public class JComponentBinderTest extends TestCase {
+public class DefaultBinderTest extends TestCase {
     public static class Aaa {
-        @Read
+        @Read(targetProperty = "background")
         private Color color1;
-        @ReadOnce
+        @ReadOnce(targetProperty = "background")
         private Color color2;
-        @ReadWrite
+        @ReadWrite(targetProperty = "background")
         private Color color3;
         @ReadSelection
         private int invalid;
@@ -82,33 +83,30 @@ public class JComponentBinderTest extends TestCase {
     }
 
     public void testAccepts() throws Exception {
-        JComponentBinder binder = new JComponentBinder();
+        DefaultBinder binder = new DefaultBinder();
         JPanel panel = new JPanel();
 
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "color1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "color1"),
                 panel));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "color2"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "color2"),
                 panel));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "color3"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "color3"),
                 panel));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "invalid"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
                 panel));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "color1"),
-                new Object()));
     }
 
     public void testCreateBinding() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                JComponentBinder binder = new JComponentBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                DefaultBinder binder = new DefaultBinder();
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JPanel panel = new JPanel();
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "color1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        panel, "background");
+                Binding binding = binder.createBinding(bindingDesc, aaa, panel);
                 binding.bind();
 
                 aaa.setColor1(Color.RED);
@@ -118,8 +116,8 @@ public class JComponentBinderTest extends TestCase {
                 assertEquals(Color.RED, aaa.getColor1());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "color2");
-                binding = binder.createBinding(bindingDesc, aaa, panel, "background");
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "color2");
+                binding = binder.createBinding(bindingDesc, aaa, panel);
 
                 aaa.setColor2(Color.GREEN);
                 binding.bind();
@@ -132,8 +130,8 @@ public class JComponentBinderTest extends TestCase {
                 assertEquals(Color.YELLOW, aaa.getColor2());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "color3");
-                binding = binder.createBinding(bindingDesc, aaa, panel, "background");
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "color3");
+                binding = binder.createBinding(bindingDesc, aaa, panel);
                 binding.bind();
 
                 aaa.setColor3(Color.RED);

@@ -14,7 +14,7 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc.impl;
+package org.seasar.swing.desc;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,18 +25,16 @@ import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.ModelDesc;
 
 /**
  * @author kaiseh
  */
 
-public class ModelDescImpl implements ModelDesc {
+public class DefaultModelDesc implements ModelDesc {
     private Class<?> modelClass;
     private List<BindingDesc> bindingDescs;
 
-    public ModelDescImpl(Class<?> modelClass) {
+    public DefaultModelDesc(Class<?> modelClass) {
         if (modelClass == null) {
             throw new EmptyRuntimeException("modelClass");
         }
@@ -53,7 +51,7 @@ public class ModelDescImpl implements ModelDesc {
             if (propField == null) {
                 continue;
             }
-            BindingDesc bindingDesc = new BindingDescImpl(
+            BindingDesc bindingDesc = new DefaultBindingDesc(
                     modelClass, propDesc);
             bindingDescs.add(bindingDesc);
         }

@@ -14,18 +14,14 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.binding.ui;
-
-import org.seasar.swing.binding.BindingTarget;
-import org.seasar.swing.binding.PropertyType;
-import org.seasar.swing.binding.SimpleBinder;
+package org.seasar.swing.binding;
 
 /**
  * @author kaiseh
  */
 
-public class BindingTargetBinder extends SimpleBinder {
-    public BindingTargetBinder() {
-        super(BindingTarget.class, null, PropertyType.VALUE);
+public class DefaultBinder extends SimpleBinder {
+    public DefaultBinder() {
+        super(Object.class, null, PropertyType.VALUE);
     }
 }

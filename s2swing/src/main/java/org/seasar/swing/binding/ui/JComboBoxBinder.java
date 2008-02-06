@@ -43,13 +43,10 @@ public class JComboBoxBinder extends AbstractBinder {
         return null;
     }
 
-    public Class<?> getAdaptedTargetClass() {
-        return JComboBox.class;
-    }
-
+    @Override
     @SuppressWarnings("unchecked")
     public Binding createBinding(BindingDesc bindingDesc, Object source,
-            Object target, String targetPropertyName) {
+            Object target) {
         if (!accepts(bindingDesc, target)) {
             throw new IllegalArgumentException(
                     "Specified parameters cannot be accepted.");
@@ -72,7 +69,7 @@ public class JComboBoxBinder extends AbstractBinder {
                 .getBindingType().getUpdateStrategy(), source, sourceProp,
                 (JComboBox) target);
         
-        setupBindingDefault(binding, bindingDesc, targetPropertyName);
+        setupBindingDefault(binding, bindingDesc, target, null);
         
         return binding;
     }

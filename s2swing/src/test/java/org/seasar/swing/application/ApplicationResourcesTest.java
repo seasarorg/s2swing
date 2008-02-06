@@ -19,7 +19,7 @@ package org.seasar.swing.application;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.application.ApplicationResources;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 import junit.framework.TestCase;
 
@@ -50,11 +50,11 @@ public class ApplicationResourcesTest extends TestCase {
     }
 
     public void testGetBindingPropertyLabel() throws Exception {
-        BindingDesc desc = new BindingDescImpl(Aaa.class, "xxx");
+        BindingDesc desc = new DefaultBindingDesc(Aaa.class, "xxx");
         assertEquals("Custom Label", ApplicationResources
                 .getBindingPropertyLabel(desc));
 
-        desc = new BindingDescImpl(Aaa.class, "yyy");
+        desc = new DefaultBindingDesc(Aaa.class, "yyy");
         assertEquals("yyy", ApplicationResources.getBindingPropertyLabel(desc));
 
         try {

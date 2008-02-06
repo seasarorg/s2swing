@@ -14,7 +14,7 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc.impl;
+package org.seasar.swing.desc;
 
 import java.awt.Component;
 import java.lang.reflect.Field;
@@ -31,8 +31,6 @@ import org.seasar.swing.annotation.ActionTarget;
 import org.seasar.swing.annotation.Model;
 import org.seasar.swing.application.ViewManager;
 import org.seasar.swing.binding.BindingTarget;
-import org.seasar.swing.desc.ActionTargetDesc;
-import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.util.CollectionsUtils;
 import org.seasar.swing.util.SwingUtils;
@@ -41,7 +39,7 @@ import org.seasar.swing.util.SwingUtils;
  * @author kaiseh
  */
 
-public class ViewDescImpl implements ViewDesc {
+public class DefaultViewDesc implements ViewDesc {
     private Class<?> viewClass;
     private BeanDesc beanDesc;
 
@@ -53,7 +51,7 @@ public class ViewDescImpl implements ViewDesc {
     private List<Field> bindingTargetFields;
     private boolean hasModelValidProperty;
 
-    public ViewDescImpl(Class<?> viewClass) {
+    public DefaultViewDesc(Class<?> viewClass) {
         if (viewClass == null) {
             throw new EmptyRuntimeException("viewClass");
         }
@@ -87,7 +85,7 @@ public class ViewDescImpl implements ViewDesc {
                 continue;
             }
             String actionName = target.value();
-            ActionTargetDesc desc = new ActionTargetDescImpl(field, actionName);
+            ActionTargetDesc desc = new DefaultActionTargetDesc(field, actionName);
             actionTargetDescs.add(desc);
         }
     }

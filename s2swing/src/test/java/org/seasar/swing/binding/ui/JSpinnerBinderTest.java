@@ -37,7 +37,7 @@ import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.impl.BindingDescImpl;
+import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
  * @author kaiseh
@@ -142,26 +142,26 @@ public class JSpinnerBinderTest extends TestCase {
         JSpinnerBinder binder = new JSpinnerBinder();
         JSpinner spinner = new JSpinner();
 
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int1"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int2"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int2"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "int3"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int3"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "double1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "double1"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "integer1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "integer1"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "bigInt1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "bigInt1"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "date1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "date1"),
                 spinner));
-        assertTrue(binder.accepts(new BindingDescImpl(Aaa.class, "string1"),
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
                 spinner));
 
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "invalid"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
                 spinner));
-        assertFalse(binder.accepts(new BindingDescImpl(Aaa.class, "int1"),
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "int1"),
                 new JTextField()));
     }
 
@@ -169,14 +169,13 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class, "int1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        spinner, binder.getTargetPropertyName(bindingDesc));
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "int1");
+                Binding binding = binder.createBinding(bindingDesc, aaa, spinner);
                 binding.bind();
 
                 aaa.setInt1(10);
@@ -186,9 +185,8 @@ public class JSpinnerBinderTest extends TestCase {
                 assertEquals(10, aaa.getInt1());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "int2");
-                binding = binder.createBinding(bindingDesc, aaa, spinner,
-                        binder.getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "int2");
+                binding = binder.createBinding(bindingDesc, aaa, spinner);
 
                 aaa.setInt2(60);
                 binding.bind();
@@ -201,9 +199,8 @@ public class JSpinnerBinderTest extends TestCase {
                 assertEquals(70, aaa.getInt2());
 
                 binding.unbind();
-                bindingDesc = new BindingDescImpl(Aaa.class, "int3");
-                binding = binder.createBinding(bindingDesc, aaa, spinner,
-                        binder.getTargetPropertyName(bindingDesc));
+                bindingDesc = new DefaultBindingDesc(Aaa.class, "int3");
+                binding = binder.createBinding(bindingDesc, aaa, spinner);
                 binding.bind();
 
                 aaa.setInt3(10);
@@ -219,15 +216,14 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "double1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        spinner, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, spinner);
                 binding.bind();
 
                 aaa.setDouble1(12.3);
@@ -243,15 +239,14 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "integer1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        spinner, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, spinner);
 
                 aaa.setInteger1(null);
                 try {
@@ -274,15 +269,14 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerNumberModel());
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "bigInt1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        spinner, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, spinner);
 
                 aaa.setBigInt1(null);
                 try {
@@ -305,15 +299,14 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerDateModel());
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "date1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        spinner, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, spinner);
 
                 aaa.setDate1(null);
                 try {
@@ -338,16 +331,15 @@ public class JSpinnerBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JSpinnerBinder binder = new JSpinnerBinder();
-                Aaa aaa = ObservableBeans.create(Aaa.class);
+                Aaa aaa = ObservableBeans.createBean(Aaa.class);
                 JSpinner spinner = new JSpinner();
 
                 spinner.setModel(new SpinnerListModel(Arrays.asList("aaa",
                         "bbb", "ccc")));
 
-                BindingDesc bindingDesc = new BindingDescImpl(Aaa.class,
+                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
                         "string1");
-                Binding binding = binder.createBinding(bindingDesc, aaa,
-                        spinner, binder.getTargetPropertyName(bindingDesc));
+                Binding binding = binder.createBinding(bindingDesc, aaa, spinner);
 
                 aaa.setString1(null);
                 try {
