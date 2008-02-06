@@ -28,7 +28,7 @@ import org.seasar.swing.application.ViewObject;
 import javax.swing.JDialog;
 
 /**
- * S2Swing のビュー機構を組み込んだ、{@code JDialog} の薄いラッパーです。
+ * S2Swing のビュー機構を組み込んだ、{@code JDialog} の薄いラッパークラスです。
  *
  * @author kaiseh
  */

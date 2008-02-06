@@ -19,6 +19,9 @@ package org.seasar.swing.builder;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 
+import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.swing.application.ViewManager;
+
 /**
  * UI ビルダの基底クラスです。
  * 
@@ -33,6 +36,13 @@ public abstract class Builder {
 
     public Builder(ActionMap actionMap) {
         this.actionMap = actionMap;
+    }
+
+    public Builder(ViewManager viewManager) {
+        if (viewManager == null) {
+            throw new EmptyRuntimeException("viewManager");
+        }
+        this.actionMap = viewManager.getActionMap();
     }
 
     public ActionMap getActionMap() {
