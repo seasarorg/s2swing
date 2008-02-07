@@ -16,6 +16,7 @@
 
 package org.seasar.swing.builder;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 
@@ -37,15 +38,15 @@ import org.seasar.swing.application.ViewManager;
  * <pre>
  * ComponentBuilder b = new ComponentBuilder();
  * b.build(contentPane,
- *     b.component(toolBar, BorderLayout.NORTH,
+ *     b.component(toolBar, b.north(),
  *         b.button("newFile"),
  *         b.button("openFile")
  *     ),
- *     b.splitPane(BorderLayout.CENTER,
+ *     b.splitPane(b.center(),
  *         b.scrollPane(tree),      // left component
  *         b.scrollPane(editorPane) // right component
  *     ),
- *     b.component(statusBar, BorderLayout.SOUTH)
+ *     b.component(statusBar, b.south())
  * );
  * </pre>
  * 
@@ -89,8 +90,8 @@ public class ComponentBuilder extends Builder {
         return new ComponentNode(component);
     }
 
-    public ComponentNode component(Component component, Object constraint,
-            Object... children) {
+    public ComponentNode component(Component component,
+            ComponentConstraint constraint, Object... children) {
         return new ComponentNode(component, constraint, toNodes(children));
     }
 
@@ -202,5 +203,25 @@ public class ComponentBuilder extends Builder {
 
     public ComponentConstraint constraint(Object constraint) {
         return new ComponentConstraint(constraint);
+    }
+    
+    public ComponentConstraint north() {
+        return constraint(BorderLayout.NORTH);
+    }
+
+    public ComponentConstraint south() {
+        return constraint(BorderLayout.SOUTH);
+    }
+
+    public ComponentConstraint east() {
+        return constraint(BorderLayout.EAST);
+    }
+
+    public ComponentConstraint west() {
+        return constraint(BorderLayout.WEST);
+    }
+
+    public ComponentConstraint center() {
+        return constraint(BorderLayout.CENTER);
     }
 }

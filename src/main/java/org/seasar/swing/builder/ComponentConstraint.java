@@ -17,8 +17,8 @@
 package org.seasar.swing.builder;
 
 /**
- * レイアウト制約を示すオブジェクトです。
- * {@link TabbedPaneNode} のオーバーロード曖昧性を回避するために用いられます。
+ * レイアウト制約を示すオブジェクトで、オーバーロード曖昧性を回避するために用いられます。
+ * 通常、このクラスは {@link ComponentBuilder} のヘルパメソッドによってインスタンス化されます。
  * 
  * @author kaiseh
  */
