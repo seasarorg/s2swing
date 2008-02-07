@@ -127,21 +127,21 @@ public class ComponentBuilder extends Builder {
         return new ScrollPaneNode(scrollPane, viewNode);
     }
 
-    public ScrollPaneNode scrollPane(Object constraint, Component view) {
+    public ScrollPaneNode scrollPane(ComponentConstraint constraint, Component view) {
         return new ScrollPaneNode(constraint, view);
     }
 
-    public ScrollPaneNode scrollPane(Object constraint,
+    public ScrollPaneNode scrollPane(ComponentConstraint constraint,
             ComponentObjectNode viewNode) {
         return new ScrollPaneNode(constraint, viewNode);
     }
 
-    public ScrollPaneNode scrollPane(JScrollPane scrollPane, Object constraint,
+    public ScrollPaneNode scrollPane(JScrollPane scrollPane, ComponentConstraint constraint,
             Component view) {
         return new ScrollPaneNode(scrollPane, constraint, view);
     }
 
-    public ScrollPaneNode scrollPane(JScrollPane scrollPane, Object constraint,
+    public ScrollPaneNode scrollPane(JScrollPane scrollPane, ComponentConstraint constraint,
             ComponentObjectNode viewNode) {
         return new ScrollPaneNode(scrollPane, constraint, viewNode);
     }
@@ -151,7 +151,7 @@ public class ComponentBuilder extends Builder {
         return new SplitPaneNode(leftNode, rightNode);
     }
 
-    public SplitPaneNode splitPane(Object constraint,
+    public SplitPaneNode splitPane(ComponentConstraint constraint,
             ComponentObjectNode leftNode, ComponentObjectNode rightNode) {
         return new SplitPaneNode(constraint, leftNode, rightNode);
     }
@@ -161,7 +161,7 @@ public class ComponentBuilder extends Builder {
         return new SplitPaneNode(splitPane, leftNode, rightNode);
     }
 
-    public SplitPaneNode splitPane(JSplitPane splitPane, Object constraint,
+    public SplitPaneNode splitPane(JSplitPane splitPane, ComponentConstraint constraint,
             ComponentObjectNode leftNode, ComponentObjectNode rightNode) {
         return new SplitPaneNode(splitPane, constraint, leftNode, rightNode);
     }

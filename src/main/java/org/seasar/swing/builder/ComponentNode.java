@@ -41,7 +41,7 @@ public class ComponentNode extends AbstractComponentNode {
 
     public ComponentNode(Component component, ComponentConstraint constraint,
             ComponentObjectNode... childNodes) {
-        super(component, constraint != null ? constraint.getConstraint() : null);
+        super(component, constraint);
         if (component == null) {
             throw new EmptyRuntimeException("component");
         }

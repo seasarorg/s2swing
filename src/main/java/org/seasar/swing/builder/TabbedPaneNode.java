@@ -45,8 +45,7 @@ public class TabbedPaneNode extends AbstractComponentNode {
 
     public TabbedPaneNode(JTabbedPane tabbedPane,
             ComponentConstraint constraint, TabNode... tabNodes) {
-        super(tabbedPane, constraint != null ? constraint.getConstraint()
-                : null);
+        super(tabbedPane, constraint);
         if (tabbedPane == null) {
             throw new EmptyRuntimeException("tabbedPane");
         }
