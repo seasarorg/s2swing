@@ -41,11 +41,11 @@ public class ScrollPaneNode extends AbstractComponentNode {
         this(new JScrollPane(), null, viewNode);
     }
 
-    public ScrollPaneNode(Object constraint, Component view) {
+    public ScrollPaneNode(ComponentConstraint constraint, Component view) {
         this(new JScrollPane(), constraint, new ComponentNode(view));
     }
 
-    public ScrollPaneNode(Object constraint, ComponentObjectNode viewNode) {
+    public ScrollPaneNode(ComponentConstraint constraint, ComponentObjectNode viewNode) {
         this(new JScrollPane(), constraint, viewNode);
     }
 
@@ -57,12 +57,12 @@ public class ScrollPaneNode extends AbstractComponentNode {
         this(scrollPane, null, viewNode);
     }
 
-    public ScrollPaneNode(JScrollPane scrollPane, Object constraint,
+    public ScrollPaneNode(JScrollPane scrollPane, ComponentConstraint constraint,
             Component view) {
         this(scrollPane, constraint, new ComponentNode(view));
     }
 
-    public ScrollPaneNode(JScrollPane scrollPane, Object constraint,
+    public ScrollPaneNode(JScrollPane scrollPane, ComponentConstraint constraint,
             ComponentObjectNode viewNode) {
         super(scrollPane, constraint);
         if (scrollPane == null) {

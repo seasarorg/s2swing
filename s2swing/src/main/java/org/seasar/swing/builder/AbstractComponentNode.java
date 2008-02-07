@@ -28,9 +28,11 @@ public abstract class AbstractComponentNode implements ComponentObjectNode {
     private Component component;
     private Object constraint;
 
-    public AbstractComponentNode(Component component, Object constraint) {
+    public AbstractComponentNode(Component component,
+            ComponentConstraint constraint) {
         this.component = component;
-        this.constraint = constraint;
+        this.constraint = constraint != null ? constraint.getConstraint()
+                : null;
     }
 
     public Component getComponent() {

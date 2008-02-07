@@ -36,7 +36,7 @@ public class SplitPaneNode extends AbstractComponentNode {
         this(new JSplitPane(), null, leftNode, rightNode);
     }
 
-    public SplitPaneNode(Object constraint, ComponentObjectNode leftNode,
+    public SplitPaneNode(ComponentConstraint constraint, ComponentObjectNode leftNode,
             ComponentObjectNode rightNode) {
         this(new JSplitPane(), constraint, leftNode, rightNode);
     }
@@ -46,7 +46,7 @@ public class SplitPaneNode extends AbstractComponentNode {
         this(splitPane, null, leftNode, rightNode);
     }
 
-    public SplitPaneNode(JSplitPane splitPane, Object constraint,
+    public SplitPaneNode(JSplitPane splitPane, ComponentConstraint constraint,
             ComponentObjectNode leftNode, ComponentObjectNode rightNode) {
         super(splitPane, constraint);
         if (splitPane == null) {
