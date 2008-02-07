@@ -266,6 +266,15 @@ public class ViewManager extends AbstractBean {
                 componentsMap.add(c.getName(), c);
             }
         }
+        for (Field field : viewDesc.getComponentFields()) {
+            Component c = (Component) FieldUtil.get(field, view);
+            if (c.getName() != null) {
+                List<Object> list = componentsMap.getValues(c.getName());
+                if (!list.contains(c)) {
+                    componentsMap.add(c.getName(), c);
+                }
+            }
+        }
         for (Field field : viewDesc.getBindingTargetFields()) {
             BindingTarget target = (BindingTarget) FieldUtil.get(field, view);
             if (target.getName() != null) {

@@ -54,8 +54,8 @@ public class ComponentBuilderTest extends TestCase {
 
         ComponentBuilder b = new ComponentBuilder();
         b.build(frame,
-                b.component(toolBar, BorderLayout.NORTH),
-                b.component(mainPanel, BorderLayout.CENTER,
+                b.component(toolBar, b.north()),
+                b.component(mainPanel, b.center(),
                         b.splitPane(splitPane,
                                 b.scrollPane(tree),
                                 b.tabbedPane(tabbedPane,
@@ -64,7 +64,7 @@ public class ComponentBuilderTest extends TestCase {
                                 )
                         )
                 ),
-                b.component(statusBar, BorderLayout.SOUTH)
+                b.component(statusBar, b.south())
         );
         
         assertEquals(toolBar, frame.getContentPane().getComponent(0));

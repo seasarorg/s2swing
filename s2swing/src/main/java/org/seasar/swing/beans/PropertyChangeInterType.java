@@ -39,7 +39,7 @@ public class PropertyChangeInterType extends AbstractInterType {
     }
 
     private void introducePropertyChangeSupport() {
-        addField(Modifier.PUBLIC, EDTPropertyChangeSupport.class, "pcs",
+        addField(Modifier.PRIVATE, EDTPropertyChangeSupport.class, "pcs",
                 CtField.Initializer.byExpr("new "
                         + EDTPropertyChangeSupport.class.getName() + "(this)"));
     }

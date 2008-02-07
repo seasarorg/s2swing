@@ -16,6 +16,7 @@
 
 package org.seasar.swing.application;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Window;
 
@@ -35,7 +36,7 @@ import org.jdesktop.application.View;
  */
 
 public abstract class S2SingleFrameApplication extends SingleFrameApplication {
-    private boolean windowShown;
+    private boolean firstWindowShown;
 
     public static S2SingleFrameApplication getInstance() {
         Application instance = Application.getInstance();
@@ -65,14 +66,14 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
 
     @Override
     protected void show(JComponent c) {
-        configure(c, c.getRootPane().getParent());
-        super.show(c);
-        windowShown = true;
+        JFrame frame = getMainFrame();
+        frame.getContentPane().add(c, BorderLayout.CENTER);
+        show(frame);
     }
 
     @Override
     public void show(JFrame frame) {
-        if (!windowShown) {
+        if (!firstWindowShown) {
             String title = getContext().getResourceMap().getString(
                     "Application.title");
             if (title != null) {
@@ -82,14 +83,14 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
         }
         configure(frame, frame);
         super.show(frame);
-        windowShown = true;
+        firstWindowShown = true;
     }
 
     @Override
     public void show(JDialog dialog) {
         configure(dialog, dialog);
         super.show(dialog);
-        windowShown = true;
+        firstWindowShown = true;
     }
 
     @Override
@@ -97,6 +98,6 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
         configure(view, view.getRootPane().getParent());
         super.show(view);
         view.getRootPane().getParent().setVisible(true);
-        windowShown = true;
+        firstWindowShown = true;
     }
 }
