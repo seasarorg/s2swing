@@ -27,6 +27,13 @@ import org.seasar.swing.validator.annotation.Pattern;
 public class PatternConstraint extends AbstractConstraint {
     private String pattern;
 
+    public PatternConstraint() {
+    }
+
+    public PatternConstraint(String pattern) {
+        this.pattern = pattern;
+    }
+
     public String getPattern() {
         return pattern;
     }
