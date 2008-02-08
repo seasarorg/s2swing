@@ -18,6 +18,8 @@ package org.seasar.swing.component;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JFrame;
 
@@ -27,7 +29,7 @@ import org.seasar.swing.application.ViewObject;
 
 /**
  * S2Swing のビュー機構を組み込んだ、{@code JFrame} の薄いラッパークラスです。
- *
+ * 
  * @author kaiseh
  */
 
@@ -57,6 +59,8 @@ public abstract class S2Frame extends JFrame implements ViewObject,
 
     private void setup() {
         viewManager = new ViewManager(this, this);
+        viewManager.addPropertyChangeListener("modelValid",
+                new ModelValidListener());
     }
 
     public ViewManager getViewManager() {
@@ -71,5 +75,12 @@ public abstract class S2Frame extends JFrame implements ViewObject,
     }
 
     public void initializeModels() {
+    }
+
+    private class ModelValidListener implements PropertyChangeListener {
+        public void propertyChange(PropertyChangeEvent e) {
+            firePropertyChange(e.getPropertyName(), e.getOldValue(), e
+                    .getNewValue());
+        }
     }
 }
