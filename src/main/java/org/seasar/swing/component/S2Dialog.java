@@ -20,16 +20,18 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.JDialog;
 
 import org.seasar.swing.application.ViewManager;
 import org.seasar.swing.application.ViewManagerHolder;
 import org.seasar.swing.application.ViewObject;
 
-import javax.swing.JDialog;
-
 /**
  * S2Swing のビュー機構を組み込んだ、{@code JDialog} の薄いラッパークラスです。
- *
+ * 
  * @author kaiseh
  */
 
@@ -98,6 +100,8 @@ public abstract class S2Dialog extends JDialog implements ViewObject,
 
     private void setup() {
         viewManager = new ViewManager(this, this);
+        viewManager.addPropertyChangeListener("modelValid",
+                new ModelValidListener());
     }
 
     public ViewManager getViewManager() {
@@ -112,5 +116,12 @@ public abstract class S2Dialog extends JDialog implements ViewObject,
     }
 
     public void initializeModels() {
+    }
+
+    private class ModelValidListener implements PropertyChangeListener {
+        public void propertyChange(PropertyChangeEvent e) {
+            firePropertyChange(e.getPropertyName(), e.getOldValue(), e
+                    .getNewValue());
+        }
     }
 }

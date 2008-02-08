@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.seasar.swing.annotation.ConstraintTarget;
-import org.seasar.swing.validator.MaxLengthConstraint;
+import org.seasar.swing.validator.LengthConstraint;
 
 /**
  * @author kaiseh
@@ -30,7 +30,7 @@ import org.seasar.swing.validator.MaxLengthConstraint;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@ConstraintTarget(MaxLengthConstraint.class)
+@ConstraintTarget(LengthConstraint.class)
 public @interface Length {
     int min();
 

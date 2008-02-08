@@ -22,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import javax.swing.Action;
@@ -145,6 +146,9 @@ public class ViewManager extends AbstractBean {
         for (Field field : viewDesc.getComponentFields()) {
             Object component = FieldUtil.get(field, view);
             if (component != null) {
+                continue;
+            }
+            if ((field.getType().getModifiers() & Modifier.ABSTRACT) != 0) {
                 continue;
             }
             Constructor<?> cons = ClassUtil.getConstructor(field.getType(),
