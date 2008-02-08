@@ -16,10 +16,10 @@
 
 package action1;
 
+import java.awt.Container;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -27,34 +27,31 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 import org.seasar.swing.annotation.ActionTarget;
-import org.seasar.swing.application.ViewObject;
+import org.seasar.swing.component.S2Frame;
 
 /**
  * @author kaiseh
  */
 
-public class MainFrame extends JFrame implements ViewObject {
+public class MainFrame extends S2Frame {
     private static final long serialVersionUID = 1L;
 
-    private JMenu fileMenu;
-    private JMenu helpMenu;
+    private JMenu fileMenu = new JMenu();
+    private JMenu helpMenu = new JMenu();
 
     @ActionTarget("exit")
-    private JMenuItem exitMenuItem;
+    private JMenuItem exitMenuItem = new JMenuItem();
     @ActionTarget("about")
-    private JMenuItem aboutMenuItem;
+    private JMenuItem aboutMenuItem = new JMenuItem();
 
     @ActionTarget("exit")
-    private JButton exitButton;
+    private JButton exitButton = new JButton();
     @ActionTarget("about")
-    private JButton aboutButton;
+    private JButton aboutButton = new JButton();
 
+    @Override
     public void initializeComponents() {
         JMenuBar menuBar = new JMenuBar();
-        fileMenu = new JMenu();
-        helpMenu = new JMenu();
-        exitMenuItem = new JMenuItem();
-        aboutMenuItem = new JMenuItem();
 
         menuBar.add(fileMenu);
         menuBar.add(helpMenu);
@@ -62,14 +59,10 @@ public class MainFrame extends JFrame implements ViewObject {
         helpMenu.add(aboutMenuItem);
         setJMenuBar(menuBar);
 
-        aboutButton = new JButton();
-        exitButton = new JButton();
-        getContentPane().setLayout(new FlowLayout());
-        getContentPane().add(exitButton);
-        getContentPane().add(aboutButton);
-    }
-
-    public void initializeModels() {
+        Container contentPane = getContentPane();
+        contentPane.setLayout(new FlowLayout());
+        contentPane.add(exitButton);
+        contentPane.add(aboutButton);
     }
 
     @Action

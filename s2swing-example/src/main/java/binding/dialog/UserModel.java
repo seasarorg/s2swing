@@ -14,23 +14,27 @@
  * governing permissions and limitations under the License.
  */
 
-package builder;
+package binding.dialog;
 
-import org.seasar.swing.application.S2SingleFrameApplication;
+import org.seasar.swing.annotation.ReadWrite;
+import org.seasar.swing.validator.annotation.Length;
+import org.seasar.swing.validator.annotation.Pattern;
 
 /**
- * ビルダの使用例を示すアプリケーションです。
- * 
  * @author kaiseh
  */
 
-public class BuilderApplication extends S2SingleFrameApplication {
-    public static void main(String[] args) {
-        launch(BuilderApplication.class, args);
+public class UserModel {
+    @ReadWrite
+    @Length(min = 4, max = 16)
+    @Pattern("[A-Z]+")
+    private String username;
+
+    public String getUsername() {
+        return username;
     }
 
-    @Override
-    protected void startup() {
-        show(new MainFrame());
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

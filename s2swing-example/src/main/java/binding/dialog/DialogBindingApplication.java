@@ -14,23 +14,25 @@
  * governing permissions and limitations under the License.
  */
 
-package builder;
+package binding.dialog;
 
 import org.seasar.swing.application.S2SingleFrameApplication;
 
 /**
- * ビルダの使用例を示すアプリケーションです。
+ * ダイアログボックスでのバインディング使用例を示すアプリケーションです。
+ * {@code S2Dialog} が持つ {@code modelValid} プロパティを利用して、
+ * ユーザの入力値が不正な場合の OK ボタンの押下を禁止しています。
  * 
  * @author kaiseh
  */
 
-public class BuilderApplication extends S2SingleFrameApplication {
+public class DialogBindingApplication extends S2SingleFrameApplication {
     public static void main(String[] args) {
-        launch(BuilderApplication.class, args);
+        launch(DialogBindingApplication.class, args);
     }
 
     @Override
     protected void startup() {
-        show(new MainFrame());
+        show(new MainDialog());
     }
 }

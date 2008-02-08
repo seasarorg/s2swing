@@ -20,7 +20,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -29,36 +28,32 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 
 import org.jdesktop.application.Action;
-import org.seasar.swing.application.ViewManager;
-import org.seasar.swing.application.ViewObject;
 import org.seasar.swing.builder.ComponentBuilder;
 import org.seasar.swing.builder.MenuBuilder;
+import org.seasar.swing.component.S2Frame;
 
 /**
  * @author kaiseh
  */
 
-public class MainFrame extends JFrame implements ViewObject {
+public class MainFrame extends S2Frame {
     private static final long serialVersionUID = 1L;
 
-    private JMenuBar menuBar;
-    private JMenu fileMenu;
-    private JButton toolButton1;
-    private JButton toolButton2;
-    private JTextArea textArea1;
-    private JTextArea textArea2;
-    private JLabel statusBar;
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu fileMenu = new JMenu();
+    private JButton toolButton1 = new JButton();
+    private JButton toolButton2 = new JButton();
+    private JTextArea textArea1 = new JTextArea();
+    private JTextArea textArea2 = new JTextArea();
+    private JLabel statusBar = new JLabel();
 
-    private ViewManager viewManager;
-
+    @Override
     public void initializeComponents() {
-        viewManager.createComponents();
-
         setJMenuBar(menuBar);
         setPreferredSize(new Dimension(640, 480));
         getContentPane().setLayout(new BorderLayout());
 
-        MenuBuilder mb = new MenuBuilder(viewManager.getActionMap());
+        MenuBuilder mb = new MenuBuilder(viewManager);
         mb.build(menuBar, 
                 mb.menu(fileMenu, 
                         "fileNew", 
@@ -67,43 +62,47 @@ public class MainFrame extends JFrame implements ViewObject {
                         "fileSave", 
                         "fileSaveAs", 
                         mb.separator(),
-                        "fileExit"));
+                        "fileExit"
+                )
+        );
 
         ComponentBuilder cb = new ComponentBuilder();
         cb.build(getContentPane(),
-                cb.component(new JToolBar(), BorderLayout.NORTH,
+                cb.component(new JToolBar(), cb.north(),
                         toolButton1,
                         toolButton2
                 ),
-                cb.splitPane(BorderLayout.CENTER, 
+                cb.splitPane(cb.center(),
                         cb.scrollPane(new JTree()), 
                         cb.tabbedPane(
                                 cb.tab("Tab 1", cb.scrollPane(textArea1)),
                                 cb.tab("Tab 2", cb.scrollPane(textArea2))
                         )
                 ),
-                cb.component(statusBar, BorderLayout.SOUTH));
+                cb.component(statusBar, cb.south())
+        );
 
         pack();
     }
 
-    public void initializeModels() {
-    }
-
     @Action
     public void fileNew() {
+        statusBar.setText("fileNew called.");
     }
 
     @Action
     public void fileOpen() {
+        statusBar.setText("fileOpen called.");
     }
 
     @Action
     public void fileSave() {
+        statusBar.setText("fileSave called.");
     }
 
     @Action
     public void fileSaveAs() {
+        statusBar.setText("fileSaveAs called.");
     }
 
     @Action

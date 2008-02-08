@@ -19,7 +19,6 @@ package binding.text;
 import java.awt.Container;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -29,40 +28,31 @@ import org.jdesktop.application.Action;
 import org.jdesktop.layout.GroupLayout;
 import org.seasar.swing.annotation.ActionTarget;
 import org.seasar.swing.annotation.Model;
-import org.seasar.swing.application.ViewManager;
-import org.seasar.swing.application.ViewObject;
+import org.seasar.swing.component.S2Frame;
 
 /**
  * @author kaiseh
  */
 
-public class MainFrame extends JFrame implements ViewObject {
+public class MainFrame extends S2Frame {
     private static final long serialVersionUID = 1L;
 
-    private JLabel hintLabel;
-    private JLabel usernameLabel;
-    private JLabel passwordLabel;
+    private JLabel hintLabel = new JLabel();
+    private JLabel usernameLabel = new JLabel();
+    private JLabel passwordLabel = new JLabel();
 
-    private JTextField username;
-    private JPasswordField password;
+    private JTextField username = new JTextField();
+    private JPasswordField password = new JPasswordField();
 
     @ActionTarget("login")
-    private JButton loginButton;
+    private JButton loginButton = new JButton();
 
     @Model
     private AccountModel accountModel;
 
-    private ViewManager viewManager;
-
+    @Override
     public void initializeComponents() {
-        hintLabel = new JLabel();
-        usernameLabel = new JLabel();
-        passwordLabel = new JLabel();
-        username = new JTextField();
-        password = new JPasswordField();
         password.setFont(username.getFont());
-
-        loginButton = new JButton();
 
         Container contentPane = getContentPane();
         GroupLayout layout = new GroupLayout(contentPane);
@@ -91,6 +81,7 @@ public class MainFrame extends JFrame implements ViewObject {
                 .add(loginButton));
     }
 
+    @Override
     public void initializeModels() {
         accountModel.setUsername("guest");
     }

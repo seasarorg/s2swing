@@ -14,19 +14,19 @@
  * governing permissions and limitations under the License.
  */
 
-package builder;
+package binding.custom;
 
 import org.seasar.swing.application.S2SingleFrameApplication;
 
 /**
- * ビルダの使用例を示すアプリケーションです。
+ * Java コードによるカスタムバインディングの例を示すアプリケーションです。
  * 
  * @author kaiseh
  */
 
-public class BuilderApplication extends S2SingleFrameApplication {
+public class CustomBindingApplication extends S2SingleFrameApplication {
     public static void main(String[] args) {
-        launch(BuilderApplication.class, args);
+        launch(CustomBindingApplication.class, args);
     }
 
     @Override

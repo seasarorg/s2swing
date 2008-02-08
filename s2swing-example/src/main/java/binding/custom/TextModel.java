@@ -14,23 +14,23 @@
  * governing permissions and limitations under the License.
  */
 
-package builder;
+package binding.custom;
 
-import org.seasar.swing.application.S2SingleFrameApplication;
+import org.seasar.swing.annotation.ReadWrite;
 
 /**
- * ビルダの使用例を示すアプリケーションです。
- * 
  * @author kaiseh
  */
 
-public class BuilderApplication extends S2SingleFrameApplication {
-    public static void main(String[] args) {
-        launch(BuilderApplication.class, args);
+public class TextModel {
+    @ReadWrite
+    private String text;
+
+    public String getText() {
+        return text;
     }
 
-    @Override
-    protected void startup() {
-        show(new MainFrame());
+    public void setText(String text) {
+        this.text = text;
     }
 }
