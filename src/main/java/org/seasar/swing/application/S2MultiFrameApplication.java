@@ -17,12 +17,11 @@
 package org.seasar.swing.application;
 
 import java.awt.Container;
+import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -45,15 +44,18 @@ public abstract class S2MultiFrameApplication extends S2SingleFrameApplication {
 
         @Override
         public void windowClosed(WindowEvent e) {
-            JFrame frame = (JFrame)e.getWindow();
-            frames.remove(frame);
-            if (frames.isEmpty()) {
+            int remainFrameCount = 0;
+            for (Frame frame : JFrame.getFrames()) {
+                if (frame.isDisplayable()) {
+                    remainFrameCount++;
+                }
+            }
+            if (remainFrameCount == 0) {
                 exit(e);
             }
         }
     }
 
-    private List<JFrame> frames = new ArrayList<JFrame>();
     private Map<JFrame, Integer> savedOperation = new WeakHashMap<JFrame, Integer>();
     
     public static S2MultiFrameApplication getInstance() {
@@ -85,7 +87,6 @@ public abstract class S2MultiFrameApplication extends S2SingleFrameApplication {
                 frame.removeWindowListener(listener);
             }
         }
-        frames.add(frame);
         frame.addWindowListener(new FrameListener());
     }
 
