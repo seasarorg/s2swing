@@ -17,6 +17,7 @@
 package org.seasar.swing.builder;
 
 import javax.swing.ActionMap;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -162,6 +163,17 @@ public class MenuBuilder extends Builder {
         return menuItem(new JMenuItem(getAction(actionName)));
     }
 
+    /**
+     * アクションとバインドされたチェックメニュー項目用のノードを作成します。
+     * このメソッドを呼び出すためには、ビルダに {@code ActionMap} を設定する必要があります。
+     * 
+     * @param actionName {@code ActionMap} から検索するアクション名
+     * @return ノード
+     */
+    public MenuItemNode checkBoxMenuItem(String actionName) {
+        return menuItem(new JCheckBoxMenuItem(getAction(actionName)));
+    }
+    
     /**
      * セパレータ用のノードを作成します。
      * 
