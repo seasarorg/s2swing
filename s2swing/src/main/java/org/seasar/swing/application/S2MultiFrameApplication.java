@@ -46,6 +46,10 @@ public abstract class S2MultiFrameApplication extends S2SingleFrameApplication {
         public void windowClosed(WindowEvent e) {
             int remainFrameCount = 0;
             for (Frame frame : JFrame.getFrames()) {
+                // ignore SwingUtilities$SharedOwnerFrame
+                if (!(frame instanceof JFrame)) {
+                    continue;
+                }
                 if (frame.isDisplayable()) {
                     remainFrameCount++;
                 }
@@ -57,7 +61,7 @@ public abstract class S2MultiFrameApplication extends S2SingleFrameApplication {
     }
 
     private Map<JFrame, Integer> savedOperation = new WeakHashMap<JFrame, Integer>();
-    
+
     public static S2MultiFrameApplication getInstance() {
         Application instance = Application.getInstance();
         if (!(instance instanceof S2MultiFrameApplication)) {
