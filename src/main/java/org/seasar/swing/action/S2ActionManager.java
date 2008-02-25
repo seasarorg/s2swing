@@ -43,6 +43,8 @@ public class S2ActionManager implements AWTEventListener {
         long mask = 0xffffffff;
         mask &= ~AWTEvent.HIERARCHY_EVENT_MASK;
         mask &= ~AWTEvent.HIERARCHY_BOUNDS_EVENT_MASK;
+        mask &= ~AWTEvent.CONTAINER_EVENT_MASK;
+        mask &= ~AWTEvent.COMPONENT_EVENT_MASK;
         Toolkit.getDefaultToolkit().addAWTEventListener(this, mask);
     }
 
@@ -51,6 +53,10 @@ public class S2ActionManager implements AWTEventListener {
     }
 
     public void eventDispatched(AWTEvent e) {
+        updateActions();
+    }
+
+    public void updateActions() {
         for (Object key : actionMap.allKeys()) {
             Action action = actionMap.get(key);
             if (action instanceof S2Action) {

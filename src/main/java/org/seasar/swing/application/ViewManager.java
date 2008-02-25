@@ -17,8 +17,6 @@
 package org.seasar.swing.application;
 
 import java.awt.Component;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -34,9 +32,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
@@ -44,8 +40,8 @@ import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.ConstructorUtil;
 import org.seasar.framework.util.FieldUtil;
 import org.seasar.framework.util.MethodUtil;
-import org.seasar.swing.action.S2ActionManager;
 import org.seasar.swing.action.S2Action;
+import org.seasar.swing.action.S2ActionManager;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.binding.Binder;
 import org.seasar.swing.binding.BinderFactory;
@@ -74,13 +70,16 @@ import org.seasar.swing.validator.S2Validator;
 public class ViewManager extends AbstractBean {
     private Object view;
     private Component rootComponent;
-    private boolean cachedModelValid = true;
 
     protected ApplicationActionMap actionMap;
     protected ResourceMap resourceMap;
     protected ViewDesc viewDesc;
     protected S2ActionManager actionManager;
     protected BindingManager bindingManager;
+
+    public ViewManager(Component rootComponent) {
+        this(rootComponent, rootComponent);
+    }
 
     public ViewManager(Object view, Component rootComponent) {
         if (view == null) {
@@ -116,7 +115,6 @@ public class ViewManager extends AbstractBean {
         actionManager = new S2ActionManager(actionMap);
         actionManager.register();
         bindingManager = new BindingManager();
-        bindingManager.addBindingListener(new ModelBindingListener());
     }
 
     public ApplicationActionMap getActionMap() {
@@ -128,7 +126,6 @@ public class ViewManager extends AbstractBean {
     }
 
     public void configure() {
-        autoInjectViewManager();
         autoInjectS2Actions();
 
         executeComponentInitializer();
@@ -168,6 +165,10 @@ public class ViewManager extends AbstractBean {
         }
     }
 
+    public void updateActions() {
+        actionManager.updateActions();
+    }
+
     @SuppressWarnings("unchecked")
     public void bind(CustomBindingDesc bindingDesc) {
         Binder binder = BinderFactory.getBinder(bindingDesc, bindingDesc
@@ -189,12 +190,6 @@ public class ViewManager extends AbstractBean {
             return cls.getSuperclass();
         } else {
             return cls;
-        }
-    }
-
-    protected void autoInjectViewManager() {
-        for (Field field : viewDesc.getViewManagerFields()) {
-            FieldUtil.set(field, view, this);
         }
     }
 
@@ -270,8 +265,6 @@ public class ViewManager extends AbstractBean {
             Object model = FieldUtil.get(field, view);
             if (model == null) {
                 model = ObservableBeans.createBean(field.getType());
-                ObservableBeans.addPropertyChangeListener(model,
-                        new ModelPropertyChangeListener());
                 FieldUtil.set(field, view, model);
             }
         }
@@ -287,7 +280,7 @@ public class ViewManager extends AbstractBean {
         }
         for (Field field : viewDesc.getComponentFields()) {
             Component c = (Component) FieldUtil.get(field, view);
-            if (c.getName() != null) {
+            if (c != null && c.getName() != null) {
                 List<Object> list = componentsMap.getValues(c.getName());
                 if (!list.contains(c)) {
                     componentsMap.add(c.getName(), c);
@@ -387,38 +380,5 @@ public class ViewManager extends AbstractBean {
             }
         }
         return true;
-    }
-
-    private void refreshModelValid() {
-        boolean modelValid = isModelValid();
-        if (cachedModelValid != modelValid) {
-            firePropertyChange("modelValid", cachedModelValid, modelValid);
-            if (viewDesc.hasModelValidProperty()) {
-                if (ObservableBeans.isObservable(view.getClass())) {
-                    ObservableBeans.firePropertyChange(view, "modelValid",
-                            cachedModelValid, modelValid);
-                }
-            }
-        }
-        cachedModelValid = modelValid;
-    }
-
-    @SuppressWarnings("unchecked")
-    private class ModelBindingListener extends AbstractBindingListener {
-        @Override
-        public void synced(Binding binding) {
-            refreshModelValid();
-        }
-
-        @Override
-        public void syncFailed(Binding binding, SyncFailure failure) {
-            refreshModelValid();
-        }
-    }
-
-    private class ModelPropertyChangeListener implements PropertyChangeListener {
-        public void propertyChange(PropertyChangeEvent e) {
-            refreshModelValid();
-        }
     }
 }

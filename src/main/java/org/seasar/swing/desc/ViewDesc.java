@@ -24,8 +24,6 @@ import java.util.List;
  */
 
 public interface ViewDesc {
-    List<Field> getViewManagerFields();
-
     List<S2ActionDesc> getS2ActionDescs();
 
     List<ActionTargetDesc> getActionTargetDescs();
@@ -37,6 +35,4 @@ public interface ViewDesc {
     List<Field> getComponentFields();
 
     List<Field> getBindingTargetFields();
-
-    boolean hasModelValidProperty();
 }

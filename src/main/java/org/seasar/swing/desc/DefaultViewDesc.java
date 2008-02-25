@@ -30,7 +30,6 @@ import org.seasar.framework.util.ArrayMap;
 import org.seasar.swing.annotation.ActionTarget;
 import org.seasar.swing.annotation.Model;
 import org.seasar.swing.annotation.S2Action;
-import org.seasar.swing.application.ViewManager;
 import org.seasar.swing.binding.BindingTarget;
 import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.util.CollectionsUtils;
@@ -45,13 +44,11 @@ public class DefaultViewDesc implements ViewDesc {
     private BeanDesc beanDesc;
 
     private Method initializer;
-    private List<Field> viewManagerFields;
     private List<S2ActionDesc> s2ActionDescs;
     private List<ActionTargetDesc> actionTargetDescs;
     private ArrayMap modelFields;
     private List<Field> componentFields;
     private List<Field> bindingTargetFields;
-    private boolean hasModelValidProperty;
 
     public DefaultViewDesc(Class<?> viewClass) {
         if (viewClass == null) {
@@ -59,23 +56,11 @@ public class DefaultViewDesc implements ViewDesc {
         }
         this.viewClass = viewClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(viewClass);
-        setupViewManagerFields();
         setupS2ActionDescs();
         setupActionTargetDescs();
         setupModelFields();
         setupComponentFields();
         setupBindingTargetFields();
-        setupHasModelValidProperty();
-    }
-
-    private void setupViewManagerFields() {
-        viewManagerFields = new ArrayList<Field>();
-        for (int i = 0; i < beanDesc.getFieldSize(); i++) {
-            Field field = beanDesc.getField(i);
-            if (field.getType() == ViewManager.class) {
-                viewManagerFields.add(field);
-            }
-        }
     }
 
     private void setupS2ActionDescs() {
@@ -144,20 +129,8 @@ public class DefaultViewDesc implements ViewDesc {
         }
     }
 
-    private void setupHasModelValidProperty() {
-        Method getter = beanDesc.getMethodNoException("isModelValid",
-                new Class<?>[0]);
-        if (getter != null && getter.getReturnType() == boolean.class) {
-            hasModelValidProperty = true;
-        }
-    }
-
     public Method getInitializer() {
         return initializer;
-    }
-
-    public List<Field> getViewManagerFields() {
-        return Collections.unmodifiableList(viewManagerFields);
     }
 
     public List<S2ActionDesc> getS2ActionDescs() {
@@ -182,9 +155,5 @@ public class DefaultViewDesc implements ViewDesc {
 
     public List<Field> getBindingTargetFields() {
         return Collections.unmodifiableList(bindingTargetFields);
-    }
-
-    public boolean hasModelValidProperty() {
-        return hasModelValidProperty;
     }
 }
