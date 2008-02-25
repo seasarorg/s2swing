@@ -14,29 +14,27 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.desc;
+package org.seasar.swing.annotation;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.jdesktop.application.Task.BlockingScope;
 
 /**
  * @author kaiseh
  */
 
-public interface ViewDesc {
-    List<Field> getViewManagerFields();
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface S2Action {
+    String name() default "";
 
-    List<S2ActionDesc> getS2ActionDescs();
+    String enabled() default "";
 
-    List<ActionTargetDesc> getActionTargetDescs();
+    String selected() default "";
 
-    List<Field> getModelFields();
-
-    Field getModelField(Class<?> modelClass);
-
-    List<Field> getComponentFields();
-
-    List<Field> getBindingTargetFields();
-
-    boolean hasModelValidProperty();
+    BlockingScope block() default BlockingScope.NONE;
 }
