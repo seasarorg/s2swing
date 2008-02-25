@@ -16,27 +16,18 @@
 
 package org.seasar.swing.desc;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import java.lang.reflect.Method;
+
+import org.jdesktop.application.Task.BlockingScope;
 
 /**
  * @author kaiseh
  */
 
-public interface ViewDesc {
-    List<Field> getViewManagerFields();
-
-    List<S2ActionDesc> getS2ActionDescs();
-
-    List<ActionTargetDesc> getActionTargetDescs();
-
-    List<Field> getModelFields();
-
-    Field getModelField(Class<?> modelClass);
-
-    List<Field> getComponentFields();
-
-    List<Field> getBindingTargetFields();
-
-    boolean hasModelValidProperty();
+public interface S2ActionDesc {
+    String getName();
+    Method getMethod();
+    String getEnabledCondition();
+    String getSelectedCondition();
+    BlockingScope getBlockingScope();
 }

@@ -44,6 +44,8 @@ import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.ConstructorUtil;
 import org.seasar.framework.util.FieldUtil;
 import org.seasar.framework.util.MethodUtil;
+import org.seasar.swing.action.S2ActionManager;
+import org.seasar.swing.action.S2Action;
 import org.seasar.swing.beans.ObservableBeans;
 import org.seasar.swing.binding.Binder;
 import org.seasar.swing.binding.BinderFactory;
@@ -55,6 +57,7 @@ import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.CustomBindingDesc;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
+import org.seasar.swing.desc.S2ActionDesc;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.desc.ViewDescFactory;
 import org.seasar.swing.exception.BindingException;
@@ -76,6 +79,7 @@ public class ViewManager extends AbstractBean {
     protected ApplicationActionMap actionMap;
     protected ResourceMap resourceMap;
     protected ViewDesc viewDesc;
+    protected S2ActionManager actionManager;
     protected BindingManager bindingManager;
 
     public ViewManager(Object view, Component rootComponent) {
@@ -109,6 +113,8 @@ public class ViewManager extends AbstractBean {
             actionMap = context.getActionMap(originalClass, view);
             resourceMap = context.getResourceMap(originalClass);
         }
+        actionManager = new S2ActionManager(actionMap);
+        actionManager.register();
         bindingManager = new BindingManager();
         bindingManager.addBindingListener(new ModelBindingListener());
     }
@@ -123,6 +129,7 @@ public class ViewManager extends AbstractBean {
 
     public void configure() {
         autoInjectViewManager();
+        autoInjectS2Actions();
 
         executeComponentInitializer();
 
@@ -137,10 +144,11 @@ public class ViewManager extends AbstractBean {
         autoBindModelFields(rootComponent);
     }
 
-    public void reconfigure(Component component) {
-        resourceMap.injectComponents(component);
-        autoBindModelFields(component);
-    }
+// TODO
+//    public void reconfigure(Component component) {
+//        resourceMap.injectComponents(component);
+//        autoBindModelFields(component);
+//    }
 
     public void createComponents() {
         for (Field field : viewDesc.getComponentFields()) {
@@ -224,6 +232,13 @@ public class ViewManager extends AbstractBean {
             if (target != null && target.getName() == null) {
                 target.setName(field.getName());
             }
+        }
+    }
+
+    protected void autoInjectS2Actions() {
+        for (S2ActionDesc actionDesc : viewDesc.getS2ActionDescs()) {
+            S2Action action = new S2Action(actionMap, resourceMap, actionDesc);
+            actionMap.put(action.getName(), action);
         }
     }
 

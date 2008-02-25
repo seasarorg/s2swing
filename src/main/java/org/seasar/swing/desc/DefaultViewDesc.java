@@ -29,6 +29,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.ArrayMap;
 import org.seasar.swing.annotation.ActionTarget;
 import org.seasar.swing.annotation.Model;
+import org.seasar.swing.annotation.S2Action;
 import org.seasar.swing.application.ViewManager;
 import org.seasar.swing.binding.BindingTarget;
 import org.seasar.swing.exception.IllegalRegistrationException;
@@ -45,6 +46,7 @@ public class DefaultViewDesc implements ViewDesc {
 
     private Method initializer;
     private List<Field> viewManagerFields;
+    private List<S2ActionDesc> s2ActionDescs;
     private List<ActionTargetDesc> actionTargetDescs;
     private ArrayMap modelFields;
     private List<Field> componentFields;
@@ -57,8 +59,8 @@ public class DefaultViewDesc implements ViewDesc {
         }
         this.viewClass = viewClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(viewClass);
-
         setupViewManagerFields();
+        setupS2ActionDescs();
         setupActionTargetDescs();
         setupModelFields();
         setupComponentFields();
@@ -76,17 +78,28 @@ public class DefaultViewDesc implements ViewDesc {
         }
     }
 
+    private void setupS2ActionDescs() {
+        s2ActionDescs = new ArrayList<S2ActionDesc>();
+        for (Method method : viewClass.getMethods()) {
+            S2Action action = method.getAnnotation(S2Action.class);
+            if (action != null) {
+                S2ActionDesc desc = new DefaultS2ActionDesc(method);
+                s2ActionDescs.add(desc);
+            }
+        }
+    }
+
     private void setupActionTargetDescs() {
         actionTargetDescs = new ArrayList<ActionTargetDesc>();
         for (int i = 0; i < beanDesc.getFieldSize(); i++) {
             Field field = beanDesc.getField(i);
             ActionTarget target = field.getAnnotation(ActionTarget.class);
-            if (target == null) {
-                continue;
+            if (target != null) {
+                String actionName = target.value();
+                ActionTargetDesc desc = new DefaultActionTargetDesc(field,
+                        actionName);
+                actionTargetDescs.add(desc);
             }
-            String actionName = target.value();
-            ActionTargetDesc desc = new DefaultActionTargetDesc(field, actionName);
-            actionTargetDescs.add(desc);
         }
     }
 
@@ -145,6 +158,10 @@ public class DefaultViewDesc implements ViewDesc {
 
     public List<Field> getViewManagerFields() {
         return Collections.unmodifiableList(viewManagerFields);
+    }
+
+    public List<S2ActionDesc> getS2ActionDescs() {
+        return Collections.unmodifiableList(s2ActionDescs);
     }
 
     public List<ActionTargetDesc> getActionTargetDescs() {
