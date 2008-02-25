@@ -32,6 +32,8 @@ public class S2Action extends ApplicationAction {
 
     private ApplicationActionMap actionMap;
     private S2ActionDesc actionDesc;
+    private Object enabledExpr;
+    private Object selectedExpr;
 
     public S2Action(ApplicationActionMap actionMap, ResourceMap resourceMap,
             S2ActionDesc actionDesc) {
@@ -39,29 +41,30 @@ public class S2Action extends ApplicationAction {
                 .getMethod(), null, null, actionDesc.getBlockingScope());
         this.actionMap = actionMap;
         this.actionDesc = actionDesc;
+        setup();
+    }
+
+    private void setup() {
+        String enabled = actionDesc.getEnabledCondition();
+        if (!StringUtil.isEmpty(enabled)) {
+            enabledExpr = OgnlUtil.parseExpression(enabled);
+        }
+        String selected = actionDesc.getSelectedCondition();
+        if (!StringUtil.isEmpty(selected)) {
+            selectedExpr = OgnlUtil.parseExpression(selected);
+        }
     }
 
     public void update() {
-        updateEnabled();
-        updateSelected();
-    }
-
-    private void updateEnabled() {
-        String enabled = actionDesc.getEnabledCondition();
-        if (!StringUtil.isEmpty(enabled)) {
-            setEnabled(evaluateOnActionObject(enabled));
+        if (enabledExpr != null) {
+            setEnabled(evaluateOnActionObject(enabledExpr));
+        }
+        if (selectedExpr != null) {
+            setSelected(evaluateOnActionObject(selectedExpr));
         }
     }
 
-    private void updateSelected() {
-        String selected = actionDesc.getSelectedCondition();
-        if (!StringUtil.isEmpty(selected)) {
-            setEnabled(evaluateOnActionObject(selected));
-        }
-    }
-
-    private boolean evaluateOnActionObject(String condition) {
-        Object expr = OgnlUtil.parseExpression(condition);
+    private boolean evaluateOnActionObject(Object expr) {
         Object result = OgnlUtil.getValue(expr, actionMap.getActionsObject());
         return Boolean.TRUE.equals(result);
     }
