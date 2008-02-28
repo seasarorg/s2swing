@@ -102,15 +102,19 @@ public class ViewManager extends AbstractBean {
     }
 
     protected void setup() {
-        viewDesc = ViewDescFactory.getViewDesc(view.getClass());
+        Class<?> originalViewClass = getOriginalClass(view.getClass());
+        viewDesc = ViewDescFactory.getViewDesc(originalViewClass);
         ApplicationContext context = getContext();
-        if (SwingUtils.isSystemClass(view.getClass())) {
+        if (SwingUtils.isSystemClass(originalViewClass)) {
             actionMap = context.getActionMap();
             resourceMap = context.getResourceMap();
         } else {
-            Class<?> originalClass = getOriginalClass(view.getClass());
-            actionMap = context.getActionMap(originalClass, view);
-            resourceMap = context.getResourceMap(originalClass);
+            actionMap = context.getActionMap(originalViewClass, view);
+            Class<?> stopClass = originalViewClass;
+            while (!SwingUtils.isSystemClass(stopClass.getSuperclass())) {
+                stopClass = stopClass.getSuperclass();
+            }
+            resourceMap = context.getResourceMap(originalViewClass, stopClass);
         }
         actionManager = new S2ActionManager(actionMap);
         actionManager.register();
@@ -139,6 +143,8 @@ public class ViewManager extends AbstractBean {
         executeModelInitializer();
 
         autoBindModelFields(rootComponent);
+
+        updateActions();
     }
 
 // TODO

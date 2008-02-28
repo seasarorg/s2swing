@@ -32,7 +32,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 public class SwingUtils {
     public static boolean isSystemClass(Class<?> cls) {
         String name = cls.getName();
-        return name.startsWith("javax.swing") || name.startsWith("java.awt")
+        return name.startsWith("java.") || name.startsWith("javax.")
                 || name.startsWith("org.jdesktop.application");
     }
 

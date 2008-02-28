@@ -45,6 +45,7 @@ public class S2ActionManager implements AWTEventListener {
         mask &= ~AWTEvent.HIERARCHY_BOUNDS_EVENT_MASK;
         mask &= ~AWTEvent.CONTAINER_EVENT_MASK;
         mask &= ~AWTEvent.COMPONENT_EVENT_MASK;
+        mask &= ~AWTEvent.MOUSE_MOTION_EVENT_MASK;
         Toolkit.getDefaultToolkit().addAWTEventListener(this, mask);
     }
 
