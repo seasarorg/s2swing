@@ -17,6 +17,9 @@
 package org.seasar.swing.application;
 
 import java.awt.Component;
+import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,6 +29,7 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.application.AbstractBean;
 import org.jdesktop.application.Application;
@@ -70,6 +74,7 @@ import org.seasar.swing.validator.S2Validator;
 public class ViewManager extends AbstractBean {
     private Object view;
     private Component rootComponent;
+    private boolean configured;
 
     protected ApplicationActionMap actionMap;
     protected ResourceMap resourceMap;
@@ -117,7 +122,6 @@ public class ViewManager extends AbstractBean {
             resourceMap = context.getResourceMap(originalViewClass, stopClass);
         }
         actionManager = new S2ActionManager(actionMap);
-        actionManager.register();
         bindingManager = new BindingManager();
     }
 
@@ -130,28 +134,35 @@ public class ViewManager extends AbstractBean {
     }
 
     public void configure() {
+        if (configured) {
+            throw new IllegalStateException("ViewManager has already been configured.");
+        }
+
         autoInjectS2Actions();
 
         executeComponentInitializer();
-
+        
         autoInjectComponentNames();
         autoInjectComponentProperties();
         autoInjectBindingTargetNames();
         autoBindActions();
         autoInjectModels();
-
+        
         executeModelInitializer();
-
+        
         autoBindModelFields(rootComponent);
-
         updateActions();
+
+        installListeners();
+
+        configured = true;
     }
 
-// TODO
-//    public void reconfigure(Component component) {
-//        resourceMap.injectComponents(component);
-//        autoBindModelFields(component);
-//    }
+    // TODO
+    // public void reconfigure(Component component) {
+    // resourceMap.injectComponents(component);
+    // autoBindModelFields(component);
+    // }
 
     public void createComponents() {
         for (Field field : viewDesc.getComponentFields()) {
@@ -357,6 +368,14 @@ public class ViewManager extends AbstractBean {
         }
     }
 
+    protected void installListeners() {
+        actionManager.register();
+        Window window = SwingUtilities.getWindowAncestor(rootComponent);
+        if (window != null) {
+            window.addWindowListener(new ViewWindowListener());
+        }
+    }
+
     public BindingManager getBindingManager() {
         return bindingManager;
     }
@@ -386,5 +405,17 @@ public class ViewManager extends AbstractBean {
             }
         }
         return true;
+    }
+
+    private class ViewWindowListener extends WindowAdapter {
+        @Override
+        public void windowOpened(WindowEvent e) {
+            actionManager.register();
+        }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+            actionManager.deregister();
+        }
     }
 }
