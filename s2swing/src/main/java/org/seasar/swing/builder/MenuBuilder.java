@@ -22,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 
 import org.seasar.swing.application.ViewManager;
 
@@ -164,16 +165,27 @@ public class MenuBuilder extends Builder {
     }
 
     /**
-     * アクションとバインドされたチェックメニュー項目用のノードを作成します。
+     * アクションとバインドされたチェックボックスメニュー項目用のノードを作成します。
      * このメソッドを呼び出すためには、ビルダに {@code ActionMap} を設定する必要があります。
      * 
      * @param actionName {@code ActionMap} から検索するアクション名
      * @return ノード
      */
-    public MenuItemNode checkBoxMenuItem(String actionName) {
+    public MenuItemNode checkBox(String actionName) {
         return menuItem(new JCheckBoxMenuItem(getAction(actionName)));
     }
-    
+
+    /**
+     * アクションとバインドされたラジオボタンメニュー項目用のノードを作成します。
+     * このメソッドを呼び出すためには、ビルダに {@code ActionMap} を設定する必要があります。
+     * 
+     * @param actionName {@code ActionMap} から検索するアクション名
+     * @return ノード
+     */
+    public MenuItemNode radioButton(String actionName) {
+        return menuItem(new JRadioButtonMenuItem(getAction(actionName)));
+    }
+
     /**
      * セパレータ用のノードを作成します。
      * 

@@ -21,7 +21,7 @@ import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JMenu;
+import javax.swing.JComponent;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
 
@@ -47,9 +47,9 @@ public class SwingUtils {
 
     private static void innerTraverse(Component c, List<Component> list) {
         list.add(c);
-        if (c instanceof JMenu) {
-            JMenu menu = (JMenu) c;
-            for (Component child : menu.getMenuComponents()) {
+        if (c instanceof JComponent) {
+            JComponent jc = (JComponent) c;
+            for (Component child : jc.getComponents()) {
                 innerTraverse(child, list);
             }
         } else if (c instanceof Container) {
