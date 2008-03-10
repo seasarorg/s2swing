@@ -158,6 +158,10 @@ public class ViewManager extends AbstractBean {
         configured = true;
     }
 
+    public boolean isConfigured() {
+        return configured;
+    }
+
     // TODO
     // public void reconfigure(Component component) {
     // resourceMap.injectComponents(component);
