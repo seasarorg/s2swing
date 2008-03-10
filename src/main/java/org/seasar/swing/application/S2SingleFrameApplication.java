@@ -51,11 +51,14 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
     protected void configureWindow(Window root) {
     }
 
-    protected void configure(Object view, Component rootComponent) {
+    protected void configureIfNecessary(Object view, Component rootComponent) {
+        ViewManager manager;
         if (view instanceof ViewManagerHolder) {
-            ((ViewManagerHolder) view).getViewManager().configure();
+            manager = ((ViewManagerHolder) view).getViewManager();
         } else {
-            ViewManager manager = createViewManager(view, rootComponent);
+            manager = createViewManager(view, rootComponent);
+        }
+        if (!manager.isConfigured()) {
             manager.configure();
         }
     }
@@ -81,21 +84,21 @@ public abstract class S2SingleFrameApplication extends SingleFrameApplication {
             }
             setMainFrame(frame);
         }
-        configure(frame, frame);
+        configureIfNecessary(frame, frame);
         super.show(frame);
         firstWindowShown = true;
     }
 
     @Override
     public void show(JDialog dialog) {
-        configure(dialog, dialog);
+        configureIfNecessary(dialog, dialog);
         super.show(dialog);
         firstWindowShown = true;
     }
 
     @Override
     public void show(View view) {
-        configure(view, view.getRootPane().getParent());
+        configureIfNecessary(view, view.getRootPane().getParent());
         super.show(view);
         view.getRootPane().getParent().setVisible(true);
         firstWindowShown = true;
