@@ -23,6 +23,8 @@ import org.seasar.framework.exception.SRuntimeException;
  */
 
 public abstract class SwingRuntimeException extends SRuntimeException {
+    private static final long serialVersionUID = 7066553943576136567L;
+
     public SwingRuntimeException(String messageCode, Object[] args,
             Throwable cause) {
         super(messageCode, args, cause);
