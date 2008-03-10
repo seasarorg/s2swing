@@ -20,8 +20,6 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JDialog;
 
@@ -37,6 +35,8 @@ import org.seasar.swing.application.ViewObject;
 
 public abstract class S2Dialog extends JDialog implements ViewObject,
         ViewManagerHolder {
+    private static final long serialVersionUID = 8371080078385843744L;
+
     protected ViewManager viewManager;
 
     public S2Dialog() throws HeadlessException {
@@ -100,28 +100,15 @@ public abstract class S2Dialog extends JDialog implements ViewObject,
 
     private void setup() {
         viewManager = new ViewManager(this, this);
-        viewManager.addPropertyChangeListener("modelValid",
-                new ModelValidListener());
     }
 
     public ViewManager getViewManager() {
         return viewManager;
     }
 
-    public boolean isModelValid() {
-        return viewManager.isModelValid();
-    }
-
     public void initializeComponents() {
     }
 
     public void initializeModels() {
-    }
-
-    private class ModelValidListener implements PropertyChangeListener {
-        public void propertyChange(PropertyChangeEvent e) {
-            firePropertyChange(e.getPropertyName(), e.getOldValue(), e
-                    .getNewValue());
-        }
     }
 }

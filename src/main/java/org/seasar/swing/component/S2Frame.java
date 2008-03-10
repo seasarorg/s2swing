@@ -18,8 +18,6 @@ package org.seasar.swing.component;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JFrame;
 
@@ -35,6 +33,8 @@ import org.seasar.swing.application.ViewObject;
 
 public abstract class S2Frame extends JFrame implements ViewObject,
         ViewManagerHolder {
+    private static final long serialVersionUID = 6166377893511334480L;
+
     protected ViewManager viewManager;
 
     public S2Frame() throws HeadlessException {
@@ -59,28 +59,15 @@ public abstract class S2Frame extends JFrame implements ViewObject,
 
     private void setup() {
         viewManager = new ViewManager(this, this);
-        viewManager.addPropertyChangeListener("modelValid",
-                new ModelValidListener());
     }
 
     public ViewManager getViewManager() {
         return viewManager;
     }
 
-    public boolean isModelValid() {
-        return viewManager.isModelValid();
-    }
-
     public void initializeComponents() {
     }
 
     public void initializeModels() {
-    }
-
-    private class ModelValidListener implements PropertyChangeListener {
-        public void propertyChange(PropertyChangeEvent e) {
-            firePropertyChange(e.getPropertyName(), e.getOldValue(), e
-                    .getNewValue());
-        }
     }
 }
