@@ -58,8 +58,8 @@ public class BindingManager {
         public void synced(Binding binding) {
             if (syncFailureMap.containsKey(binding)) {
                 syncFailureMap.remove(binding);
-                fireBindingStateChanged();
             }
+            fireBindingStateChanged();
             if (syncedProcessing) {
                 return;
             }
@@ -132,6 +132,7 @@ public class BindingManager {
         for (Binding binding : bindingGroup.getBindings()) {
             if (!binding.isBound()) {
                 binding.bind();
+                binding.saveAndNotify(); // TODO
             }
         }
     }
@@ -224,6 +225,8 @@ public class BindingManager {
         List<String> errorMessages = new ArrayList<String>();
         for (Binding binding : syncFailureMap.keySet()) {
             SyncFailure failure = syncFailureMap.get(binding);
+            syncFailures.add(failure);
+
             BindingDesc bindingDesc = getBindingDesc(binding);
             if (failure.getType() == SyncFailureType.CONVERSION_FAILED) {
                 RuntimeException exception = failure.getConversionException();
