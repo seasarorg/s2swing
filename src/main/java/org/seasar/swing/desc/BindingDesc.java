@@ -16,13 +16,10 @@
 
 package org.seasar.swing.desc;
 
-import java.util.List;
-
 import org.jdesktop.beansbinding.Converter;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
-import org.seasar.swing.validator.Constraint;
 
 /**
  * @author kaiseh
@@ -31,17 +28,11 @@ import org.seasar.swing.validator.Constraint;
 public interface BindingDesc {
     BindingType getBindingType();
 
-    Class<?> getSourceClass();
+    PropertyType getPropertyType();
 
-    PropertyDesc getSourcePropertyDesc();
+    String getSourceProperty();
 
-    String getTargetName();
-
-    String getTargetPropertyName();
-
-    PropertyType getTargetPropertyType();
+    PropertyDesc getTargetObjectDesc();
 
     Converter<?, ?> getConverter();
-
-    List<Constraint> getConstraints();
 }

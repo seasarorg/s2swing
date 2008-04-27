@@ -32,6 +32,5 @@ import org.seasar.swing.binding.PropertyType;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface BindingDescription {
     BindingType binding();
-
-    PropertyType property() default PropertyType.VALUE;
+    PropertyType property();
 }

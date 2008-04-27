@@ -22,26 +22,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.seasar.swing.binding.BindingType;
+import org.seasar.swing.binding.PropertyType;
 
 /**
- * モデルオブジェクトのプロパティが、バインディングの開始直後に、UI コンポーネントに一度だけ読み出されることを許可します。
- * 
  * @author kaiseh
  */
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@BindingDescription(binding = BindingType.READ_ONCE)
+@BindingDescription(binding = BindingType.READ_ONCE, property = PropertyType.VALUE)
 public @interface ReadOnce {
-    /**
-     * バインディング対象となる UI コンポーネント名を指定します。指定を省略した場合は、
-     * モデルクラスのプロパティ名が選択されます。
-     */
-    String target() default "";
-
-    /**
-     * バインディング対象となる UI コンポーネントのプロパティ名を指定します。 指定を省略した場合は、UI
-     * コンポーネントの種類に応じて、適切なデフォルトプロパティ名が選択されます。
-     */
-    String targetProperty() default "";
+    String source() default "";
 }

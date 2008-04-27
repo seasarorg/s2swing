@@ -17,116 +17,104 @@
 package org.seasar.swing.desc;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.jdesktop.beansbinding.Converter;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.ConstructorUtil;
-import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.annotation.BindingDescription;
-import org.seasar.swing.annotation.ConstraintTarget;
 import org.seasar.swing.annotation.ConverterTarget;
 import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.converter.ConverterFactory;
 import org.seasar.swing.exception.IllegalRegistrationException;
-import org.seasar.swing.resolver.ComponentResolver;
 import org.seasar.swing.util.AnnotationUtils;
-import org.seasar.swing.validator.Constraint;
 
 /**
  * @author kaiseh
  */
 
 public class DefaultBindingDesc implements BindingDesc {
-    private Class<?> sourceClass;
-    private Field sourceField;
+    private Class<?> viewClass;
+    private Field targetField;
 
-    private BindingDescription bindingDescription;
-    private PropertyDesc sourcePropertyDesc;
-    private String targetName;
-    private String targetPropertyName;
+    private BindingType bindingType;
+    private PropertyType propertyType;
+    private String sourceProperty;
+    private PropertyDesc targetObjectDesc;
     private Converter<?, ?> converter;
-    private List<Constraint> constraints;
 
-    public DefaultBindingDesc(Class<?> modelClass, Field sourceField) {
-        if (modelClass == null) {
-            throw new EmptyRuntimeException("modelClass");
+    public DefaultBindingDesc(Class<?> viewClass, Field targetField) {
+        if (viewClass == null) {
+            throw new EmptyRuntimeException("viewClass");
         }
-        if (sourceField == null) {
-            throw new EmptyRuntimeException("sourceField");
+        if (targetField == null) {
+            throw new EmptyRuntimeException("targetField");
         }
-        this.sourceClass = modelClass;
-        this.sourceField = sourceField;
-        initialize();
+        this.viewClass = viewClass;
+        this.targetField = targetField;
+        BeanDesc beanDesc = BeanDescFactory.getBeanDesc(viewClass);
+        this.targetObjectDesc = beanDesc.getPropertyDesc(targetField.getName());
+        setup();
     }
 
-    public DefaultBindingDesc(Class<?> modelClass, PropertyDesc sourcePropertyDesc) {
-        if (modelClass == null) {
-            throw new EmptyRuntimeException("modelClass");
+    public DefaultBindingDesc(Class<?> viewClass,
+            PropertyDesc targetPropertyDesc) {
+        if (viewClass == null) {
+            throw new EmptyRuntimeException("viewClass");
         }
-        if (sourcePropertyDesc == null) {
-            throw new EmptyRuntimeException("sourcePropertyDesc");
+        if (targetPropertyDesc == null) {
+            throw new EmptyRuntimeException("targetPropertyDesc");
         }
-        if (sourcePropertyDesc.getField() == null) {
+        if (targetPropertyDesc.getField() == null) {
             throw new IllegalArgumentException(
-                    "sourcePropertyDesc must have a field.");
+                    "targetPropertyDesc must have a field.");
         }
-        this.sourceClass = modelClass;
-        this.sourceField = sourcePropertyDesc.getField();
-        initialize();
+        this.viewClass = viewClass;
+        this.targetField = targetPropertyDesc.getField();
+        this.targetObjectDesc = targetPropertyDesc;
+        setup();
     }
 
-    public DefaultBindingDesc(Class<?> modelClass, String sourceFieldName) {
-        if (modelClass == null) {
-            throw new EmptyRuntimeException("modelClass");
+    public DefaultBindingDesc(Class<?> viewClass, String targetFieldName) {
+        if (viewClass == null) {
+            throw new EmptyRuntimeException("viewClass");
         }
-        if (sourceFieldName == null) {
-            throw new EmptyRuntimeException("sourceFieldName");
+        if (targetFieldName == null) {
+            throw new EmptyRuntimeException("targetFieldName");
         }
-        this.sourceClass = modelClass;
-        BeanDesc beanDesc = BeanDescFactory.getBeanDesc(modelClass);
-        this.sourceField = beanDesc.getField(sourceFieldName);
-        initialize();
+        this.viewClass = viewClass;
+        BeanDesc beanDesc = BeanDescFactory.getBeanDesc(viewClass);
+        this.targetField = beanDesc.getField(targetFieldName);
+        this.targetObjectDesc = beanDesc.getPropertyDesc(targetFieldName);
+        setup();
     }
 
-    private void initialize() {
+    private void setup() {
         setupMain();
         setupConverter();
-        setupConstraints();
     }
 
     private void setupMain() {
-        BeanDesc beanDesc = BeanDescFactory.getBeanDesc(sourceClass);
-        sourcePropertyDesc = beanDesc.getPropertyDesc(sourceField.getName());
-
-        for (Annotation annotation : sourceField.getAnnotations()) {
+        BindingDescription registeredDescription = null;
+        for (Annotation annotation : targetField.getAnnotations()) {
             Class<?> annotationType = annotation.annotationType();
-            BindingDescription description = annotationType
+            BindingDescription desc = annotationType
                     .getAnnotation(BindingDescription.class);
-            if (description != null) {
-                if (bindingDescription != null) {
+            if (desc != null) {
+                if (registeredDescription != null) {
                     throw new IllegalRegistrationException("ESWI0102",
-                            sourceClass.getName(), sourceField.getName());
+                            viewClass.getName(), targetField.getName());
                 }
-                bindingDescription = description;
-                targetName = (String) AnnotationUtils.getProperty(annotation,
-                        "target");
-                if (targetName.length() == 0) {
-                    targetName = null;
-                }
-                targetPropertyName = (String) AnnotationUtils.getProperty(
-                        annotation, "targetProperty");
-                if (targetPropertyName.length() == 0) {
-                    targetPropertyName = null;
+                registeredDescription = desc;
+                bindingType = desc.binding();
+                propertyType = desc.property();
+                sourceProperty = (String) AnnotationUtils.getProperty(
+                        annotation, "source");
+                if (sourceProperty.length() == 0) {
+                    sourceProperty = null;
                 }
             }
         }
@@ -134,15 +122,15 @@ public class DefaultBindingDesc implements BindingDesc {
 
     private void setupConverter() {
         Annotation registeredAnnotation = null;
-        for (Annotation annotation : sourceField.getAnnotations()) {
+        for (Annotation annotation : targetField.getAnnotations()) {
             ConverterTarget target = annotation.annotationType().getAnnotation(
                     ConverterTarget.class);
             if (target == null) {
                 continue;
             }
             if (registeredAnnotation != null) {
-                throw new IllegalRegistrationException("ESWI0105", sourceClass
-                        .getName(), sourceField.getName(), registeredAnnotation
+                throw new IllegalRegistrationException("ESWI0105", viewClass
+                        .getName(), targetField.getName(), registeredAnnotation
                         .annotationType(), annotation.annotationType());
             }
             converter = ConverterFactory.createConverter(annotation);
@@ -150,82 +138,72 @@ public class DefaultBindingDesc implements BindingDesc {
         }
     }
 
-    private void setupConstraints() {
-        constraints = new ArrayList<Constraint>();
-        for (Annotation annotation : sourceField.getAnnotations()) {
-            ConstraintTarget target = annotation.annotationType()
-                    .getAnnotation(ConstraintTarget.class);
-            if (target == null) {
-                continue;
-            }
-            Class<?> constraintClass = target.value();
-            Constraint constraint = (Constraint) ClassUtil
-                    .newInstance(constraintClass);
-            constraint.read(annotation);
-            constraints.add(constraint);
-        }
-
-        org.seasar.swing.validator.annotation.Constraint c = sourceField
-                .getAnnotation(org.seasar.swing.validator.annotation.Constraint.class);
-        if (c != null) {
-            Object constraintObject = null;
-            if (!StringUtil.isEmpty(c.name())) {
-                constraintObject = ComponentResolver.getComponent(c.name());
-            } else {
-                if (c.type() == Constraint.class) {
-                    throw new IllegalRegistrationException("ESWI0108",
-                            sourceClass.getName(), sourceField.getName());
-                }
-                String[] args = c.args();
-                Class<?>[] argTypes = new Class<?>[args.length];
-                for (int i = 0; i < argTypes.length; i++) {
-                    argTypes[i] = String.class;
-                }
-                Constructor<?> constructor = ClassUtil.getConstructor(c.type(),
-                        argTypes);
-                constraintObject = ConstructorUtil.newInstance(constructor,
-                        args);
-            }
-            if (constraintObject instanceof Constraint) {
-                constraints.add((Constraint) constraintObject);
-            } else {
-                throw new IllegalRegistrationException("ESWI0109", c.type()
-                        .getName());
-            }
-        }
-    }
+//    private void setupConstraints() {
+//        constraints = new ArrayList<Constraint>();
+//        for (Annotation annotation : targetField.getAnnotations()) {
+//            ConstraintTarget target = annotation.annotationType()
+//                    .getAnnotation(ConstraintTarget.class);
+//            if (target == null) {
+//                continue;
+//            }
+//            Class<?> constraintClass = target.value();
+//            Constraint constraint = (Constraint) ClassUtil
+//                    .newInstance(constraintClass);
+//            constraint.read(annotation);
+//            constraints.add(constraint);
+//        }
+//
+//        org.seasar.swing.validator.annotation.Constraint c = targetField
+//                .getAnnotation(org.seasar.swing.validator.annotation.Constraint.class);
+//        if (c != null) {
+//            Object constraintObject = null;
+//            if (!StringUtil.isEmpty(c.name())) {
+//                constraintObject = ComponentResolver.getComponent(c.name());
+//            } else {
+//                if (c.type() == Constraint.class) {
+//                    throw new IllegalRegistrationException("ESWI0108",
+//                            viewClass.getName(), targetField.getName());
+//                }
+//                String[] args = c.args();
+//                Class<?>[] argTypes = new Class<?>[args.length];
+//                for (int i = 0; i < argTypes.length; i++) {
+//                    argTypes[i] = String.class;
+//                }
+//                Constructor<?> constructor = ClassUtil.getConstructor(c.type(),
+//                        argTypes);
+//                constraintObject = ConstructorUtil.newInstance(constructor,
+//                        args);
+//            }
+//            if (constraintObject instanceof Constraint) {
+//                constraints.add((Constraint) constraintObject);
+//            } else {
+//                throw new IllegalRegistrationException("ESWI0109", c.type()
+//                        .getName());
+//            }
+//        }
+//    }
 
     public BindingType getBindingType() {
-        return bindingDescription != null ? bindingDescription.binding()
-                : BindingType.NONE;
+        return bindingType;
     }
 
-    public Class<?> getSourceClass() {
-        return sourceClass;
+    public PropertyType getPropertyType() {
+        return propertyType;
+    }
+    
+    public Class<?> getViewClass() {
+        return viewClass;
     }
 
-    public PropertyDesc getSourcePropertyDesc() {
-        return sourcePropertyDesc;
+    public String getSourceProperty() {
+        return sourceProperty;
     }
 
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public String getTargetPropertyName() {
-        return targetPropertyName;
-    }
-
-    public PropertyType getTargetPropertyType() {
-        return bindingDescription != null ? bindingDescription.property()
-                : null;
+    public PropertyDesc getTargetObjectDesc() {
+        return targetObjectDesc;
     }
 
     public Converter<?, ?> getConverter() {
         return converter;
-    }
-
-    public List<Constraint> getConstraints() {
-        return Collections.unmodifiableList(constraints);
     }
 }

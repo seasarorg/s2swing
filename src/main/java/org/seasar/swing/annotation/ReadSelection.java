@@ -37,15 +37,5 @@ import org.seasar.swing.binding.PropertyType;
 @Target(ElementType.FIELD)
 @BindingDescription(binding = BindingType.READ, property = PropertyType.SELECTION)
 public @interface ReadSelection {
-    /**
-     * バインディング対象となる UI コンポーネント名を指定します。指定を省略した場合は、
-     * モデルクラスのプロパティ名が選択されます。
-     */
-    String target() default "";
-
-    /**
-     * バインディング対象となる UI コンポーネントのプロパティ名を指定します。 指定を省略した場合は、UI
-     * コンポーネントの種類に応じて、適切なデフォルトプロパティ名が選択されます。
-     */
-    String targetProperty() default "";
+    String source() default "";
 }

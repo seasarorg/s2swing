@@ -25,8 +25,7 @@ import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
 
 /**
- * モデルオブジェクトのプロパティが、バインディングの開始直後に、UI コンポーネントの選択値として
- * 一度だけ読み出されることを許可します。
+ * モデルオブジェクトのプロパティが、バインディングの開始直後に、UI コンポーネントの選択値として一度だけ読み出されることを許可します。
  * <p>
  * このアノテーションの指定は、{@code JComboBox} コンポーネントまたは {@code JList}
  * コンポーネントとのバインディングに対して有効です。
@@ -38,15 +37,5 @@ import org.seasar.swing.binding.PropertyType;
 @Target(ElementType.FIELD)
 @BindingDescription(binding = BindingType.READ_ONCE, property = PropertyType.SELECTION)
 public @interface ReadOnceSelection {
-    /**
-     * バインディング対象となる UI コンポーネント名を指定します。指定を省略した場合は、
-     * モデルクラスのプロパティ名が選択されます。
-     */
-    String target() default "";
-
-    /**
-     * バインディング対象となる UI コンポーネントのプロパティ名を指定します。 指定を省略した場合は、UI
-     * コンポーネントの種類に応じて、適切なデフォルトプロパティ名が選択されます。
-     */
-    String targetProperty() default "";
+    String source() default "";
 }

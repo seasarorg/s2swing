@@ -28,9 +28,9 @@ public interface ViewDesc {
 
     List<ActionTargetDesc> getActionTargetDescs();
 
-    List<Field> getModelFields();
+    List<BindingDesc> getBindingDescs();
 
-    Field getModelField(Class<?> modelClass);
+    List<Field> getModelFields();
 
     List<Field> getComponentFields();
 
