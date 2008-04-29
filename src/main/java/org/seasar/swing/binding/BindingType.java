@@ -23,7 +23,6 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
  */
 
 public enum BindingType {
-    NONE(null),
     READ(UpdateStrategy.READ), 
     READ_ONCE(UpdateStrategy.READ_ONCE), 
     READ_WRITE(UpdateStrategy.READ_WRITE);

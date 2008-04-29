@@ -31,6 +31,7 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.Binding.SyncFailureType;
+import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.application.ApplicationResources;
 import org.seasar.swing.desc.BindingDesc;

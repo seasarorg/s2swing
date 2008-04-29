@@ -16,7 +16,6 @@
 
 package org.seasar.swing.desc;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import junit.framework.TestCase;
@@ -29,42 +28,13 @@ import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.converter.annotation.Converter;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
-import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.DefaultBindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
-import org.seasar.swing.validator.MinLengthConstraint;
-import org.seasar.swing.validator.RequiredConstraint;
-import org.seasar.swing.validator.annotation.Constraint;
-import org.seasar.swing.validator.annotation.MinLength;
-import org.seasar.swing.validator.annotation.Required;
 
 /**
  * @author kaiseh
  */
 
 public class DefaultBindingDescTest extends TestCase {
-    public static class DummyConstraint implements
-            org.seasar.swing.validator.Constraint {
-        public String arg0;
-        public String arg1;
-
-        public DummyConstraint(String arg0, String arg1) {
-            this.arg0 = arg0;
-            this.arg1 = arg1;
-        }
-
-        public String getViolationMessage(BindingDesc desc, Object value) {
-            return null;
-        }
-
-        public boolean isSatisfied(Object value) {
-            return false;
-        }
-
-        public void read(Annotation annotation) {
-        }
-    }
-
     public static class DummyConverter extends
             org.jdesktop.beansbinding.Converter<Object, Object> {
         @Override
@@ -81,23 +51,21 @@ public class DefaultBindingDescTest extends TestCase {
     public static class Aaa {
         @ReadWrite
         @Converter(type = DummyConverter.class)
-        @Required
-        @MinLength(10)
-        @Constraint(type = DummyConstraint.class, args = { "111", "222" })
         public String aaa; // valid
 
-        @ReadSelection(target = "yyy", targetProperty = "zzz")
+        @ReadSelection(source = "xxx")
         public String bbb; // valid
 
         @ReadWrite
         @ReadWriteSelection
         public String ccc; // duplicate binding types
 
+        @ReadWrite
         @DateTimeConverter("yyyy-MM-dd")
         @Converter(type = DummyConverter.class)
         public String ddd; // duplicate converters
 
-        public String eee; // valid (no annotations)
+        public String eee; // no annotations
 
         public String getAaa() {
             return aaa;
@@ -143,34 +111,17 @@ public class DefaultBindingDescTest extends TestCase {
     public void test() throws Exception {
         DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
 
-        assertEquals(Aaa.class, desc.getSourceClass());
-        assertEquals(Aaa.class.getField("aaa"), desc.getSourcePropertyDesc()
-                .getField());
+        assertEquals("aaa", desc.getTargetObjectDesc().getPropertyName());
         assertEquals(BindingType.READ_WRITE, desc.getBindingType());
-        assertEquals(PropertyType.VALUE, desc.getTargetPropertyType());
-        assertNull(desc.getTargetName());
-        assertNull(desc.getTargetPropertyName());
-
-        assertEquals(3, desc.getConstraints().size());
-        assertEquals(RequiredConstraint.class, desc.getConstraints().get(0)
-                .getClass());
-        assertEquals(MinLengthConstraint.class, desc.getConstraints().get(1)
-                .getClass());
-        assertEquals(DummyConstraint.class, desc.getConstraints().get(2)
-                .getClass());
-        assertEquals(10, ((MinLengthConstraint) desc.getConstraints().get(1))
-                .getMinLength());
-        assertEquals("111",
-                ((DummyConstraint) desc.getConstraints().get(2)).arg0);
-        assertEquals("222",
-                ((DummyConstraint) desc.getConstraints().get(2)).arg1);
+        assertEquals(PropertyType.VALUE, desc.getPropertyType());
+        assertNull(desc.getSourceProperty());
 
         desc = new DefaultBindingDesc(Aaa.class, "bbb");
 
+        assertEquals("bbb", desc.getTargetObjectDesc().getPropertyName());
         assertEquals(BindingType.READ, desc.getBindingType());
-        assertEquals(PropertyType.SELECTION, desc.getTargetPropertyType());
-        assertEquals("yyy", desc.getTargetName());
-        assertEquals("zzz", desc.getTargetPropertyName());
+        assertEquals(PropertyType.SELECTION, desc.getPropertyType());
+        assertEquals("xxx", desc.getSourceProperty());
 
         try {
             new DefaultBindingDesc(Aaa.class, "ccc");
@@ -184,11 +135,11 @@ public class DefaultBindingDescTest extends TestCase {
         } catch (IllegalRegistrationException e) {
         }
 
-        desc = new DefaultBindingDesc(Aaa.class, "eee");
-        assertEquals(BindingType.NONE, desc.getBindingType());
-        assertNull(desc.getTargetPropertyType());
-        assertNull(desc.getTargetName());
-        assertNull(desc.getTargetPropertyName());
+        try {
+            new DefaultBindingDesc(Aaa.class, "eee");
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
 
         try {
             new DefaultBindingDesc(Aaa.class, (Field) null);

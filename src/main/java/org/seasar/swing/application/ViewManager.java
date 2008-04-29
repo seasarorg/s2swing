@@ -61,6 +61,7 @@ import org.seasar.swing.desc.S2ActionDesc;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.desc.ViewDescFactory;
 import org.seasar.swing.exception.BindingException;
+import org.seasar.swing.property.PropertyPath;
 import org.seasar.swing.util.ListMap;
 import org.seasar.swing.util.SwingUtils;
 import org.seasar.swing.validator.S2Validator;
@@ -150,7 +151,7 @@ public class ViewManager extends AbstractBean {
         
         executeModelInitializer();
         
-        autoBindModelFields(rootComponent);
+        autoBindProperties(rootComponent);
         updateActions();
 
         installListeners();
@@ -292,7 +293,21 @@ public class ViewManager extends AbstractBean {
     }
 
     @SuppressWarnings("unchecked")
-    protected void autoBindModelFields(Component component) {
+    protected void autoBindProperties(Component component) {
+        for (BindingDesc bindingDesc : viewDesc.getBindingDescs()) {
+            String sourceProp = bindingDesc.getSourceProperty();
+            if (sourceProp == null) {
+                sourceProp = bindingDesc.getTargetObjectDesc().getPropertyName();
+            }
+            PropertyPath path = new PropertyPath(sourceProp);
+            for (Field modelField : viewDesc.getModelFields()) {
+                Object model = FieldUtil.get(modelField, view);
+                if (path.hasProperty(model)) {
+                    
+                }
+            }
+        }
+        
         ListMap<String, Object> componentsMap = new ListMap<String, Object>();
         for (Component c : SwingUtils.traverse(component)) {
             if (c.getName() != null) {
@@ -373,8 +388,12 @@ public class ViewManager extends AbstractBean {
     }
 
     protected void installListeners() {
-        actionManager.register();
-        Window window = SwingUtilities.getWindowAncestor(rootComponent);
+        Window window;
+        if (rootComponent instanceof Window) {
+            window = (Window) rootComponent;
+        } else {
+            window = SwingUtilities.getWindowAncestor(rootComponent);
+        }
         if (window != null) {
             window.addWindowListener(new ViewWindowListener());
         }

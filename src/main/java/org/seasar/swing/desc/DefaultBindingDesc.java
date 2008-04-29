@@ -118,6 +118,9 @@ public class DefaultBindingDesc implements BindingDesc {
                 }
             }
         }
+        if (registeredDescription == null) {
+            throw new IllegalArgumentException("Binding annotation is not set.");
+        }
     }
 
     private void setupConverter() {
