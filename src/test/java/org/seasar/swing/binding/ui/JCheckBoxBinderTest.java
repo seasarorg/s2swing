@@ -110,7 +110,7 @@ public class JCheckBoxBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JCheckBoxBinder binder = new JCheckBoxBinder();
         JCheckBox checkBox = new JCheckBox();
 

@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * 
  * <pre>
  * public class MyFrame extends JFrame {
- *     &#064;ActionTarget(&quot;ok&quot;)
+ *     &#064;ActionSource(&quot;ok&quot;)
  *     private JButton okButton;
  * 
  *     &#064;Action
@@ -42,7 +42,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ActionTarget {
+public @interface ActionSource {
     /**
      * バインディング対象のアクション名です。
      */

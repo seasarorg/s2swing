@@ -28,7 +28,7 @@ import junit.framework.TestCase;
  */
 
 public class MessageUtilsTest extends TestCase {
-    public void testRenderMessage() throws Exception {
+    public void testRenderMessage() {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("aaa", "111");
         vars.put("bbb", "222");

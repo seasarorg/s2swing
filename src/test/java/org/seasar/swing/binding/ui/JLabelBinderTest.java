@@ -105,7 +105,7 @@ public class JLabelBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JLabelBinder binder = new JLabelBinder();
         JLabel label = new JLabel();
 

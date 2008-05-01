@@ -49,7 +49,7 @@ public class ApplicationResourcesTest extends TestCase {
         }
     }
 
-    public void testGetBindingPropertyLabel() throws Exception {
+    public void testGetBindingPropertyLabel() {
         BindingDesc desc = new DefaultBindingDesc(Aaa.class, "xxx");
         assertEquals("Custom Label", ApplicationResources
                 .getBindingPropertyLabel(desc));
@@ -64,7 +64,7 @@ public class ApplicationResourcesTest extends TestCase {
         }
     }
 
-    public void testGetString() throws Exception {
+    public void testGetString() {
         assertEquals("111", ApplicationResources.getString(Aaa.class, "aaa"));
         assertEquals("222:333", ApplicationResources.getString(Aaa.class,
                 "bbb", 222, 333));

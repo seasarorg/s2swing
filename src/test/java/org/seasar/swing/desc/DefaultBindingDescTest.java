@@ -53,7 +53,7 @@ public class DefaultBindingDescTest extends TestCase {
         @Converter(type = DummyConverter.class)
         public String aaa; // valid
 
-        @ReadSelection(source = "xxx")
+        @ReadSelection("xxx")
         public String bbb; // valid
 
         @ReadWrite
@@ -108,21 +108,7 @@ public class DefaultBindingDescTest extends TestCase {
         }
     }
 
-    public void test() throws Exception {
-        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
-
-        assertEquals("aaa", desc.getTargetObjectDesc().getPropertyName());
-        assertEquals(BindingType.READ_WRITE, desc.getBindingType());
-        assertEquals(PropertyType.VALUE, desc.getPropertyType());
-        assertNull(desc.getSourceProperty());
-
-        desc = new DefaultBindingDesc(Aaa.class, "bbb");
-
-        assertEquals("bbb", desc.getTargetObjectDesc().getPropertyName());
-        assertEquals(BindingType.READ, desc.getBindingType());
-        assertEquals(PropertyType.SELECTION, desc.getPropertyType());
-        assertEquals("xxx", desc.getSourceProperty());
-
+    public void test() {
         try {
             new DefaultBindingDesc(Aaa.class, "ccc");
             fail();
@@ -152,5 +138,45 @@ public class DefaultBindingDescTest extends TestCase {
             fail();
         } catch (EmptyRuntimeException e) {
         }
+    }
+
+    public void testGetTargetObjectDesc() {
+        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
+
+        assertEquals("aaa", desc.getTargetObjectDesc().getPropertyName());
+
+        desc = new DefaultBindingDesc(Aaa.class, "bbb");
+
+        assertEquals("bbb", desc.getTargetObjectDesc().getPropertyName());
+    }
+
+    public void testGetBindingType() {
+        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
+
+        assertEquals(BindingType.READ_WRITE, desc.getBindingType());
+
+        desc = new DefaultBindingDesc(Aaa.class, "bbb");
+
+        assertEquals(BindingType.READ, desc.getBindingType());
+    }
+
+    public void testGetPropertyType() {
+        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
+
+        assertEquals(PropertyType.VALUE, desc.getPropertyType());
+
+        desc = new DefaultBindingDesc(Aaa.class, "bbb");
+
+        assertEquals(PropertyType.SELECTION, desc.getPropertyType());
+    }
+
+    public void testGetSourceProperty() {
+        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
+
+        assertNull(desc.getSourceProperty());
+
+        desc = new DefaultBindingDesc(Aaa.class, "bbb");
+
+        assertEquals("xxx", desc.getSourceProperty());
     }
 }

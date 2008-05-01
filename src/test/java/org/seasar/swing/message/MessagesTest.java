@@ -28,7 +28,7 @@ import junit.framework.TestCase;
  */
 
 public class MessagesTest extends TestCase {
-    public void testGetMessage() throws Exception {
+    public void testGetMessage() {
         Messages messages = new Messages();
         assertNull(messages.getMessage(null, "aaa"));
 
@@ -50,7 +50,7 @@ public class MessagesTest extends TestCase {
         }
     }
 
-    public void testFormatMessage() throws Exception {
+    public void testFormatMessage() {
         Messages messages = new Messages();
         assertNull(messages.formatMessage(null, "bbb"));
 
@@ -75,7 +75,7 @@ public class MessagesTest extends TestCase {
         }
     }
 
-    public void testRenderMessage() throws Exception {
+    public void testRenderMessage() {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("xxx", "XXX");
         vars.put("yyy", null);
@@ -111,12 +111,12 @@ public class MessagesTest extends TestCase {
         }
     }
 
-    public void testGetConverterMessages() throws Exception {
+    public void testGetConverterMessages() {
         assertNotNull(Messages.getConverterMessages()
                 .getMessage(null, "failed"));
     }
 
-    public void testGetValidatorMessages() throws Exception {
+    public void testGetValidatorMessages() {
         assertNotNull(Messages.getValidatorMessages().getMessage(null,
                 "violated"));
     }

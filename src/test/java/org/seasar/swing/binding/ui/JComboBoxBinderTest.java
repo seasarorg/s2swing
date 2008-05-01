@@ -81,7 +81,7 @@ public class JComboBoxBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JComboBoxBinder binder = new JComboBoxBinder();
         JComboBox comboBox = new JComboBox();
 

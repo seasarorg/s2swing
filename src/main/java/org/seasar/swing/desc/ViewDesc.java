@@ -26,13 +26,11 @@ import java.util.List;
 public interface ViewDesc {
     List<S2ActionDesc> getS2ActionDescs();
 
-    List<ActionTargetDesc> getActionTargetDescs();
+    List<ActionSourceDesc> getActionSourceDescs();
+
+    Field getBindingSourceField();
 
     List<BindingDesc> getBindingDescs();
 
-    List<Field> getModelFields();
-
     List<Field> getComponentFields();
-
-    List<Field> getBindingTargetFields();
 }

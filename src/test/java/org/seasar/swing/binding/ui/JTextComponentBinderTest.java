@@ -108,7 +108,7 @@ public class JTextComponentBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JTextComponentBinder binder = new JTextComponentBinder();
         JTextField textField = new JTextField();
         JTextArea textArea = new JTextArea();

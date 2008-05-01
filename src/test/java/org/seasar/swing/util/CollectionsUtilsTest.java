@@ -27,7 +27,7 @@ import junit.framework.TestCase;
  */
 
 public class CollectionsUtilsTest extends TestCase {
-    public void testUnmodifiableList() throws Exception {
+    public void testUnmodifiableList() {
         ArrayMap map = new ArrayMap();
         map.put("aaa", "111");
         map.put("bbb", "222");

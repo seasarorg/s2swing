@@ -37,5 +37,5 @@ import org.seasar.swing.binding.PropertyType;
 @Target(ElementType.FIELD)
 @BindingDescription(binding = BindingType.READ_ONCE, property = PropertyType.SELECTION)
 public @interface ReadOnceSelection {
-    String source() default "";
+    String value() default "";
 }

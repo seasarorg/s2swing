@@ -38,14 +38,14 @@ import junit.framework.TestCase;
  */
 
 public class SwingUtilsTest extends TestCase {
-    public void testIsSystemClass() throws Exception {
+    public void testIsSystemClass() {
         assertTrue(SwingUtils.isSystemClass(JComponent.class));
         assertTrue(SwingUtils.isSystemClass(Component.class));
         assertTrue(SwingUtils.isSystemClass(FrameView.class));
         assertFalse(SwingUtils.isSystemClass(SwingUtilsTest.class));
     }
 
-    public void testTraverse() throws Exception {
+    public void testTraverse() {
         JFrame frame = new JFrame();
 
         JMenuBar menuBar = new JMenuBar();

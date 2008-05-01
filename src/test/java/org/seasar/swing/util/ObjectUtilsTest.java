@@ -23,7 +23,7 @@ import junit.framework.TestCase;
  */
 
 public class ObjectUtilsTest extends TestCase {
-    public void testEquals() throws Exception {
+    public void testEquals() {
         assertTrue(ObjectUtils.equals("aaa", "aaa"));
         assertTrue(ObjectUtils.equals(null, null));
         assertFalse(ObjectUtils.equals("aaa", null));

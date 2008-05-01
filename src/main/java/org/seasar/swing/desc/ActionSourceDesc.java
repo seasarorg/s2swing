@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
  * @author kaiseh
  */
 
-public interface ActionTargetDesc {
+public interface ActionSourceDesc {
     Field getField();
 
     String getActionName();

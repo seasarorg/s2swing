@@ -24,7 +24,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
  * @author kaiseh
  */
 
-public class DefaultActionTargetDesc implements ActionTargetDesc {
+public class DefaultActionTargetDesc implements ActionSourceDesc {
     private Field field;
     private String actionName;
 

@@ -138,7 +138,7 @@ public class JSpinnerBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JSpinnerBinder binder = new JSpinnerBinder();
         JSpinner spinner = new JSpinner();
 

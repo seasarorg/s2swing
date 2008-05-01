@@ -82,7 +82,7 @@ public class AbstractConstraintTest extends TestCase {
         }
     }
 
-    public void testGetViolationMessage() throws Exception {
+    public void testGetViolationMessage() {
         Messages.getValidatorMessages().addBundle(
                 "org/seasar/swing/validator/AbstractConstraintTest");
 

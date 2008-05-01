@@ -38,5 +38,5 @@ import org.seasar.swing.binding.PropertyType;
 @Target(ElementType.FIELD)
 @BindingDescription(binding = BindingType.READ_WRITE, property = PropertyType.SELECTION)
 public @interface ReadWriteSelection {
-    String source() default "";
+    String value() default "";
 }

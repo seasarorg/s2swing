@@ -81,7 +81,7 @@ public class JListBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JListBinder binder = new JListBinder();
         JList list = new JList();
 

@@ -21,16 +21,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.seasar.swing.binding.BindingType;
-import org.seasar.swing.binding.PropertyType;
-
 /**
  * @author kaiseh
  */
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@BindingDescription(binding = BindingType.READ_ONCE, property = PropertyType.VALUE)
-public @interface ReadOnce {
-    String value() default "";
+public @interface BindingSource {
 }

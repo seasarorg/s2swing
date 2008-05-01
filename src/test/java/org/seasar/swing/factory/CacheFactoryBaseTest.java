@@ -25,7 +25,7 @@ import junit.framework.TestCase;
  */
 
 public class CacheFactoryBaseTest extends TestCase {
-    public void testGet() throws Exception {
+    public void testGet() {
         assertNull(CacheFactoryBase.get(CacheFactoryBaseTest.class, "aaa",
                 String.class));
 
@@ -55,7 +55,7 @@ public class CacheFactoryBaseTest extends TestCase {
         }
     }
 
-    public void testPut() throws Exception {
+    public void testPut() {
         assertEquals("111", CacheFactoryBase.put(CacheFactoryBaseTest.class,
                 "bbb", "111"));
 

@@ -122,7 +122,7 @@ public class JSliderBinderTest extends TestCase {
         }
     }
 
-    public void testAccepts() throws Exception {
+    public void testAccepts() {
         JSliderBinder binder = new JSliderBinder();
         JSlider slider = new JSlider();
 

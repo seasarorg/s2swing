@@ -43,7 +43,7 @@ public class ServiceLoaderFactoryBaseTest extends TestCase {
     public static class Dummy3 {
     }
 
-    public void testGetServices() throws Exception {
+    public void testGetServices() {
         List<Object> list = ServiceLoaderFactoryBase.getServices(Dummy1.class);
 
         assertEquals(2, list.size());

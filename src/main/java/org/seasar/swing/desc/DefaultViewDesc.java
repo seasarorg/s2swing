@@ -17,6 +17,7 @@
 package org.seasar.swing.desc;
 
 import java.awt.Component;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -26,13 +27,11 @@ import java.util.List;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.framework.util.ArrayMap;
-import org.seasar.swing.annotation.ActionTarget;
-import org.seasar.swing.annotation.Model;
+import org.seasar.swing.annotation.ActionSource;
+import org.seasar.swing.annotation.BindingDescription;
+import org.seasar.swing.annotation.BindingSource;
 import org.seasar.swing.annotation.S2Action;
-import org.seasar.swing.binding.BindingTarget;
 import org.seasar.swing.exception.IllegalRegistrationException;
-import org.seasar.swing.util.CollectionsUtils;
 import org.seasar.swing.util.SwingUtils;
 
 /**
@@ -43,12 +42,11 @@ public class DefaultViewDesc implements ViewDesc {
     private Class<?> viewClass;
     private BeanDesc beanDesc;
 
-    private Method initializer;
     private List<S2ActionDesc> s2ActionDescs;
-    private List<ActionTargetDesc> actionTargetDescs;
-    private ArrayMap modelFields;
+    private List<ActionSourceDesc> actionSourceDescs;
+    private Field bindingSourceField;
+    private List<BindingDesc> bindingDescs;
     private List<Field> componentFields;
-    private List<Field> bindingTargetFields;
 
     public DefaultViewDesc(Class<?> viewClass) {
         if (viewClass == null) {
@@ -57,10 +55,10 @@ public class DefaultViewDesc implements ViewDesc {
         this.viewClass = viewClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(viewClass);
         setupS2ActionDescs();
-        setupActionTargetDescs();
-        setupModelFields();
+        setupActionSourceDescs();
+        setupBindingSourceField();
+        setupBindingDescs();
         setupComponentFields();
-        setupBindingTargetFields();
     }
 
     private void setupS2ActionDescs() {
@@ -74,34 +72,53 @@ public class DefaultViewDesc implements ViewDesc {
         }
     }
 
-    private void setupActionTargetDescs() {
-        actionTargetDescs = new ArrayList<ActionTargetDesc>();
+    private void setupActionSourceDescs() {
+        actionSourceDescs = new ArrayList<ActionSourceDesc>();
         for (int i = 0; i < beanDesc.getFieldSize(); i++) {
             Field field = beanDesc.getField(i);
-            ActionTarget target = field.getAnnotation(ActionTarget.class);
-            if (target != null) {
-                String actionName = target.value();
-                ActionTargetDesc desc = new DefaultActionTargetDesc(field,
+            ActionSource source = field.getAnnotation(ActionSource.class);
+            if (source != null) {
+                String actionName = source.value();
+                ActionSourceDesc desc = new DefaultActionTargetDesc(field,
                         actionName);
-                actionTargetDescs.add(desc);
+                actionSourceDescs.add(desc);
             }
         }
     }
 
-    private void setupModelFields() {
-        modelFields = new ArrayMap();
+    private void setupBindingSourceField() {
         for (int i = 0; i < beanDesc.getFieldSize(); i++) {
             Field field = beanDesc.getField(i);
-            Model model = field.getAnnotation(Model.class);
-            if (model != null) {
-                Class<?> modelClass = field.getType();
-                if (modelFields.containsKey(modelClass)) {
-                    Field anotherField = (Field) modelFields.get(modelClass);
+            BindingSource source = field.getAnnotation(BindingSource.class);
+            if (source != null) {
+                if (bindingSourceField != null) {
                     throw new IllegalRegistrationException("ESWI0103",
-                            viewClass.getName(), modelClass.getName(),
-                            anotherField.getName(), field.getName());
+                            viewClass.getName(), bindingSourceField.getName(),
+                            field.getName());
                 }
-                modelFields.put(modelClass, field);
+                bindingSourceField = field;
+            }
+        }
+    }
+
+    private void setupBindingDescs() {
+        bindingDescs = new ArrayList<BindingDesc>();
+        for (int i = 0; i < beanDesc.getFieldSize(); i++) {
+            Field field = beanDesc.getField(i);
+            for (Annotation annotation : field.getAnnotations()) {
+                Class<?> annotationType = annotation.annotationType();
+                BindingDescription desc = annotationType
+                        .getAnnotation(BindingDescription.class);
+                if (desc != null) {
+                    if (bindingSourceField == null) {
+                        throw new IllegalRegistrationException("ESWI0101",
+                                viewClass.getName(), field.getName());
+                    }
+                    BindingDesc bindingDesc = new DefaultBindingDesc(viewClass,
+                            field);
+                    bindingDescs.add(bindingDesc);
+                    break;
+                }
             }
         }
     }
@@ -119,41 +136,23 @@ public class DefaultViewDesc implements ViewDesc {
         }
     }
 
-    private void setupBindingTargetFields() {
-        bindingTargetFields = new ArrayList<Field>();
-        for (int i = 0; i < beanDesc.getFieldSize(); i++) {
-            Field field = beanDesc.getField(i);
-            if (BindingTarget.class.isAssignableFrom(field.getType())) {
-                bindingTargetFields.add(field);
-            }
-        }
-    }
-
-    public Method getInitializer() {
-        return initializer;
-    }
-
     public List<S2ActionDesc> getS2ActionDescs() {
         return Collections.unmodifiableList(s2ActionDescs);
     }
 
-    public List<ActionTargetDesc> getActionTargetDescs() {
-        return Collections.unmodifiableList(actionTargetDescs);
+    public List<ActionSourceDesc> getActionSourceDescs() {
+        return Collections.unmodifiableList(actionSourceDescs);
     }
 
-    public List<Field> getModelFields() {
-        return CollectionsUtils.unmodifiableList(modelFields, Field.class);
+    public Field getBindingSourceField() {
+        return bindingSourceField;
     }
 
-    public Field getModelField(Class<?> modelClass) {
-        return (Field) modelFields.get(modelClass);
+    public List<BindingDesc> getBindingDescs() {
+        return Collections.unmodifiableList(bindingDescs);
     }
 
     public List<Field> getComponentFields() {
         return Collections.unmodifiableList(componentFields);
-    }
-
-    public List<Field> getBindingTargetFields() {
-        return Collections.unmodifiableList(bindingTargetFields);
     }
 }

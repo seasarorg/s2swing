@@ -32,5 +32,5 @@ import org.seasar.swing.binding.PropertyType;
 @Target(ElementType.FIELD)
 @BindingDescription(binding = BindingType.READ, property = PropertyType.VALUE)
 public @interface Read {
-    String source() default "";
+    String value() default "";
 }

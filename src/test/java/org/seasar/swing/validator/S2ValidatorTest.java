@@ -50,7 +50,7 @@ public class S2ValidatorTest extends TestCase {
         }
     }
 
-    public void testValidate() throws Exception {
+    public void testValidate() {
         Aaa aaa = new Aaa();
         assertEquals(2, S2Validator.validate(aaa).size());
 
@@ -64,7 +64,7 @@ public class S2ValidatorTest extends TestCase {
         assertEquals(0, S2Validator.validate(aaa).size());
     }
 
-    public void testIsValid() throws Exception {
+    public void testIsValid() {
         Aaa aaa = new Aaa();
         assertFalse(S2Validator.isValid(aaa));
 
@@ -78,7 +78,7 @@ public class S2ValidatorTest extends TestCase {
         assertTrue(S2Validator.isValid(aaa));
     }
 
-    public void testAssertValid() throws Exception {
+    public void testAssertValid() {
         Aaa aaa = new Aaa();
         try {
             S2Validator.assertValid(aaa);

@@ -52,7 +52,7 @@ import org.seasar.swing.binding.BinderFactory;
 import org.seasar.swing.binding.BindingManager;
 import org.seasar.swing.binding.BindingStateListener;
 import org.seasar.swing.binding.BindingTarget;
-import org.seasar.swing.desc.ActionTargetDesc;
+import org.seasar.swing.desc.ActionSourceDesc;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.CustomBindingDesc;
 import org.seasar.swing.desc.ModelDesc;
@@ -260,7 +260,7 @@ public class ViewManager extends AbstractBean {
     }
 
     protected void autoBindActions() {
-        for (ActionTargetDesc targetDesc : viewDesc.getActionTargetDescs()) {
+        for (ActionSourceDesc targetDesc : viewDesc.getActionSourceDescs()) {
             Action action = actionMap.get(targetDesc.getActionName());
             if (action == null) {
                 // TODO warn

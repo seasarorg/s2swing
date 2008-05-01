@@ -23,7 +23,7 @@ import junit.framework.TestCase;
  */
 
 public class ListMapTest extends TestCase {
-    public void testGetValues() throws Exception {
+    public void testGetValues() {
         ListMap<String, String> map = new ListMap<String, String>();
         map.add("aaa", "111");
         map.add("bbb", "222");
@@ -34,7 +34,7 @@ public class ListMapTest extends TestCase {
         assertEquals("[]", map.getValues("ccc").toString());
     }
 
-    public void testIsEmpty() throws Exception {
+    public void testIsEmpty() {
         ListMap<String, String> map = new ListMap<String, String>();
         assertTrue(map.isEmpty());
         

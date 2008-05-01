@@ -101,7 +101,7 @@ public class ObservableBeansTest extends TestCase {
         public PropertyChangeEvent event;
     }
 
-    public void testIsObservable() throws Exception {
+    public void testIsObservable() {
         assertFalse(ObservableBeans.isObservable(Aaa.class));
         assertTrue(ObservableBeans.isObservable(Bbb.class));
         assertTrue(ObservableBeans.isObservable(ObservableBeans.createBean(Aaa.class)

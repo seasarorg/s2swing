@@ -112,7 +112,7 @@ public class DefaultBindingDesc implements BindingDesc {
                 bindingType = desc.binding();
                 propertyType = desc.property();
                 sourceProperty = (String) AnnotationUtils.getProperty(
-                        annotation, "source");
+                        annotation, "value");
                 if (sourceProperty.length() == 0) {
                     sourceProperty = null;
                 }
