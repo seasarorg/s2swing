@@ -19,7 +19,7 @@ package org.seasar.swing.binding.ui;
 import javax.swing.JSpinner;
 
 import org.jdesktop.swingbinding.adapters.JSpinnerAdapterProvider;
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.SimpleBinder;
 
 /**
@@ -28,7 +28,7 @@ import org.seasar.swing.binding.SimpleBinder;
 
 public class JSpinnerBinder extends SimpleBinder {
     public JSpinnerBinder() {
-        super(JSpinner.class, "value", PropertyType.VALUE);
+        super(JSpinner.class, "value", BindingType.VALUE);
     }
 
     @Override

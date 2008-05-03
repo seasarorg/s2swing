@@ -19,7 +19,7 @@ package org.seasar.swing.binding.ui;
 import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingbinding.adapters.JTextComponentAdapterProvider;
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.SimpleBinder;
 
 /**
@@ -28,7 +28,7 @@ import org.seasar.swing.binding.SimpleBinder;
 
 public class JTextComponentBinder extends SimpleBinder {
     public JTextComponentBinder() {
-        super(JTextComponent.class, "text", PropertyType.VALUE);
+        super(JTextComponent.class, "text", BindingType.VALUE);
     }
 
     @Override

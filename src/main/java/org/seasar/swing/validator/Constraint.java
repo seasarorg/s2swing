@@ -18,7 +18,7 @@ package org.seasar.swing.validator;
 
 import java.lang.annotation.Annotation;
 
-import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.ModelFieldDesc;
 
 /**
  * @author kaiseh
@@ -27,7 +27,7 @@ import org.seasar.swing.desc.BindingDesc;
 public interface Constraint {
     void read(Annotation annotation);
 
-    String getViolationMessage(BindingDesc bindingDesc, Object value);
+    String getViolationMessage(ModelFieldDesc fieldDesc, Object value);
 
     boolean isSatisfied(Object value);
 }

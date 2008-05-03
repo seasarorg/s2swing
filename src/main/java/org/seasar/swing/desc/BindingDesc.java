@@ -18,17 +18,17 @@ package org.seasar.swing.desc;
 
 import org.jdesktop.beansbinding.Converter;
 import org.seasar.framework.beans.PropertyDesc;
+import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
-import org.seasar.swing.binding.PropertyType;
 
 /**
  * @author kaiseh
  */
 
 public interface BindingDesc {
-    BindingType getBindingType();
+    BindingStrategy getBindingStrategy();
 
-    PropertyType getPropertyType();
+    BindingType getBindingType();
 
     String getSourceProperty();
 

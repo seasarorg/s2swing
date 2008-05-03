@@ -56,6 +56,11 @@ public class PropertyPathTest extends TestCase {
         }
     }
 
+    public void testGetPropertyName() {
+        assertEquals("aaa", new PropertyPath("aaa").getPropertyName());
+        assertEquals("bbb", new PropertyPath("aaa.bbb").getPropertyName());
+    }
+
     public void testHasProperty() {
         Aaa aaa = new Aaa();
         Bbb bbb = new Bbb();

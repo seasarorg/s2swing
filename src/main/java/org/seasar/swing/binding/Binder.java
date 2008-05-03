@@ -25,7 +25,7 @@ import org.seasar.swing.desc.BindingDesc;
 
 @SuppressWarnings("unchecked")
 public interface Binder {
-    boolean accepts(BindingDesc bindingDesc, Object target);
+    boolean accepts(BindingDesc bindingDesc);
 
     Binding createBinding(BindingDesc bindingDesc, Object source, Object target);
 }

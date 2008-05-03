@@ -26,8 +26,8 @@ import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.annotation.BindingDescription;
 import org.seasar.swing.annotation.ConverterTarget;
+import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
-import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.converter.ConverterFactory;
 import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.util.AnnotationUtils;
@@ -40,8 +40,8 @@ public class DefaultBindingDesc implements BindingDesc {
     private Class<?> viewClass;
     private Field targetField;
 
+    private BindingStrategy bindingStrategy;
     private BindingType bindingType;
-    private PropertyType propertyType;
     private String sourceProperty;
     private PropertyDesc targetObjectDesc;
     private Converter<?, ?> converter;
@@ -109,8 +109,8 @@ public class DefaultBindingDesc implements BindingDesc {
                             viewClass.getName(), targetField.getName());
                 }
                 registeredDescription = desc;
-                bindingType = desc.binding();
-                propertyType = desc.property();
+                bindingStrategy = desc.strategy();
+                bindingType = desc.type();
                 sourceProperty = (String) AnnotationUtils.getProperty(
                         annotation, "value");
                 if (sourceProperty.length() == 0) {
@@ -141,57 +141,12 @@ public class DefaultBindingDesc implements BindingDesc {
         }
     }
 
-//    private void setupConstraints() {
-//        constraints = new ArrayList<Constraint>();
-//        for (Annotation annotation : targetField.getAnnotations()) {
-//            ConstraintTarget target = annotation.annotationType()
-//                    .getAnnotation(ConstraintTarget.class);
-//            if (target == null) {
-//                continue;
-//            }
-//            Class<?> constraintClass = target.value();
-//            Constraint constraint = (Constraint) ClassUtil
-//                    .newInstance(constraintClass);
-//            constraint.read(annotation);
-//            constraints.add(constraint);
-//        }
-//
-//        org.seasar.swing.validator.annotation.Constraint c = targetField
-//                .getAnnotation(org.seasar.swing.validator.annotation.Constraint.class);
-//        if (c != null) {
-//            Object constraintObject = null;
-//            if (!StringUtil.isEmpty(c.name())) {
-//                constraintObject = ComponentResolver.getComponent(c.name());
-//            } else {
-//                if (c.type() == Constraint.class) {
-//                    throw new IllegalRegistrationException("ESWI0108",
-//                            viewClass.getName(), targetField.getName());
-//                }
-//                String[] args = c.args();
-//                Class<?>[] argTypes = new Class<?>[args.length];
-//                for (int i = 0; i < argTypes.length; i++) {
-//                    argTypes[i] = String.class;
-//                }
-//                Constructor<?> constructor = ClassUtil.getConstructor(c.type(),
-//                        argTypes);
-//                constraintObject = ConstructorUtil.newInstance(constructor,
-//                        args);
-//            }
-//            if (constraintObject instanceof Constraint) {
-//                constraints.add((Constraint) constraintObject);
-//            } else {
-//                throw new IllegalRegistrationException("ESWI0109", c.type()
-//                        .getName());
-//            }
-//        }
-//    }
+    public BindingStrategy getBindingStrategy() {
+        return bindingStrategy;
+    }
 
     public BindingType getBindingType() {
         return bindingType;
-    }
-
-    public PropertyType getPropertyType() {
-        return propertyType;
     }
     
     public Class<?> getViewClass() {

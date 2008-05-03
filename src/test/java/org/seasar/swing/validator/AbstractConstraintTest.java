@@ -21,7 +21,6 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.seasar.swing.annotation.ReadWrite;
-import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
 import org.seasar.swing.message.Messages;
@@ -33,8 +32,7 @@ import org.seasar.swing.message.Messages;
 public class AbstractConstraintTest extends TestCase {
     public static class TestConstraint extends AbstractConstraint {
         @Override
-        protected Map<String, String> getVariables(BindingDesc bindingDesc,
-                Object value) {
+        protected Map<String, String> getVariables() {
             return createMap("aaa", "111", "bbb", "222");
         }
 
@@ -90,14 +88,14 @@ public class AbstractConstraintTest extends TestCase {
 
         ModelDesc desc = ModelDescFactory.getModelDesc(Model1.class);
         assertEquals("xxx => 111, 222", constraint.getViolationMessage(desc
-                .getBindingDescs().get(0), null));
+                .getModelFieldDesc("xxx"), null));
 
         desc = ModelDescFactory.getModelDesc(Model2.class);
         assertEquals("Custom Name => 111, 222", constraint.getViolationMessage(
-                desc.getBindingDescs().get(0), null));
+                desc.getModelFieldDesc("yyy"), null));
 
         desc = ModelDescFactory.getModelDesc(Model3.class);
         assertEquals("zzz => Custom Message", constraint.getViolationMessage(
-                desc.getBindingDescs().get(0), null));
+                desc.getModelFieldDesc("zzz"), null));
     }
 }

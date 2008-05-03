@@ -19,7 +19,6 @@ package org.seasar.swing.validator;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.validator.annotation.Length;
 
 /**
@@ -54,8 +53,7 @@ public class LengthConstraint extends AbstractConstraint {
     }
 
     @Override
-    protected Map<String, String> getVariables(BindingDesc bindingDesc,
-            Object value) {
+    protected Map<String, String> getVariables() {
         return createMap("minLength", minLength, "maxLength", maxLength);
     }
 

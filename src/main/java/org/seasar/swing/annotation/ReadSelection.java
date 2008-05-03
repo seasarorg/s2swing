@@ -21,8 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
-import org.seasar.swing.binding.PropertyType;
 
 /**
  * モデルオブジェクトのプロパティが、UI コンポーネントの選択値として継続的に読み出されることを許可します。
@@ -35,7 +35,7 @@ import org.seasar.swing.binding.PropertyType;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@BindingDescription(binding = BindingType.READ, property = PropertyType.SELECTION)
+@BindingDescription(strategy = BindingStrategy.READ, type = BindingType.SELECTION)
 public @interface ReadSelection {
     String value() default "";
 }

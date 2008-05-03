@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.seasar.swing.application.ApplicationResources;
-import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.ModelFieldDesc;
 import org.seasar.swing.message.Messages;
 import org.seasar.swing.util.MessageUtils;
 
@@ -49,8 +49,7 @@ public abstract class AbstractConstraint implements Constraint {
         return map;
     }
 
-    protected Map<String, String> getVariables(BindingDesc bindingDesc,
-            Object value) {
+    protected Map<String, String> getVariables() {
         return Collections.emptyMap();
     }
 
@@ -59,22 +58,19 @@ public abstract class AbstractConstraint implements Constraint {
         return name.replaceAll("Constraint\\z", "");
     }
 
-    public String getViolationMessage(BindingDesc bindingDesc, Object value) {
-        Class<?> sourceClass = bindingDesc.getSourceClass();
-        String fieldName = bindingDesc.getSourcePropertyDesc()
-                .getPropertyName();
+    public String getViolationMessage(ModelFieldDesc fieldDesc, Object value) {
+        Class<?> modelClass = fieldDesc.getModelClass();
+        String fieldName = fieldDesc.getField().getName();
         Messages messages = Messages.getValidatorMessages();
 
-        String template = ApplicationResources.getString(sourceClass, fieldName
+        String template = ApplicationResources.getString(modelClass, fieldName
                 + "." + getConstraintName() + "." + MESSAGE_KEY);
         if (template == null) {
             template = messages.getMessage(getClass(), MESSAGE_KEY);
         }
 
-        String label = ApplicationResources
-                .getBindingPropertyLabel(bindingDesc);
-        String content = MessageUtils.renderMessage(template, getVariables(
-                bindingDesc, value));
+        String label = ApplicationResources.getModelFieldLabel(fieldDesc);
+        String content = MessageUtils.renderMessage(template, getVariables());
         return messages.formatMessage(AbstractConstraint.class,
                 "messageFormat", label, content);
     }

@@ -71,7 +71,7 @@ public class DefaultViewDescTest extends TestCase {
         public JTextField text;
     }
 
-    public void test() {
+    public void testCreate() {
         try {
             new DefaultViewDesc(Bbb.class);
             fail();
@@ -89,6 +89,12 @@ public class DefaultViewDescTest extends TestCase {
             fail();
         } catch (EmptyRuntimeException e) {
         }
+    }
+
+    public void testGetViewClass() {
+        DefaultViewDesc desc = new DefaultViewDesc(Aaa.class);
+
+        assertEquals(Aaa.class, desc.getViewClass());
     }
 
     public void testGetS2ActionDescs() {

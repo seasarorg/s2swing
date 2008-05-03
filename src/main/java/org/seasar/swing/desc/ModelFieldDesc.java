@@ -14,27 +14,21 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.binding;
+package org.seasar.swing.desc;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
-import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.factory.ServiceLoaderFactoryBase;
+import org.seasar.swing.validator.Constraint;
 
 /**
  * @author kaiseh
  */
 
-public abstract class BinderFactory {
-    public static Binder getBinder(BindingDesc bindingDesc) {
-        List<Object> services = ServiceLoaderFactoryBase
-                .getServices(BinderFactory.class);
-        for (Object service : services) {
-            Binder binder = (Binder) service;
-            if (binder.accepts(bindingDesc)) {
-                return binder;
-            }
-        }
-        return null;
-    }
+public interface ModelFieldDesc {
+    Class<?> getModelClass();
+
+    Field getField();
+
+    List<Constraint> getConstraints();
 }

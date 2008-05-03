@@ -16,6 +16,7 @@
 
 package org.seasar.swing.binding;
 
+import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.Converter;
@@ -32,8 +33,14 @@ import org.seasar.swing.converter.ConverterChain;
 import org.seasar.swing.converter.DefaultConverter;
 import org.seasar.swing.converter.NotEnteredConverter;
 import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.ModelDesc;
+import org.seasar.swing.desc.ModelDescFactory;
+import org.seasar.swing.desc.ModelFieldDesc;
 import org.seasar.swing.exception.BindingException;
+import org.seasar.swing.property.PropertyFactory;
+import org.seasar.swing.property.PropertyPath;
 import org.seasar.swing.validator.BindingValidator;
+import org.seasar.swing.validator.S2Validator;
 
 /**
  * @author kaiseh
@@ -41,46 +48,44 @@ import org.seasar.swing.validator.BindingValidator;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractBinder implements Binder {
-    protected String getTargetPropertyName(BindingDesc bindingDesc) {
-        if (!StringUtil.isEmpty(bindingDesc.getTargetPropertyName())) {
-            return bindingDesc.getTargetPropertyName();
-        }
-        return getDefaultTargetPropertyName(bindingDesc);
-    }
-
-    protected abstract String getDefaultTargetPropertyName(
-            BindingDesc bindingDesc);
+    protected abstract String getTargetPropertyExpression();
 
     public Binding createBinding(BindingDesc bindingDesc, Object source,
             Object target) {
         if (target == null) {
             throw new EmptyRuntimeException("target");
         }
-        if (!accepts(bindingDesc, target)) {
+        if (!accepts(bindingDesc)) {
             throw new IllegalArgumentException(
                     "Specified parameters cannot be accepted.");
         }
 
-        UpdateStrategy strategy = bindingDesc.getBindingType()
+        UpdateStrategy strategy = bindingDesc.getBindingStrategy()
                 .getUpdateStrategy();
-        String sourcePropertyName = bindingDesc.getSourcePropertyDesc()
-                .getPropertyName();
+        String sourcePropertyName = bindingDesc.getSourceProperty();
+        PropertyPath sourcePropertyPath = new PropertyPath(sourcePropertyName);
 
-        String targetPropertyName = getTargetPropertyName(bindingDesc);
-        if (targetPropertyName == null) {
-            throw new BindingException("ESWI0201", target.getClass().getName());
-        }
+        String targetPropertyExpr = getTargetPropertyExpression();
+
+        // Note that sourcePropertyName must be simply period-separated
+        // (BeanProperty)
+        // whereas targetPropertyExpr can be null or EL-style
+        Property sourceProperty = BeanProperty.create(sourcePropertyName);
+        Property targetProperty = PropertyFactory
+                .createProperty(targetPropertyExpr);
         Binding binding = Bindings.createAutoBinding(strategy, source,
-                createProperty(sourcePropertyName), target,
-                createProperty(targetPropertyName));
+                sourceProperty, target, targetProperty);
 
-        setupBindingDefault(binding, bindingDesc, target, targetPropertyName);
+        Object sourcePropertyHolder = sourcePropertyPath
+                .getPropertyHolder(source);
+        ModelDesc modelDesc = ModelDescFactory
+                .getModelDesc(sourcePropertyHolder.getClass());
+        ModelFieldDesc fieldDesc = modelDesc
+                .getModelFieldDesc(sourcePropertyPath.getPropertyName());
+
+        setupBindingDefault(binding, bindingDesc, target, targetPropertyExpr);
 
         return binding;
-    }
-
-    protected Property createProperty(String exprContent) {
-        return ELProperty.create("${" + exprContent + "}");
     }
 
     protected Class<?> getTargetAdapterClass() {
@@ -107,10 +112,10 @@ public abstract class AbstractBinder implements Binder {
     }
 
     protected void setupBindingDefault(Binding binding,
-            BindingDesc bindingDesc, Object target, String targetPropertyName) {
-        binding.setConverter(createConverter(bindingDesc, target,
-                targetPropertyName));
-        binding.setValidator(createValidator(bindingDesc));
+            BindingDesc bindingDesc, Object target, String targetPropertyName,
+            ModelFieldDesc sourceFieldDesc) {
+        binding.setConverter(createConverter(bindingDesc, sourceFieldDesc));
+        binding.setValidator(new BindingValidator(sourceFieldDesc));
 
         if (targetPropertyName != null) {
             PropertyDesc targetPropDesc = getTargetPropertyDesc(target,
@@ -121,34 +126,18 @@ public abstract class AbstractBinder implements Binder {
         }
     }
 
-    protected Converter createConverter(BindingDesc bindingDesc, Object target,
-            String targetPropertyName) {
-        PropertyDesc sourcePropDesc = bindingDesc.getSourcePropertyDesc();
-
+    protected Converter createConverter(BindingDesc bindingDesc,
+            ModelFieldDesc sourceFieldDesc) {
         ConverterChain chain = new ConverterChain();
 
         if (bindingDesc.getConverter() != null) {
             chain.add(bindingDesc.getConverter());
-        } else {
-            // note that targetPropertyName may be null
-            // (ex. JComboBoxBinder, JListBinder)
-            if (targetPropertyName != null) {
-                PropertyDesc targetPropDesc = getTargetPropertyDesc(target,
-                        targetPropertyName);
-                Converter defaultConverter = new DefaultConverter(
-                        sourcePropDesc, targetPropDesc);
-                chain.add(defaultConverter);
-            }
         }
 
-        Converter notEnteredConverter = new NotEnteredConverter(sourcePropDesc
-                .getPropertyType());
+        Converter notEnteredConverter = new NotEnteredConverter(sourceFieldDesc
+                .getField().getType());
         chain.add(notEnteredConverter);
 
         return chain;
-    }
-
-    protected Validator createValidator(BindingDesc bindingDesc) {
-        return new BindingValidator(bindingDesc);
     }
 }

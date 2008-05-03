@@ -14,27 +14,25 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.binding;
+package org.seasar.swing.property;
 
-import java.util.List;
-
-import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.factory.ServiceLoaderFactoryBase;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.ObjectProperty;
+import org.jdesktop.beansbinding.Property;
 
 /**
  * @author kaiseh
  */
 
-public abstract class BinderFactory {
-    public static Binder getBinder(BindingDesc bindingDesc) {
-        List<Object> services = ServiceLoaderFactoryBase
-                .getServices(BinderFactory.class);
-        for (Object service : services) {
-            Binder binder = (Binder) service;
-            if (binder.accepts(bindingDesc)) {
-                return binder;
-            }
+public abstract class PropertyFactory {
+    public static Property<?, ?> createProperty(String expression) {
+        if (expression == null) {
+            return ObjectProperty.create();
+        } else if (expression.contains("${")) {
+            return ELProperty.create(expression);
+        } else {
+            return BeanProperty.create(expression);
         }
-        return null;
     }
 }

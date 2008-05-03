@@ -24,7 +24,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.ObjectProperty;
 import org.jdesktop.beansbinding.Property;
 import org.seasar.swing.binding.AbstractBinder;
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
@@ -33,13 +33,14 @@ import org.seasar.swing.exception.IllegalRegistrationException;
  */
 
 public class JListBinder extends AbstractBinder {
-    public boolean accepts(BindingDesc bindingDesc, Object target) {
-        return bindingDesc.getTargetPropertyType() == PropertyType.VALUE
-                && (target instanceof JList);
+    public boolean accepts(BindingDesc bindingDesc) {
+        return bindingDesc.getBindingType() == BindingType.VALUE
+                && JList.class.isAssignableFrom(bindingDesc
+                        .getTargetObjectDesc().getPropertyType());
     }
 
     @Override
-    protected String getDefaultTargetPropertyName(BindingDesc bindingDesc) {
+    protected String getTargetPropertyExpression() {
         return null;
     }
 
@@ -53,7 +54,7 @@ public class JListBinder extends AbstractBinder {
         }
 
         Class<?> sourcePropClass = bindingDesc.getSourcePropertyDesc()
-                .getPropertyType();
+                .getBindingType();
         if (!List.class.isAssignableFrom(sourcePropClass)) {
             throw new IllegalRegistrationException("ESWI0112", bindingDesc
                     .getSourceClass().getName()
@@ -65,7 +66,7 @@ public class JListBinder extends AbstractBinder {
                 .getPropertyName();
         Property sourceProp = createProperty(sourcePropName);
 
-        Binding binding = new S2JListBinding(bindingDesc.getBindingType()
+        Binding binding = new S2JListBinding(bindingDesc.getBindingStrategy()
                 .getUpdateStrategy(), source, sourceProp, target,
                 ObjectProperty.create(), null);
 

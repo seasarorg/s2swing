@@ -25,31 +25,32 @@ import org.seasar.swing.desc.BindingDesc;
 
 public class SimpleBinder extends AbstractBinder {
     private Class<?> targetClass;
-    private String defaultTargetPropertyName;
-    private PropertyType targetPropertyType;
+    private String targetPropertyExpression;
+    private BindingType bindingType;
 
-    public SimpleBinder(Class<?> targetClass, String defaultTargetPropertyName,
-            PropertyType targetPropertyType) {
+    public SimpleBinder(Class<?> targetClass, String targetPropertyExpression,
+            BindingType bindingType) {
         if (targetClass == null) {
             throw new EmptyRuntimeException("targetClass");
         }
-        if (targetPropertyType == null) {
-            throw new EmptyRuntimeException("targetPropertyType");
+        if (bindingType == null) {
+            throw new EmptyRuntimeException("bindingType");
         }
         this.targetClass = targetClass;
-        this.defaultTargetPropertyName = defaultTargetPropertyName;
-        this.targetPropertyType = targetPropertyType;
+        this.targetPropertyExpression = targetPropertyExpression;
+        this.bindingType = bindingType;
     }
 
-    public boolean accepts(BindingDesc bindingDesc, Object target) {
-        if (bindingDesc.getTargetPropertyType() == targetPropertyType) {
-            return targetClass.isInstance(target);
+    public boolean accepts(BindingDesc bindingDesc) {
+        if (bindingDesc.getBindingType() == bindingType) {
+            Class<?> type = bindingDesc.getTargetObjectDesc().getPropertyType();
+            return targetClass.isAssignableFrom(type);
         }
         return false;
     }
 
     @Override
-    protected String getDefaultTargetPropertyName(BindingDesc bindingDesc) {
-        return defaultTargetPropertyName;
+    protected String getTargetPropertyExpression() {
+        return targetPropertyExpression;
     }
 }

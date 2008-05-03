@@ -16,8 +16,6 @@
 
 package org.seasar.swing.desc;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,15 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.seasar.framework.beans.BeanDesc;
+import org.seasar.framework.beans.FieldNotFoundRuntimeException;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.ConstructorUtil;
-import org.seasar.framework.util.StringUtil;
-import org.seasar.swing.annotation.ConstraintTarget;
-import org.seasar.swing.exception.IllegalRegistrationException;
-import org.seasar.swing.resolver.ComponentResolver;
-import org.seasar.swing.validator.Constraint;
 
 /**
  * @author kaiseh
@@ -42,78 +34,48 @@ import org.seasar.swing.validator.Constraint;
 
 public class DefaultModelDesc implements ModelDesc {
     private Class<?> modelClass;
-    private Map<String, List<Constraint>> constraintsMap;
+    private List<ModelFieldDesc> modelFieldDescs;
+    private Map<String, ModelFieldDesc> modelFieldDescMap;
 
     public DefaultModelDesc(Class<?> modelClass) {
         if (modelClass == null) {
             throw new EmptyRuntimeException("modelClass");
         }
         this.modelClass = modelClass;
-        setupConstraints();
+        setupModelFieldDescs();
     }
 
-    private void setupConstraints() {
-        constraintsMap = new HashMap<String, List<Constraint>>();
+    private void setupModelFieldDescs() {
+        modelFieldDescs = new ArrayList<ModelFieldDesc>();
+        modelFieldDescMap = new HashMap<String, ModelFieldDesc>();
+
         BeanDesc beanDesc = BeanDescFactory.getBeanDesc(modelClass);
         for (int i = 0; i < beanDesc.getFieldSize(); i++) {
             Field field = beanDesc.getField(i);
-            List<Constraint> constraints = createConstraints(field);
-            constraintsMap.put(field.getName(), constraints);
+            ModelFieldDesc fieldDesc = new DefaultModelFieldDesc(modelClass,
+                    field);
+            modelFieldDescs.add(fieldDesc);
+            modelFieldDescMap.put(field.getName(), fieldDesc);
         }
     }
 
-    private List<Constraint> createConstraints(Field field) {
-        List<Constraint> constraints = new ArrayList<Constraint>();
-        for (Annotation annotation : field.getAnnotations()) {
-            ConstraintTarget target = annotation.annotationType()
-                    .getAnnotation(ConstraintTarget.class);
-            if (target == null) {
-                continue;
-            }
-            Class<?> constraintClass = target.value();
-            Constraint constraint = (Constraint) ClassUtil
-                    .newInstance(constraintClass);
-            constraint.read(annotation);
-            constraints.add(constraint);
-        }
-
-        org.seasar.swing.validator.annotation.Constraint c = field
-                .getAnnotation(org.seasar.swing.validator.annotation.Constraint.class);
-        if (c != null) {
-            Object constraintObject = null;
-            if (!StringUtil.isEmpty(c.name())) {
-                constraintObject = ComponentResolver.getComponent(c.name());
-            } else {
-                if (c.type() == Constraint.class) {
-                    throw new IllegalRegistrationException("ESWI0108",
-                            modelClass.getName(), field.getName());
-                }
-                String[] args = c.args();
-                Class<?>[] argTypes = new Class<?>[args.length];
-                for (int i = 0; i < argTypes.length; i++) {
-                    argTypes[i] = String.class;
-                }
-                Constructor<?> constructor = ClassUtil.getConstructor(c.type(),
-                        argTypes);
-                constraintObject = ConstructorUtil.newInstance(constructor,
-                        args);
-            }
-            if (constraintObject instanceof Constraint) {
-                constraints.add((Constraint) constraintObject);
-            } else {
-                throw new IllegalRegistrationException("ESWI0109", c.type()
-                        .getName());
-            }
-        }
-        return constraints;
+    public Class<?> getModelClass() {
+        return modelClass;
     }
 
-    public List<Constraint> getConstraints(String fieldName) {
-        List<Constraint> constraints = constraintsMap.get(fieldName);
-        if (constraints != null) {
-            return Collections.unmodifiableList(constraints);
-        } else {
-            return Collections.<Constraint> emptyList();
+    public List<ModelFieldDesc> getModelFieldDescs() {
+        return Collections.unmodifiableList(modelFieldDescs);
+    }
+
+    public boolean hasModelFieldDesc(String fieldName) {
+        return modelFieldDescMap.containsKey(fieldName);
+    }
+
+    public ModelFieldDesc getModelFieldDesc(String fieldName) {
+        ModelFieldDesc desc = modelFieldDescMap.get(fieldName);
+        if (desc == null) {
+            throw new FieldNotFoundRuntimeException(modelClass, fieldName);
         }
+        return desc;
     }
 }

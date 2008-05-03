@@ -18,27 +18,28 @@ package org.seasar.swing.validator;
 
 import org.jdesktop.beansbinding.Validator;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.ModelFieldDesc;
 
 /**
  * @author kaiseh
  */
 
 public class BindingValidator extends Validator<Object> {
-    private BindingDesc bindingDesc;
+    private ModelFieldDesc fieldDesc;
 
-    public BindingValidator(BindingDesc bindingDesc) {
-        if (bindingDesc == null) {
-            throw new EmptyRuntimeException("bindingDesc");
+    public BindingValidator(ModelFieldDesc fieldDesc) {
+        if (fieldDesc == null) {
+            throw new EmptyRuntimeException("fieldDesc");
         }
-        this.bindingDesc = bindingDesc;
+        this.fieldDesc = fieldDesc;
     }
 
     @Override
     public Result validate(Object value) {
-        for (Constraint constraint : bindingDesc.getConstraints()) {
+        for (Constraint constraint : fieldDesc.getConstraints()) {
             if (!constraint.isSatisfied(value)) {
-                String message = constraint.getViolationMessage(bindingDesc, value);
+                String message = constraint.getViolationMessage(fieldDesc,
+                        value);
                 return new Result(null, message);
             }
         }

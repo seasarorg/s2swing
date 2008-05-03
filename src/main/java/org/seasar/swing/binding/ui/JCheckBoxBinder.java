@@ -18,7 +18,7 @@ package org.seasar.swing.binding.ui;
 
 import javax.swing.JCheckBox;
 
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.SimpleBinder;
 
 /**
@@ -27,6 +27,6 @@ import org.seasar.swing.binding.SimpleBinder;
 
 public class JCheckBoxBinder extends SimpleBinder {
     public JCheckBoxBinder() {
-        super(JCheckBox.class, "selected", PropertyType.VALUE);
+        super(JCheckBox.class, "selected", BindingType.VALUE);
     }
 }

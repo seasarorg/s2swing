@@ -18,7 +18,7 @@ package org.seasar.swing.binding.ui;
 
 import javax.swing.JLabel;
 
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.SimpleBinder;
 
 /**
@@ -27,6 +27,6 @@ import org.seasar.swing.binding.SimpleBinder;
 
 public class JLabelBinder extends SimpleBinder {
     public JLabelBinder() {
-        super(JLabel.class, "text", PropertyType.VALUE);
+        super(JLabel.class, "text", BindingType.VALUE);
     }
 }

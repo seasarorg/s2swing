@@ -54,7 +54,6 @@ import org.seasar.swing.binding.BindingStateListener;
 import org.seasar.swing.binding.BindingTarget;
 import org.seasar.swing.desc.ActionSourceDesc;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.desc.CustomBindingDesc;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
 import org.seasar.swing.desc.S2ActionDesc;
@@ -145,7 +144,6 @@ public class ViewManager extends AbstractBean {
         
         autoInjectComponentNames();
         autoInjectComponentProperties();
-        autoInjectBindingTargetNames();
         autoBindActions();
         autoInjectModels();
         
@@ -243,15 +241,6 @@ public class ViewManager extends AbstractBean {
         }
     }
 
-    protected void autoInjectBindingTargetNames() {
-        for (Field field : viewDesc.getBindingTargetFields()) {
-            BindingTarget target = (BindingTarget) FieldUtil.get(field, view);
-            if (target != null && target.getName() == null) {
-                target.setName(field.getName());
-            }
-        }
-    }
-
     protected void autoInjectS2Actions() {
         for (S2ActionDesc actionDesc : viewDesc.getS2ActionDescs()) {
             S2Action action = new S2Action(actionMap, resourceMap, actionDesc);
@@ -338,7 +327,7 @@ public class ViewManager extends AbstractBean {
             ModelDesc modelDesc = ModelDescFactory.getModelDesc(modelField
                     .getType());
             for (BindingDesc bindingDesc : modelDesc.getBindingDescs()) {
-                if (bindingDesc.getBindingType() == null) {
+                if (bindingDesc.getBindingStrategy() == null) {
                     continue;
                 }
                 String targetName = bindingDesc.getTargetName();

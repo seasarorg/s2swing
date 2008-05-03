@@ -16,7 +16,7 @@
 
 package org.seasar.swing.binding.ui;
 
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.SimpleBinder;
 
 /**
@@ -25,6 +25,6 @@ import org.seasar.swing.binding.SimpleBinder;
 
 public class S2ButtonGroupBinder extends SimpleBinder {
     public S2ButtonGroupBinder() {
-        super(S2ButtonGroup.class, "value", PropertyType.VALUE);
+        super(S2ButtonGroup.class, "value", BindingType.VALUE);
     }
 }

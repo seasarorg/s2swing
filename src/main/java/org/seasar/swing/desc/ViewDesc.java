@@ -24,6 +24,8 @@ import java.util.List;
  */
 
 public interface ViewDesc {
+    Class<?> getViewClass();
+    
     List<S2ActionDesc> getS2ActionDescs();
 
     List<ActionSourceDesc> getActionSourceDescs();

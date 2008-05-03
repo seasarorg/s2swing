@@ -70,7 +70,7 @@ public class BindingManager {
                     continue;
                 }
                 BindingDesc desc = getBindingDesc(other);
-                if (desc.getTargetPropertyType() == PropertyType.SELECTION) {
+                if (desc.getTargetPropertyType() == BindingType.SELECTION) {
                     Object savedSourceValue = cachedSourceValueMap.get(other);
                     desc.getSourcePropertyDesc().setValue(
                             other.getSourceObject(), savedSourceValue);
@@ -239,7 +239,7 @@ public class BindingManager {
                             "failed");
                 }
                 String label = ApplicationResources
-                        .getBindingPropertyLabel(bindingDesc);
+                        .getModelFieldLabel(bindingDesc);
                 String message = Messages.getConverterMessages().formatMessage(
                         null, "messageFormat", label, content);
                 errorMessages.add(message);

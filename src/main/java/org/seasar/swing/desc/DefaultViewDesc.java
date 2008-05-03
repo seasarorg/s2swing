@@ -136,6 +136,10 @@ public class DefaultViewDesc implements ViewDesc {
         }
     }
 
+    public Class<?> getViewClass() {
+        return viewClass;
+    }
+
     public List<S2ActionDesc> getS2ActionDescs() {
         return Collections.unmodifiableList(s2ActionDescs);
     }

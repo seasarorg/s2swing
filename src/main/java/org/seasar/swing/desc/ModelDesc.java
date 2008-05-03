@@ -18,12 +18,14 @@ package org.seasar.swing.desc;
 
 import java.util.List;
 
-import org.seasar.swing.validator.Constraint;
-
 /**
  * @author kaiseh
  */
 
 public interface ModelDesc {
-    List<Constraint> getConstraints(String fieldName);
+    Class<?> getModelClass();
+
+    List<ModelFieldDesc> getModelFieldDescs();
+
+    ModelFieldDesc getModelFieldDesc(String fieldName);
 }

@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.desc.BindingDesc;
+import org.seasar.framework.util.FieldUtil;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
+import org.seasar.swing.desc.ModelFieldDesc;
 import org.seasar.swing.exception.ValidatorException;
 
 /**
@@ -36,12 +37,12 @@ public class S2Validator {
         }
         List<String> messages = new ArrayList<String>();
         ModelDesc modelDesc = ModelDescFactory.getModelDesc(model.getClass());
-        for (BindingDesc bindingDesc : modelDesc.getBindingDescs()) {
-            Object value = bindingDesc.getSourcePropertyDesc().getValue(model);
-            for (Constraint constraint : bindingDesc.getConstraints()) {
+        for (ModelFieldDesc fieldDesc : modelDesc.getModelFieldDescs()) {
+            Object value = FieldUtil.get(fieldDesc.getField(), model);
+            for (Constraint constraint : fieldDesc.getConstraints()) {
                 if (!constraint.isSatisfied(value)) {
-                    String message = constraint.getViolationMessage(
-                            bindingDesc, value);
+                    String message = constraint.getViolationMessage(fieldDesc,
+                            value);
                     messages.add(message);
                 }
             }

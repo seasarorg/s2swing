@@ -24,8 +24,8 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.annotation.ReadWriteSelection;
+import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
-import org.seasar.swing.binding.PropertyType;
 import org.seasar.swing.converter.annotation.Converter;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
 import org.seasar.swing.exception.IllegalRegistrationException;
@@ -108,7 +108,7 @@ public class DefaultBindingDescTest extends TestCase {
         }
     }
 
-    public void test() {
+    public void testCreate() {
         try {
             new DefaultBindingDesc(Aaa.class, "ccc");
             fail();
@@ -150,24 +150,24 @@ public class DefaultBindingDescTest extends TestCase {
         assertEquals("bbb", desc.getTargetObjectDesc().getPropertyName());
     }
 
+    public void testGetBindingStrategy() {
+        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
+
+        assertEquals(BindingStrategy.READ_WRITE, desc.getBindingStrategy());
+
+        desc = new DefaultBindingDesc(Aaa.class, "bbb");
+
+        assertEquals(BindingStrategy.READ, desc.getBindingStrategy());
+    }
+
     public void testGetBindingType() {
         DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
 
-        assertEquals(BindingType.READ_WRITE, desc.getBindingType());
+        assertEquals(BindingType.VALUE, desc.getBindingType());
 
         desc = new DefaultBindingDesc(Aaa.class, "bbb");
 
-        assertEquals(BindingType.READ, desc.getBindingType());
-    }
-
-    public void testGetPropertyType() {
-        DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
-
-        assertEquals(PropertyType.VALUE, desc.getPropertyType());
-
-        desc = new DefaultBindingDesc(Aaa.class, "bbb");
-
-        assertEquals(PropertyType.SELECTION, desc.getPropertyType());
+        assertEquals(BindingType.SELECTION, desc.getBindingType());
     }
 
     public void testGetSourceProperty() {

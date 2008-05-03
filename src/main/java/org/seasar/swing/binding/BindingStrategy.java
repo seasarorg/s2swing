@@ -16,10 +16,24 @@
 
 package org.seasar.swing.binding;
 
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
 /**
  * @author kaiseh
  */
 
-public enum PropertyType {
-    VALUE, SELECTION;
+public enum BindingStrategy {
+    READ(UpdateStrategy.READ), 
+    READ_ONCE(UpdateStrategy.READ_ONCE), 
+    READ_WRITE(UpdateStrategy.READ_WRITE);
+
+    private UpdateStrategy updateStrategy;
+
+    private BindingStrategy(UpdateStrategy updateStrategy) {
+        this.updateStrategy = updateStrategy;
+    }
+
+    public UpdateStrategy getUpdateStrategy() {
+        return updateStrategy;
+    }
 }

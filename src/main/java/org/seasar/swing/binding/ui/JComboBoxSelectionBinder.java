@@ -19,7 +19,7 @@ package org.seasar.swing.binding.ui;
 import javax.swing.JComboBox;
 
 import org.seasar.swing.binding.AbstractBinder;
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.adapter.S2JComboBoxAdapterProvider;
 import org.seasar.swing.desc.BindingDesc;
 
@@ -29,12 +29,12 @@ import org.seasar.swing.desc.BindingDesc;
 
 public class JComboBoxSelectionBinder extends AbstractBinder {
     public boolean accepts(BindingDesc bindingDesc, Object target) {
-        return bindingDesc.getTargetPropertyType() == PropertyType.SELECTION
+        return bindingDesc.getTargetPropertyType() == BindingType.SELECTION
                 && (target instanceof JComboBox);
     }
 
     @Override
-    protected String getDefaultTargetPropertyName(BindingDesc bindingDesc) {
+    protected String getTargetPropertyExpression() {
         return S2JComboBoxAdapterProvider.SELECTED_ITEM;
     }
 

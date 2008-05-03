@@ -20,7 +20,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.desc.BindingDesc;
+import org.seasar.swing.desc.ModelFieldDesc;
 
 /**
  * リソースマップからリソース文字列を取得するためのユーティリティクラスです。
@@ -35,14 +35,13 @@ public class ApplicationResources {
         return Application.getInstance().getContext();
     }
 
-    public static String getBindingPropertyLabel(BindingDesc bindingDesc) {
-        if (bindingDesc == null) {
-            throw new EmptyRuntimeException("bindingDesc");
+    public static String getModelFieldLabel(ModelFieldDesc fieldDesc) {
+        if (fieldDesc == null) {
+            throw new EmptyRuntimeException("fieldDesc");
         }
-        Class<?> sourceClass = bindingDesc.getSourceClass();
-        String fieldName = bindingDesc.getSourcePropertyDesc()
-                .getPropertyName();
-        String customLabel = getString(sourceClass, fieldName + LABEL_SUFFIX);
+        Class<?> modelClass = fieldDesc.getModelClass();
+        String fieldName = fieldDesc.getField().getName();
+        String customLabel = getString(modelClass, fieldName + LABEL_SUFFIX);
         return customLabel != null ? customLabel : fieldName;
     }
 

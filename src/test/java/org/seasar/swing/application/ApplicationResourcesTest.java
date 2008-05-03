@@ -52,13 +52,13 @@ public class ApplicationResourcesTest extends TestCase {
     public void testGetBindingPropertyLabel() {
         BindingDesc desc = new DefaultBindingDesc(Aaa.class, "xxx");
         assertEquals("Custom Label", ApplicationResources
-                .getBindingPropertyLabel(desc));
+                .getModelFieldLabel(desc));
 
         desc = new DefaultBindingDesc(Aaa.class, "yyy");
-        assertEquals("yyy", ApplicationResources.getBindingPropertyLabel(desc));
+        assertEquals("yyy", ApplicationResources.getModelFieldLabel(desc));
 
         try {
-            ApplicationResources.getBindingPropertyLabel(null);
+            ApplicationResources.getModelFieldLabel(null);
             fail();
         } catch (EmptyRuntimeException e) {
         }

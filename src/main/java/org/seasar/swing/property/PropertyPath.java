@@ -45,6 +45,10 @@ public class PropertyPath {
         }
     }
 
+    public String getPropertyName() {
+        return names[names.length - 1];
+    }
+
     public boolean hasProperty(Object root) {
         if (root == null) {
             return false;

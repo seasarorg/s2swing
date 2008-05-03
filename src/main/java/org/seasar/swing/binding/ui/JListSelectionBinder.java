@@ -21,7 +21,7 @@ import java.util.List;
 import javax.swing.JList;
 
 import org.seasar.swing.binding.AbstractBinder;
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.binding.adapter.S2JListAdapterProvider;
 import org.seasar.swing.desc.BindingDesc;
 
@@ -30,15 +30,27 @@ import org.seasar.swing.desc.BindingDesc;
  */
 
 public class JListSelectionBinder extends AbstractBinder {
+    public boolean accepts(BindingDesc bindingDesc) {
+        return bindingDesc.getBindingType() == BindingType.SELECTION
+                && JList.class.isAssignableFrom(bindingDesc
+                        .getTargetObjectDesc().getPropertyType());
+    }
+
+    @Override
+    protected String getTargetPropertyExpression() {
+        return null;
+    }
+
+    
     public boolean accepts(BindingDesc bindingDesc, Object target) {
-        return bindingDesc.getTargetPropertyType() == PropertyType.SELECTION
+        return bindingDesc.getTargetPropertyType() == BindingType.SELECTION
                 && (target instanceof JList);
     }
 
     @Override
     protected String getDefaultTargetPropertyName(BindingDesc bindingDesc) {
         Class<?> sourcePropClass = bindingDesc.getSourcePropertyDesc()
-                .getPropertyType();
+                .getBindingType();
         if (List.class.isAssignableFrom(sourcePropClass)) {
             return S2JListAdapterProvider.SELECTED_ELEMENTS;
         } else {

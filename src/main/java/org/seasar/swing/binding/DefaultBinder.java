@@ -22,6 +22,6 @@ package org.seasar.swing.binding;
 
 public class DefaultBinder extends SimpleBinder {
     public DefaultBinder() {
-        super(Object.class, null, PropertyType.VALUE);
+        super(Object.class, null, BindingType.VALUE);
     }
 }

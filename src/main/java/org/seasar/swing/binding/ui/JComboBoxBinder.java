@@ -24,7 +24,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Property;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.seasar.swing.binding.AbstractBinder;
-import org.seasar.swing.binding.PropertyType;
+import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
@@ -34,7 +34,7 @@ import org.seasar.swing.exception.IllegalRegistrationException;
 
 public class JComboBoxBinder extends AbstractBinder {
     public boolean accepts(BindingDesc bindingDesc, Object target) {
-        return bindingDesc.getTargetPropertyType() == PropertyType.VALUE
+        return bindingDesc.getTargetPropertyType() == BindingType.VALUE
                 && (target instanceof JComboBox);
     }
 
@@ -53,7 +53,7 @@ public class JComboBoxBinder extends AbstractBinder {
         }
 
         Class<?> sourcePropClass = bindingDesc.getSourcePropertyDesc()
-                .getPropertyType();
+                .getBindingType();
         if (!List.class.isAssignableFrom(sourcePropClass)) {
             throw new IllegalRegistrationException("ESWI0111", bindingDesc
                     .getSourceClass().getName()
@@ -66,7 +66,7 @@ public class JComboBoxBinder extends AbstractBinder {
         Property sourceProp = createProperty(sourcePropName);
 
         Binding binding = SwingBindings.createJComboBoxBinding(bindingDesc
-                .getBindingType().getUpdateStrategy(), source, sourceProp,
+                .getBindingStrategy().getUpdateStrategy(), source, sourceProp,
                 (JComboBox) target);
         
         setupBindingDefault(binding, bindingDesc, target, null);
