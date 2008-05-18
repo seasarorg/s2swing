@@ -16,6 +16,10 @@
 
 package org.seasar.swing.binding;
 
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.Property;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.desc.BindingDesc;
 
@@ -23,12 +27,13 @@ import org.seasar.swing.desc.BindingDesc;
  * @author kaiseh
  */
 
+@SuppressWarnings("unchecked")
 public class SimpleBinder extends AbstractBinder {
     private Class<?> targetClass;
-    private String targetPropertyExpression;
+    private String targetPropertyName;
     private BindingType bindingType;
 
-    public SimpleBinder(Class<?> targetClass, String targetPropertyExpression,
+    public SimpleBinder(Class<?> targetClass, String targetPropertyName,
             BindingType bindingType) {
         if (targetClass == null) {
             throw new EmptyRuntimeException("targetClass");
@@ -37,7 +42,7 @@ public class SimpleBinder extends AbstractBinder {
             throw new EmptyRuntimeException("bindingType");
         }
         this.targetClass = targetClass;
-        this.targetPropertyExpression = targetPropertyExpression;
+        this.targetPropertyName = targetPropertyName;
         this.bindingType = bindingType;
     }
 
@@ -50,7 +55,12 @@ public class SimpleBinder extends AbstractBinder {
     }
 
     @Override
-    protected String getTargetPropertyExpression() {
-        return targetPropertyExpression;
+    protected Binding doCreateBinding(BindingDesc bindingDesc, Object source,
+            Object target) {
+        Property sourceProp = BeanProperty.create(bindingDesc
+                .getSourceProperty());
+        Property targetProp = BeanProperty.create(targetPropertyName);
+        return Bindings.createAutoBinding(bindingDesc.getUpdateStrategy(),
+                source, sourceProp, target, targetProp);
     }
 }

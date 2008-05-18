@@ -21,7 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.seasar.swing.binding.BindingStrategy;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.seasar.swing.binding.BindingType;
 
 /**
@@ -30,7 +30,7 @@ import org.seasar.swing.binding.BindingType;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@BindingDescription(strategy = BindingStrategy.READ, type = BindingType.VALUE)
+@BindingDescription(strategy = UpdateStrategy.READ, type = BindingType.VALUE)
 public @interface Read {
     String value() default "";
 }

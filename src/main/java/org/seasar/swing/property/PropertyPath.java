@@ -28,12 +28,14 @@ import org.seasar.swing.exception.IllegalRegistrationException;
  */
 
 public class PropertyPath {
+    private String path;
     private String[] names;
 
     public PropertyPath(String path) {
         if (StringUtil.isEmpty(path)) {
             throw new EmptyRuntimeException("path");
         }
+        this.path = path;
         names = path.split("\\.");
         if (names.length == 0) {
             throw new EmptyRuntimeException("path");
@@ -43,6 +45,10 @@ public class PropertyPath {
                 throw new IllegalRegistrationException("ESWI0114", path);
             }
         }
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public String getPropertyName() {

@@ -21,7 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.seasar.swing.binding.BindingStrategy;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.seasar.swing.binding.BindingType;
 
 /**
@@ -31,6 +31,6 @@ import org.seasar.swing.binding.BindingType;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface BindingDescription {
-    BindingStrategy strategy();
+    UpdateStrategy strategy();
     BindingType type();
 }

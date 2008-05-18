@@ -16,61 +16,19 @@
 
 package org.seasar.swing.binding.ui;
 
-import java.util.List;
-
 import javax.swing.JComboBox;
 
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Property;
-import org.jdesktop.swingbinding.SwingBindings;
-import org.seasar.swing.binding.AbstractBinder;
 import org.seasar.swing.binding.BindingType;
-import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.exception.IllegalRegistrationException;
+import org.seasar.swing.binding.SimpleBinder;
+import org.seasar.swing.binding.adapter.S2JComboBoxAdapterProvider;
 
 /**
  * @author kaiseh
  */
 
-public class JComboBoxBinder extends AbstractBinder {
-    public boolean accepts(BindingDesc bindingDesc, Object target) {
-        return bindingDesc.getTargetPropertyType() == BindingType.VALUE
-                && (target instanceof JComboBox);
-    }
-
-    @Override
-    protected String getDefaultTargetPropertyName(BindingDesc bindingDesc) {
-        return null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Binding createBinding(BindingDesc bindingDesc, Object source,
-            Object target) {
-        if (!accepts(bindingDesc, target)) {
-            throw new IllegalArgumentException(
-                    "Specified parameters cannot be accepted.");
-        }
-
-        Class<?> sourcePropClass = bindingDesc.getSourcePropertyDesc()
-                .getBindingType();
-        if (!List.class.isAssignableFrom(sourcePropClass)) {
-            throw new IllegalRegistrationException("ESWI0111", bindingDesc
-                    .getSourceClass().getName()
-                    + "."
-                    + bindingDesc.getSourcePropertyDesc().getPropertyName());
-        }
-
-        String sourcePropName = bindingDesc.getSourcePropertyDesc()
-                .getPropertyName();
-        Property sourceProp = createProperty(sourcePropName);
-
-        Binding binding = SwingBindings.createJComboBoxBinding(bindingDesc
-                .getBindingStrategy().getUpdateStrategy(), source, sourceProp,
-                (JComboBox) target);
-        
-        setupBindingDefault(binding, bindingDesc, target, null);
-        
-        return binding;
+public class JComboBoxBinder extends SimpleBinder {
+    public JComboBoxBinder() {
+        super(JComboBox.class, S2JComboBoxAdapterProvider.SELECTED_ITEM,
+                BindingType.VALUE);
     }
 }

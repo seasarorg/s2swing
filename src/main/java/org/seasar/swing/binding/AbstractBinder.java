@@ -16,31 +16,17 @@
 
 package org.seasar.swing.binding;
 
-import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.beansbinding.Property;
-import org.jdesktop.beansbinding.Validator;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.seasar.framework.beans.BeanDesc;
-import org.seasar.framework.beans.PropertyDesc;
-import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.converter.ConverterChain;
-import org.seasar.swing.converter.DefaultConverter;
 import org.seasar.swing.converter.NotEnteredConverter;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
 import org.seasar.swing.desc.ModelFieldDesc;
-import org.seasar.swing.exception.BindingException;
-import org.seasar.swing.property.PropertyFactory;
 import org.seasar.swing.property.PropertyPath;
 import org.seasar.swing.validator.BindingValidator;
-import org.seasar.swing.validator.S2Validator;
 
 /**
  * @author kaiseh
@@ -48,96 +34,47 @@ import org.seasar.swing.validator.S2Validator;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractBinder implements Binder {
-    protected abstract String getTargetPropertyExpression();
-
     public Binding createBinding(BindingDesc bindingDesc, Object source,
             Object target) {
+        if (source == null) {
+            throw new EmptyRuntimeException("source");
+        }
         if (target == null) {
             throw new EmptyRuntimeException("target");
         }
         if (!accepts(bindingDesc)) {
             throw new IllegalArgumentException(
-                    "Specified parameters cannot be accepted.");
+                    "Cannot accept the specified BindingDesc.");
         }
 
-        UpdateStrategy strategy = bindingDesc.getBindingStrategy()
-                .getUpdateStrategy();
-        String sourcePropertyName = bindingDesc.getSourceProperty();
-        PropertyPath sourcePropertyPath = new PropertyPath(sourcePropertyName);
+        Binding binding = doCreateBinding(bindingDesc, source, target);
 
-        String targetPropertyExpr = getTargetPropertyExpression();
+        String sourcePropString = bindingDesc.getSourceProperty();
+        PropertyPath sourcePropPath = new PropertyPath(sourcePropString);
+        Object sourcePropHolder = sourcePropPath.getPropertyHolder(source);
+        ModelDesc modelDesc = ModelDescFactory.getModelDesc(sourcePropHolder
+                .getClass());
 
-        // Note that sourcePropertyName must be simply period-separated
-        // (BeanProperty)
-        // whereas targetPropertyExpr can be null or EL-style
-        Property sourceProperty = BeanProperty.create(sourcePropertyName);
-        Property targetProperty = PropertyFactory
-                .createProperty(targetPropertyExpr);
-        Binding binding = Bindings.createAutoBinding(strategy, source,
-                sourceProperty, target, targetProperty);
-
-        Object sourcePropertyHolder = sourcePropertyPath
-                .getPropertyHolder(source);
-        ModelDesc modelDesc = ModelDescFactory
-                .getModelDesc(sourcePropertyHolder.getClass());
-        ModelFieldDesc fieldDesc = modelDesc
-                .getModelFieldDesc(sourcePropertyPath.getPropertyName());
-
-        setupBindingDefault(binding, bindingDesc, target, targetPropertyExpr);
-
-        return binding;
-    }
-
-    protected Class<?> getTargetAdapterClass() {
-        return null;
-    }
-
-    protected PropertyDesc getTargetPropertyDesc(Object target,
-            String targetPropertyName) {
-        PropertyDesc targetPropDesc = null;
-        Class<?> targetAdapterClass = getTargetAdapterClass();
-        if (targetAdapterClass != null) {
-            BeanDesc targetDesc = BeanDescFactory
-                    .getBeanDesc(targetAdapterClass);
-            if (targetDesc.hasPropertyDesc(targetPropertyName)) {
-                targetPropDesc = targetDesc.getPropertyDesc(targetPropertyName);
-            }
-        }
-        if (targetPropDesc == null) {
-            BeanDesc targetDesc = BeanDescFactory
-                    .getBeanDesc(target.getClass());
-            targetPropDesc = targetDesc.getPropertyDesc(targetPropertyName);
-        }
-        return targetPropDesc;
-    }
-
-    protected void setupBindingDefault(Binding binding,
-            BindingDesc bindingDesc, Object target, String targetPropertyName,
-            ModelFieldDesc sourceFieldDesc) {
-        binding.setConverter(createConverter(bindingDesc, sourceFieldDesc));
-        binding.setValidator(new BindingValidator(sourceFieldDesc));
-
-        if (targetPropertyName != null) {
-            PropertyDesc targetPropDesc = getTargetPropertyDesc(target,
-                    targetPropertyName);
-            if (targetPropDesc.getPropertyType().isPrimitive()) {
-                binding.setSourceNullValue(targetPropDesc.convertIfNeed(null));
-            }
-        }
-    }
-
-    protected Converter createConverter(BindingDesc bindingDesc,
-            ModelFieldDesc sourceFieldDesc) {
         ConverterChain chain = new ConverterChain();
-
         if (bindingDesc.getConverter() != null) {
             chain.add(bindingDesc.getConverter());
         }
 
-        Converter notEnteredConverter = new NotEnteredConverter(sourceFieldDesc
-                .getField().getType());
-        chain.add(notEnteredConverter);
+        if (modelDesc.hasModelFieldDesc(sourcePropPath.getPropertyName())) {
+            ModelFieldDesc fieldDesc = modelDesc
+                    .getModelFieldDesc(sourcePropPath.getPropertyName());
+            binding.setValidator(new BindingValidator(fieldDesc));
 
-        return chain;
+            Converter notEnteredConverter = new NotEnteredConverter(fieldDesc
+                    .getField().getType());
+            chain.add(notEnteredConverter);
+        }
+
+        binding.setConverter(chain);
+
+        return binding;
     }
+
+    protected abstract Binding doCreateBinding(BindingDesc bindingDesc,
+            Object source, Object target);
 }

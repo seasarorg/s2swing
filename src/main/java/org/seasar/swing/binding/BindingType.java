@@ -21,5 +21,5 @@ package org.seasar.swing.binding;
  */
 
 public enum BindingType {
-    VALUE, SELECTION;
+    VALUE, ITEMS;
 }

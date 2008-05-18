@@ -27,5 +27,7 @@ public interface ModelDesc {
 
     List<ModelFieldDesc> getModelFieldDescs();
 
+    boolean hasModelFieldDesc(String fieldName);
+
     ModelFieldDesc getModelFieldDesc(String fieldName);
 }

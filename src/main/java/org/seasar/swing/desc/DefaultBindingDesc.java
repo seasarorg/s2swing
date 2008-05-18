@@ -20,13 +20,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.annotation.BindingDescription;
 import org.seasar.swing.annotation.ConverterTarget;
-import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.converter.ConverterFactory;
 import org.seasar.swing.exception.IllegalRegistrationException;
@@ -40,7 +40,7 @@ public class DefaultBindingDesc implements BindingDesc {
     private Class<?> viewClass;
     private Field targetField;
 
-    private BindingStrategy bindingStrategy;
+    private UpdateStrategy updateStrategy;
     private BindingType bindingType;
     private String sourceProperty;
     private PropertyDesc targetObjectDesc;
@@ -109,12 +109,12 @@ public class DefaultBindingDesc implements BindingDesc {
                             viewClass.getName(), targetField.getName());
                 }
                 registeredDescription = desc;
-                bindingStrategy = desc.strategy();
+                updateStrategy = desc.strategy();
                 bindingType = desc.type();
                 sourceProperty = (String) AnnotationUtils.getProperty(
                         annotation, "value");
                 if (sourceProperty.length() == 0) {
-                    sourceProperty = null;
+                    sourceProperty = targetField.getName();
                 }
             }
         }
@@ -141,14 +141,14 @@ public class DefaultBindingDesc implements BindingDesc {
         }
     }
 
-    public BindingStrategy getBindingStrategy() {
-        return bindingStrategy;
+    public UpdateStrategy getUpdateStrategy() {
+        return updateStrategy;
     }
 
     public BindingType getBindingType() {
         return bindingType;
     }
-    
+
     public Class<?> getViewClass() {
         return viewClass;
     }

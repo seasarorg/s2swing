@@ -14,29 +14,23 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.binding;
+package org.seasar.swing.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.seasar.swing.binding.BindingType;
 
 /**
  * @author kaiseh
  */
 
-public abstract class AbstractBindingTarget implements BindingTarget {
-    private String name;
-    private boolean bound;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isBound() {
-        return bound;
-    }
-
-    public void setBound(boolean bound) {
-        this.bound = bound;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@BindingDescription(strategy = UpdateStrategy.READ_ONCE, type = BindingType.ITEMS)
+public @interface ReadOnceItems {
+    String value();
 }

@@ -16,12 +16,30 @@
 
 package org.seasar.swing.binding;
 
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ObjectProperty;
+import org.jdesktop.beansbinding.Property;
+import org.seasar.swing.desc.BindingDesc;
+
 /**
  * @author kaiseh
  */
 
-public class DefaultBinder extends SimpleBinder {
-    public DefaultBinder() {
-        super(Object.class, null, BindingType.VALUE);
+@SuppressWarnings("unchecked")
+public class DefaultBinder extends AbstractBinder {
+    public boolean accepts(BindingDesc bindingDesc) {
+        return true;
+    }
+
+    @Override
+    protected Binding doCreateBinding(BindingDesc bindingDesc, Object source,
+            Object target) {
+        Property sourceProp = BeanProperty.create(bindingDesc
+                .getSourceProperty());
+        Property targetProp = ObjectProperty.create();
+        return Bindings.createAutoBinding(bindingDesc.getUpdateStrategy(),
+                source, sourceProp, target, targetProp);
     }
 }

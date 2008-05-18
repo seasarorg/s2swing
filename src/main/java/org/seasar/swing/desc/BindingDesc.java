@@ -17,8 +17,8 @@
 package org.seasar.swing.desc;
 
 import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.seasar.framework.beans.PropertyDesc;
-import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
 
 /**
@@ -26,7 +26,7 @@ import org.seasar.swing.binding.BindingType;
  */
 
 public interface BindingDesc {
-    BindingStrategy getBindingStrategy();
+    UpdateStrategy getUpdateStrategy();
 
     BindingType getBindingType();
 

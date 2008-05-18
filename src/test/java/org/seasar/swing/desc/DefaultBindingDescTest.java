@@ -20,11 +20,11 @@ import java.lang.reflect.Field;
 
 import junit.framework.TestCase;
 
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.annotation.ReadSelection;
+import org.seasar.swing.annotation.Read;
+import org.seasar.swing.annotation.ReadItems;
 import org.seasar.swing.annotation.ReadWrite;
-import org.seasar.swing.annotation.ReadWriteSelection;
-import org.seasar.swing.binding.BindingStrategy;
 import org.seasar.swing.binding.BindingType;
 import org.seasar.swing.converter.annotation.Converter;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
@@ -53,11 +53,11 @@ public class DefaultBindingDescTest extends TestCase {
         @Converter(type = DummyConverter.class)
         public String aaa; // valid
 
-        @ReadSelection("xxx")
+        @ReadItems("xxx")
         public String bbb; // valid
 
+        @Read
         @ReadWrite
-        @ReadWriteSelection
         public String ccc; // duplicate binding types
 
         @ReadWrite
@@ -150,14 +150,14 @@ public class DefaultBindingDescTest extends TestCase {
         assertEquals("bbb", desc.getTargetObjectDesc().getPropertyName());
     }
 
-    public void testGetBindingStrategy() {
+    public void testGetUpdateStrategy() {
         DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
 
-        assertEquals(BindingStrategy.READ_WRITE, desc.getBindingStrategy());
+        assertEquals(UpdateStrategy.READ_WRITE, desc.getUpdateStrategy());
 
         desc = new DefaultBindingDesc(Aaa.class, "bbb");
 
-        assertEquals(BindingStrategy.READ, desc.getBindingStrategy());
+        assertEquals(UpdateStrategy.READ, desc.getUpdateStrategy());
     }
 
     public void testGetBindingType() {
@@ -167,13 +167,13 @@ public class DefaultBindingDescTest extends TestCase {
 
         desc = new DefaultBindingDesc(Aaa.class, "bbb");
 
-        assertEquals(BindingType.SELECTION, desc.getBindingType());
+        assertEquals(BindingType.ITEMS, desc.getBindingType());
     }
 
     public void testGetSourceProperty() {
         DefaultBindingDesc desc = new DefaultBindingDesc(Aaa.class, "aaa");
 
-        assertNull(desc.getSourceProperty());
+        assertEquals("aaa", desc.getSourceProperty());
 
         desc = new DefaultBindingDesc(Aaa.class, "bbb");
 
