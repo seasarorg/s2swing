@@ -26,6 +26,7 @@ import org.seasar.swing.desc.ModelDesc;
 import org.seasar.swing.desc.ModelDescFactory;
 import org.seasar.swing.desc.ModelFieldDesc;
 import org.seasar.swing.property.PropertyPath;
+import org.seasar.swing.util.ObjectUtils;
 import org.seasar.swing.validator.BindingValidator;
 
 /**
@@ -34,6 +35,7 @@ import org.seasar.swing.validator.BindingValidator;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractBinder implements Binder {
+    // TODO null property issue
     public Binding createBinding(BindingDesc bindingDesc, Object source,
             Object target) {
         if (source == null) {
@@ -71,6 +73,19 @@ public abstract class AbstractBinder implements Binder {
         }
 
         binding.setConverter(chain);
+
+        Class<?> sourcePropClass = binding.getSourceProperty().getWriteType(
+                source);
+        Class<?> targetPropClass = binding.getTargetProperty().getWriteType(
+                target);
+        if (!sourcePropClass.isPrimitive() && targetPropClass.isPrimitive()) {
+            binding.setSourceNullValue(ObjectUtils
+                    .getPrimitiveDefaultValue(targetPropClass));
+        } else if (sourcePropClass.isPrimitive()
+                && !targetPropClass.isPrimitive()) {
+            binding.setTargetNullValue(ObjectUtils
+                    .getPrimitiveDefaultValue(sourcePropClass));
+        }
 
         return binding;
     }

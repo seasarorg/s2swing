@@ -16,26 +16,18 @@
 
 package org.seasar.swing.binding.ui;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import junit.framework.TestCase;
 
 import org.jdesktop.beansbinding.Binding;
-import org.seasar.swing.annotation.Read;
-import org.seasar.swing.annotation.ReadOnce;
-import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
+import org.seasar.swing.annotation.ReadWriteItems;
 import org.seasar.swing.beans.ObservableBeans;
+import org.seasar.swing.binding.ui.JCheckBoxBinderTest.Aaa;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
-import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
@@ -45,27 +37,63 @@ import org.seasar.swing.desc.DefaultBindingDesc;
 @SuppressWarnings("unchecked")
 public class JTextComponentBinderTest extends TestCase {
     public static class Aaa {
-        @Read
+        @ReadWrite
+        private JTextField textField1 = new JTextField();
+        @ReadWriteItems("xxx")
+        private JTextField textField2 = new JTextField();
+        @ReadWrite
+        @DateTimeConverter("yyyy/MM/dd")
+        private JTextField textField3 = new JTextField();
+        @ReadWrite
+        private JPasswordField passwordField1 = new JPasswordField();
+        @ReadWrite
+        private Object nonTextField = new Object();
+
+        public Object getNonTextField() {
+            return nonTextField;
+        }
+
+        public void setNonTextField(Object nonTextField) {
+            this.nonTextField = nonTextField;
+        }
+
+        public JTextField getTextField1() {
+            return textField1;
+        }
+
+        public void setTextField1(JTextField textField1) {
+            this.textField1 = textField1;
+        }
+
+        public JTextField getTextField2() {
+            return textField2;
+        }
+
+        public void setTextField2(JTextField textField2) {
+            this.textField2 = textField2;
+        }
+
+        public JTextField getTextField3() {
+            return textField3;
+        }
+
+        public void setTextField3(JTextField textField3) {
+            this.textField3 = textField3;
+        }
+
+        public JPasswordField getPasswordField1() {
+            return passwordField1;
+        }
+
+        public void setPasswordField1(JPasswordField passwordField1) {
+            this.passwordField1 = passwordField1;
+        }
+    }
+
+    public static class Bbb {
         private String string1;
-        @ReadOnce
-        private String string2;
-        @ReadWrite
-        private String string3;
-        @ReadWrite
         private int int1;
-        @ReadWrite
-        @DateTimeConverter("yyyy-MM-dd")
-        private Date date1;
-        @ReadSelection
-        private int invalid;
-
-        public Date getDate1() {
-            return date1;
-        }
-
-        public void setDate1(Date date1) {
-            this.date1 = date1;
-        }
+        private Integer integer1;
 
         public String getString1() {
             return string1;
@@ -73,22 +101,6 @@ public class JTextComponentBinderTest extends TestCase {
 
         public void setString1(String string1) {
             this.string1 = string1;
-        }
-
-        public String getString2() {
-            return string2;
-        }
-
-        public void setString2(String string2) {
-            this.string2 = string2;
-        }
-
-        public String getString3() {
-            return string3;
-        }
-
-        public void setString3(String string3) {
-            this.string3 = string3;
         }
 
         public int getInt1() {
@@ -99,100 +111,56 @@ public class JTextComponentBinderTest extends TestCase {
             this.int1 = int1;
         }
 
-        public int getInvalid() {
-            return invalid;
+        public Integer getInteger1() {
+            return integer1;
         }
 
-        public void setInvalid(int invalid) {
-            this.invalid = invalid;
+        public void setInteger1(Integer integer1) {
+            this.integer1 = integer1;
         }
     }
 
     public void testAccepts() {
         JTextComponentBinder binder = new JTextComponentBinder();
-        JTextField textField = new JTextField();
-        JTextArea textArea = new JTextArea();
-        JPasswordField passwordField = new JPasswordField();
-        JEditorPane editorPane = new JEditorPane();
 
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
-                textField));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
-                textArea));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
-                passwordField));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
-                editorPane));
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class,
+                "textField1")));
+        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class,
+                "passwordField1")));
 
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string2"),
-                textField));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "string3"),
-                textField));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "int1"),
-                textField));
-
-        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
-                textField));
-        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "string1"),
-                new JButton()));
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class,
+                "textField2")));
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class,
+                "nonTextField")));
     }
 
     public void testCreateBindingString() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JTextField textField = new JTextField();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
 
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
-                        "string1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, textField);
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "textField1");
+                bindingDesc.setSourceProperty("string1");
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.textField1);
                 binding.bind();
 
-                aaa.setString1("aaa");
-                assertEquals("aaa", textField.getText());
+                assertEquals("", aaa.textField1.getText());
 
-                textField.setText("bbb"); // read-only
-                assertEquals("aaa", aaa.getString1());
+                bbb.setString1("abc");
+                assertEquals("abc", aaa.textField1.getText());
 
-                binding.unbind();
-                bindingDesc = new DefaultBindingDesc(Aaa.class, "string2");
-                binding = binder.createBinding(bindingDesc, aaa, textField);
+                bbb.setString1(null);
+                assertEquals("", aaa.textField1.getText());
 
-                aaa.setString2("ccc");
-                binding.bind();
-                assertEquals("ccc", textField.getText());
+                aaa.textField1.setText("xyz");
+                assertEquals("xyz", bbb.getString1());
 
-                aaa.setString2("ddd"); // read-once
-                assertEquals("ccc", textField.getText());
-
-                textField.setText("eee");
-                assertEquals("ddd", aaa.getString2());
-
-                binding.unbind();
-                bindingDesc = new DefaultBindingDesc(Aaa.class, "string3");
-                binding = binder.createBinding(bindingDesc, aaa, textField);
-                binding.bind();
-
-                aaa.setString3("aaa");
-                assertEquals("aaa", textField.getText());
-
-                textField.setText("bbb"); // read-write
-                assertEquals("bbb", aaa.getString3());
-
-                aaa.setString3("");
-                assertEquals("", textField.getText());
-
-                aaa.setString3(null);
-                assertEquals("", textField.getText());
-
-                textField.setText("dummy");
-                textField.setText("");
-                assertEquals("", aaa.getString3());
-
-                textField.setText("dummy");
-                textField.setText(null);
-                assertEquals("", aaa.getString3());
+                aaa.textField1.setText(null);
+                assertEquals("", bbb.getString1());
             }
         });
     }
@@ -201,63 +169,86 @@ public class JTextComponentBinderTest extends TestCase {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JTextField textField = new JTextField();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
 
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "int1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, textField);
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "textField1");
+                bindingDesc.setSourceProperty("int1");
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.textField1);
                 binding.bind();
 
-                assertEquals("0", textField.getText());
-
-                aaa.setInt1(111);
-                assertEquals("111", textField.getText());
-
-                textField.setText("222");
-                assertEquals(222, aaa.getInt1());
-
-                // reverse conversion fails and source value remains
-                textField.setText("abc");
-                assertEquals(222, aaa.getInt1());
-
-                textField.setText("");
-                assertEquals(222, aaa.getInt1());
-
-                textField.setText(null);
-                assertEquals(222, aaa.getInt1());
+                assertEquals("", aaa.textField1.getText());
             }
         });
     }
 
-    public void testCreateBindingWithConverter() throws Exception {
-        SwingUtilities.invokeAndWait(new Runnable() {
-            public void run() {
-                JTextComponentBinder binder = new JTextComponentBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JTextField textField = new JTextField();
-
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
-                        "date1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, textField);
-                binding.bind();
-
-                assertEquals("", textField.getText());
-
-                aaa.setDate1(new GregorianCalendar(2008, 0, 1).getTime());
-                assertEquals("2008-01-01", textField.getText());
-
-                textField.setText("2008-02-01");
-                assertEquals(new GregorianCalendar(2008, 1, 1).getTime(), aaa
-                        .getDate1());
-
-                // reverse conversion fails and source value remains
-                textField.setText("abc");
-                assertEquals(new GregorianCalendar(2008, 1, 1).getTime(), aaa
-                        .getDate1());
-
-                textField.setText("");
-                assertNull(aaa.getDate1());
-            }
-        });
-    }
+    //
+    // public void testCreateBindingInt() throws Exception {
+    // SwingUtilities.invokeAndWait(new Runnable() {
+    // public void run() {
+    // JTextComponentBinder binder = new JTextComponentBinder();
+    // Aaa aaa = ObservableBeans.createBean(Aaa.class);
+    // JTextField textField = new JTextField();
+    //
+    // BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
+    // "int1");
+    // Binding binding = binder.createBinding(bindingDesc, aaa,
+    // textField);
+    // binding.bind();
+    //
+    // assertEquals("0", textField.getText());
+    //
+    // aaa.setInt1(111);
+    // assertEquals("111", textField.getText());
+    //
+    // textField.setText("222");
+    // assertEquals(222, aaa.getInt1());
+    //
+    // // reverse conversion fails and source value remains
+    // textField.setText("abc");
+    // assertEquals(222, aaa.getInt1());
+    //
+    // textField.setText("");
+    // assertEquals(222, aaa.getInt1());
+    //
+    // textField.setText(null);
+    // assertEquals(222, aaa.getInt1());
+    // }
+    // });
+    // }
+    //
+    // public void testCreateBindingWithConverter() throws Exception {
+    // SwingUtilities.invokeAndWait(new Runnable() {
+    // public void run() {
+    // JTextComponentBinder binder = new JTextComponentBinder();
+    // Aaa aaa = ObservableBeans.createBean(Aaa.class);
+    // JTextField textField = new JTextField();
+    //
+    // BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
+    // "date1");
+    // Binding binding = binder.createBinding(bindingDesc, aaa,
+    // textField);
+    // binding.bind();
+    //
+    // assertEquals("", textField.getText());
+    //
+    // aaa.setDate1(new GregorianCalendar(2008, 0, 1).getTime());
+    // assertEquals("2008-01-01", textField.getText());
+    //
+    // textField.setText("2008-02-01");
+    // assertEquals(new GregorianCalendar(2008, 1, 1).getTime(), aaa
+    // .getDate1());
+    //
+    // // reverse conversion fails and source value remains
+    // textField.setText("abc");
+    // assertEquals(new GregorianCalendar(2008, 1, 1).getTime(), aaa
+    // .getDate1());
+    //
+    // textField.setText("");
+    // assertNull(aaa.getDate1());
+    // }
+    // });
+    // }
 }

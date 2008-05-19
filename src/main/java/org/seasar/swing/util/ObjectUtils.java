@@ -21,6 +21,37 @@ package org.seasar.swing.util;
  */
 
 public class ObjectUtils {
+    private static final Byte BYTE_DEFAULT = new Byte((byte) 0);
+    private static final Short SHORT_DEFAULT = new Short((short) 0);
+    private static final Integer INT_DEFAULT = new Integer(0);
+    private static final Long LONG_DEFAULT = new Long(0l);
+    private static final Float FLOAT_DEFAULT = new Float(0f);
+    private static final Double DOUBLE_DEFAULT = new Double(0d);
+    private static final Character CHAR_DEFAULT = new Character((char) 0);
+    private static final Boolean BOOLEAN_DEFAULT = Boolean.FALSE;
+
+    public static Object getPrimitiveDefaultValue(Class<?> primitiveClass) {
+        if (primitiveClass == boolean.class) {
+            return BOOLEAN_DEFAULT;
+        } else if (primitiveClass == byte.class) {
+            return BYTE_DEFAULT;
+        } else if (primitiveClass == short.class) {
+            return SHORT_DEFAULT;
+        } else if (primitiveClass == int.class) {
+            return INT_DEFAULT;
+        } else if (primitiveClass == long.class) {
+            return LONG_DEFAULT;
+        } else if (primitiveClass == float.class) {
+            return FLOAT_DEFAULT;
+        } else if (primitiveClass == double.class) {
+            return DOUBLE_DEFAULT;
+        } else if (primitiveClass == char.class) {
+            return CHAR_DEFAULT;
+        } else {
+            throw new IllegalArgumentException("Non primitive class.");
+        }
+    }
+
     public static boolean equals(Object o1, Object o2) {
         if (o1 == null) {
             return (o2 == null);

@@ -23,6 +23,37 @@ import junit.framework.TestCase;
  */
 
 public class ObjectUtilsTest extends TestCase {
+    public void testGetPrimitiveDefaultValue() {
+        assertEquals(Boolean.FALSE, ObjectUtils
+                .getPrimitiveDefaultValue(boolean.class));
+        assertEquals(new Byte((byte) 0), ObjectUtils
+                .getPrimitiveDefaultValue(byte.class));
+        assertEquals(new Short((short) 0), ObjectUtils
+                .getPrimitiveDefaultValue(short.class));
+        assertEquals(new Integer(0), ObjectUtils
+                .getPrimitiveDefaultValue(int.class));
+        assertEquals(new Long(0l), ObjectUtils
+                .getPrimitiveDefaultValue(long.class));
+        assertEquals(new Float(0f), ObjectUtils
+                .getPrimitiveDefaultValue(float.class));
+        assertEquals(new Double(0d), ObjectUtils
+                .getPrimitiveDefaultValue(double.class));
+        assertEquals(new Character((char) 0), ObjectUtils
+                .getPrimitiveDefaultValue(char.class));
+
+        try {
+            ObjectUtils.getPrimitiveDefaultValue(Object.class);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            ObjectUtils.getPrimitiveDefaultValue(null);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
     public void testEquals() {
         assertTrue(ObjectUtils.equals("aaa", "aaa"));
         assertTrue(ObjectUtils.equals(null, null));

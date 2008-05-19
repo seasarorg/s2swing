@@ -35,12 +35,12 @@ import org.seasar.swing.desc.DefaultBindingDesc;
 public class JCheckBoxBinderTest extends TestCase {
     public static class Aaa {
         @ReadWrite
-        private JCheckBox checkBox1;
+        private JCheckBox checkBox1 = new JCheckBox();
         @ReadWriteItems("xxx")
         // invalid
-        private JCheckBox checkBox2;
+        private JCheckBox checkBox2 = new JCheckBox();
         @ReadWrite
-        private Object nonCheckBox;
+        private Object nonCheckBox = new Object();
 
         public JCheckBox getCheckBox1() {
             return checkBox1;
@@ -117,8 +117,8 @@ public class JCheckBoxBinderTest extends TestCase {
                 "nonCheckBox")));
     }
 
-    public void testCreateBindingPrimitiveBoolean() {
-        SwingUtilities.invokeLater(new Runnable() {
+    public void testCreateBindingPrimitiveBoolean() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
                 Aaa aaa = new Aaa();
@@ -127,7 +127,8 @@ public class JCheckBoxBinderTest extends TestCase {
                 DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
                         Aaa.class, "checkBox1");
                 bindingDesc.setSourceProperty("boolean1");
-                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.checkBox1);
                 binding.bind();
 
                 assertFalse(aaa.checkBox1.isSelected());
@@ -141,8 +142,8 @@ public class JCheckBoxBinderTest extends TestCase {
         });
     }
 
-    public void testCreateBindingBoolean() {
-        SwingUtilities.invokeLater(new Runnable() {
+    public void testCreateBindingBoolean() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
                 Aaa aaa = new Aaa();
@@ -151,7 +152,8 @@ public class JCheckBoxBinderTest extends TestCase {
                 DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
                         Aaa.class, "checkBox1");
                 bindingDesc.setSourceProperty("boolean2");
-                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.checkBox1);
                 binding.bind();
 
                 assertFalse(aaa.checkBox1.isSelected());
@@ -169,8 +171,8 @@ public class JCheckBoxBinderTest extends TestCase {
         });
     }
 
-    public void testCreateBindingInt() {
-        SwingUtilities.invokeLater(new Runnable() {
+    public void testCreateBindingInt() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
                 Aaa aaa = new Aaa();
@@ -179,7 +181,8 @@ public class JCheckBoxBinderTest extends TestCase {
                 DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
                         Aaa.class, "checkBox1");
                 bindingDesc.setSourceProperty("int1");
-                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.checkBox1);
                 binding.bind();
 
                 assertFalse(aaa.checkBox1.isSelected());
@@ -203,8 +206,8 @@ public class JCheckBoxBinderTest extends TestCase {
         });
     }
 
-    public void testCreateBindingString() {
-        SwingUtilities.invokeLater(new Runnable() {
+    public void testCreateBindingString() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
                 Aaa aaa = new Aaa();
@@ -213,7 +216,8 @@ public class JCheckBoxBinderTest extends TestCase {
                 DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
                         Aaa.class, "checkBox1");
                 bindingDesc.setSourceProperty("string1");
-                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.checkBox1);
                 binding.bind();
 
                 assertFalse(aaa.checkBox1.isSelected());
