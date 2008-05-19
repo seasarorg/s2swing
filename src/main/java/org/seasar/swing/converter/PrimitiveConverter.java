@@ -24,8 +24,7 @@ import org.seasar.swing.util.ObjectUtils;
  * @author kaiseh
  */
 
-@SuppressWarnings("unchecked")
-public class PrimitiveConverter extends Converter {
+public class PrimitiveConverter extends Converter<Object, Object> {
     private Class<?> sourceClass;
     private Class<?> targetClass;
 

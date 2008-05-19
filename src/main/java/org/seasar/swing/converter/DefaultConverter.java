@@ -17,6 +17,7 @@
 package org.seasar.swing.converter;
 
 import org.jdesktop.beansbinding.Converter;
+import org.seasar.framework.util.ClassUtil;
 
 /**
  * @author kaiseh
@@ -24,37 +25,34 @@ import org.jdesktop.beansbinding.Converter;
 
 @SuppressWarnings("unchecked")
 public class DefaultConverter extends Converter {
-    private static final Converter CHAR_TO_STRING = new Converter() {
-        public Object convertForward(Object value) {
-            return value.toString();
-        }
+    private Converter converter;
 
-        public Object convertReverse(Object value) {
-            String s = (String) value;
-            if (s.length() != 1) {
-                throw new IllegalArgumentException();
-            }
-            return s.charAt(0);
-        }
-    };
+    public DefaultConverter(Class<?> sourceClass, Class<?> targetClass) {
+        setupConverter(sourceClass, targetClass);
+    }
 
-    private static final Converter BOOLEAN_TO_STRING = new Converter() {
-        public Object convertForward(Object value) {
-            return ((Boolean) value).toString();
+    private void setupConverter(Class<?> sourceClass, Class<?> targetClass) {
+        Class<?> source = ClassUtil.getWrapperClassIfPrimitive(sourceClass);
+        Class<?> target = ClassUtil.getWrapperClassIfPrimitive(targetClass);
+        if (Number.class.isAssignableFrom(target)) {
+            Class<? extends Number> number = (Class<? extends Number>) target;
+            converter = new ToNumberConverter(source, number);
+        } else if (targetClass == String.class) {
+            converter = new ToStringConverter(source);
+        } else if (targetClass == Boolean.class) {
+            converter = new ToBooleanConverter(source);
+        } else {
+            converter = new IdentityConverter();
         }
-
-        public Object convertReverse(Object value) {
-            return new Boolean((String) value);
-        }
-    };
+    }
 
     @Override
     public Object convertForward(Object value) {
-        return null;
+        return converter.convertForward(value);
     }
 
     @Override
     public Object convertReverse(Object value) {
-        return null;
+        return converter.convertReverse(value);
     }
 }

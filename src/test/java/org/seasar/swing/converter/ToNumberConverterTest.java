@@ -26,12 +26,36 @@ import junit.framework.TestCase;
 
 public class ToNumberConverterTest extends TestCase {
     public void testConvertForward() {
-        assertEquals(new BigInteger("1"), new ToNumberConverter(Byte.class,
-                BigInteger.class).convertForward((byte) 1));
+        assertEquals(1, new ToNumberConverter(BigInteger.class, Integer.class)
+                .convertForward(new BigInteger("1")));
+
+        assertEquals(1, new ToNumberConverter(Boolean.class, Integer.class)
+                .convertForward(true));
+        assertEquals(0, new ToNumberConverter(Boolean.class, Integer.class)
+                .convertForward(false));
+
+        assertEquals(1, new ToNumberConverter(String.class, Integer.class)
+                .convertForward("1"));
+
+        assertEquals(1, new ToNumberConverter(Character.class, Integer.class)
+                .convertForward('1'));
     }
 
     public void testConvertReverse() {
         assertEquals(new BigInteger("1"), new ToNumberConverter(
-                BigInteger.class, Byte.class).convertReverse((byte) 1));
+                BigInteger.class, Integer.class).convertReverse(1));
+
+        assertEquals(Boolean.TRUE, new ToNumberConverter(Boolean.class,
+                Integer.class).convertReverse(1));
+        assertEquals(Boolean.FALSE, new ToNumberConverter(Boolean.class,
+                Integer.class).convertReverse(0));
+
+        assertEquals("1", new ToNumberConverter(String.class, Integer.class)
+                .convertReverse(1));
+
+        assertEquals('1', new ToNumberConverter(Character.class, Integer.class)
+                .convertReverse(1));
+        assertEquals((char) 0, new ToNumberConverter(Character.class,
+                Integer.class).convertReverse(123));
     }
 }
