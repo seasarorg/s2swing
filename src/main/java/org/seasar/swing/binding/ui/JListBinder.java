@@ -20,18 +20,22 @@ import java.util.List;
 
 import javax.swing.JList;
 
+import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.ObjectProperty;
+import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.Property;
+import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.swing.binding.AbstractBinder;
 import org.seasar.swing.binding.BindingType;
+import org.seasar.swing.binding.adapter.S2JListAdapterProvider;
 import org.seasar.swing.desc.BindingDesc;
-import org.seasar.swing.exception.IllegalRegistrationException;
+import org.seasar.swing.property.PropertyPath;
 
 /**
  * @author kaiseh
  */
 
+@SuppressWarnings("unchecked")
 public class JListBinder extends AbstractBinder {
     public boolean accepts(BindingDesc bindingDesc) {
         return bindingDesc.getBindingType() == BindingType.VALUE
@@ -40,38 +44,20 @@ public class JListBinder extends AbstractBinder {
     }
 
     @Override
-    protected String getTargetPropertyExpression() {
-        return null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Binding createBinding(BindingDesc bindingDesc, Object source,
+    protected Binding doCreateBinding(BindingDesc bindingDesc, Object source,
             Object target) {
-        if (!accepts(bindingDesc, target)) {
-            throw new IllegalArgumentException(
-                    "Specified parameters cannot be accepted.");
+        PropertyPath path = new PropertyPath(bindingDesc.getSourceProperty());
+        PropertyDesc sourcePropDesc = path.getPropertyDesc(source);
+        String targetPropName;
+        if (List.class.isAssignableFrom(sourcePropDesc.getPropertyType())) {
+            targetPropName = S2JListAdapterProvider.SELECTED_ELEMENTS;
+        } else {
+            targetPropName = S2JListAdapterProvider.SELECTED_ELEMENT;
         }
-
-        Class<?> sourcePropClass = bindingDesc.getSourcePropertyDesc()
-                .getBindingType();
-        if (!List.class.isAssignableFrom(sourcePropClass)) {
-            throw new IllegalRegistrationException("ESWI0112", bindingDesc
-                    .getSourceClass().getName()
-                    + "."
-                    + bindingDesc.getSourcePropertyDesc().getPropertyName());
-        }
-
-        String sourcePropName = bindingDesc.getSourcePropertyDesc()
-                .getPropertyName();
-        Property sourceProp = createProperty(sourcePropName);
-
-        Binding binding = new S2JListBinding(bindingDesc.getBindingStrategy()
-                .getUpdateStrategy(), source, sourceProp, target,
-                ObjectProperty.create(), null);
-
-        setupBindingDefault(binding, bindingDesc, target, null);
-
-        return binding;
+        Property sourceProp = BeanProperty.create(bindingDesc
+                .getSourceProperty());
+        Property targetProp = BeanProperty.create(targetPropName);
+        return Bindings.createAutoBinding(bindingDesc.getUpdateStrategy(),
+                source, sourceProp, target, targetProp);
     }
 }

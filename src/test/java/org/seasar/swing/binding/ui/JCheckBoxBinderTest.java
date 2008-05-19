@@ -17,18 +17,14 @@
 package org.seasar.swing.binding.ui;
 
 import javax.swing.JCheckBox;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import junit.framework.TestCase;
 
 import org.jdesktop.beansbinding.Binding;
-import org.seasar.swing.annotation.Read;
-import org.seasar.swing.annotation.ReadOnce;
-import org.seasar.swing.annotation.ReadSelection;
 import org.seasar.swing.annotation.ReadWrite;
+import org.seasar.swing.annotation.ReadWriteItems;
 import org.seasar.swing.beans.ObservableBeans;
-import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.DefaultBindingDesc;
 
 /**
@@ -38,52 +34,44 @@ import org.seasar.swing.desc.DefaultBindingDesc;
 @SuppressWarnings("unchecked")
 public class JCheckBoxBinderTest extends TestCase {
     public static class Aaa {
-        @Read
+        @ReadWrite
+        private JCheckBox checkBox1;
+        @ReadWriteItems("xxx")
+        // invalid
+        private JCheckBox checkBox2;
+        @ReadWrite
+        private Object nonCheckBox;
+
+        public JCheckBox getCheckBox1() {
+            return checkBox1;
+        }
+
+        public void setCheckBox1(JCheckBox checkBox1) {
+            this.checkBox1 = checkBox1;
+        }
+
+        public Object getNonCheckBox() {
+            return nonCheckBox;
+        }
+
+        public void setNonCheckBox(Object nonCheckBox) {
+            this.nonCheckBox = nonCheckBox;
+        }
+
+        public JCheckBox getCheckBox2() {
+            return checkBox2;
+        }
+
+        public void setCheckBox2(JCheckBox checkBox2) {
+            this.checkBox2 = checkBox2;
+        }
+    }
+
+    public static class Bbb {
         private boolean boolean1;
-        @ReadOnce
-        private boolean boolean2;
-        @ReadWrite
-        private boolean boolean3;
-        @ReadWrite
-        private Boolean boolean4;
-        @ReadWrite
+        private Boolean boolean2;
         private int int1;
-        @ReadWrite
         private String string1;
-        @ReadSelection
-        private int invalid;
-
-        public Boolean getBoolean4() {
-            return boolean4;
-        }
-
-        public void setBoolean4(Boolean boolean4) {
-            this.boolean4 = boolean4;
-        }
-
-        public boolean isBoolean1() {
-            return boolean1;
-        }
-
-        public void setBoolean1(boolean boolean1) {
-            this.boolean1 = boolean1;
-        }
-
-        public boolean isBoolean2() {
-            return boolean2;
-        }
-
-        public void setBoolean2(boolean boolean2) {
-            this.boolean2 = boolean2;
-        }
-
-        public boolean isBoolean3() {
-            return boolean3;
-        }
-
-        public void setBoolean3(boolean boolean3) {
-            this.boolean3 = boolean3;
-        }
 
         public int getInt1() {
             return int1;
@@ -101,178 +89,158 @@ public class JCheckBoxBinderTest extends TestCase {
             this.string1 = string1;
         }
 
-        public int getInvalid() {
-            return invalid;
+        public boolean isBoolean1() {
+            return boolean1;
         }
 
-        public void setInvalid(int invalid) {
-            this.invalid = invalid;
+        public void setBoolean1(boolean boolean1) {
+            this.boolean1 = boolean1;
+        }
+
+        public Boolean getBoolean2() {
+            return boolean2;
+        }
+
+        public void setBoolean2(Boolean boolean2) {
+            this.boolean2 = boolean2;
         }
     }
 
     public void testAccepts() {
         JCheckBoxBinder binder = new JCheckBoxBinder();
-        JCheckBox checkBox = new JCheckBox();
 
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "boolean1"),
-                checkBox));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "boolean2"),
-                checkBox));
-        assertTrue(binder.accepts(new DefaultBindingDesc(Aaa.class, "boolean3"),
-                checkBox));
         assertTrue(binder
-                .accepts(new DefaultBindingDesc(Aaa.class, "int1"), checkBox));
-
-        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "invalid"),
-                checkBox));
-        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class, "boolean1"),
-                new JTextField()));
+                .accepts(new DefaultBindingDesc(Aaa.class, "checkBox1")));
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class,
+                "checkBox2")));
+        assertFalse(binder.accepts(new DefaultBindingDesc(Aaa.class,
+                "nonCheckBox")));
     }
 
-    public void testCreateBindingPrimitiveBoolean() throws Exception {
-        SwingUtilities.invokeAndWait(new Runnable() {
+    public void testCreateBindingPrimitiveBoolean() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JCheckBox checkBox = new JCheckBox();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
 
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
-                        "boolean1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, checkBox);
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "checkBox1");
+                bindingDesc.setSourceProperty("boolean1");
+                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
                 binding.bind();
 
-                assertFalse(checkBox.isSelected());
-                
-                aaa.setBoolean1(true);
-                assertTrue(checkBox.isSelected());
+                assertFalse(aaa.checkBox1.isSelected());
 
-                checkBox.setSelected(false); // read-only
-                assertTrue(aaa.isBoolean1());
+                bbb.setBoolean1(true);
+                assertTrue(aaa.checkBox1.isSelected());
 
-                binding.unbind();
-                bindingDesc = new DefaultBindingDesc(Aaa.class, "boolean2");
-                binding = binder.createBinding(bindingDesc, aaa, checkBox);
-
-                aaa.setBoolean2(true);
-                binding.bind();
-                assertTrue(checkBox.isSelected());
-
-                aaa.setBoolean2(false); // read-once
-                assertTrue(checkBox.isSelected());
-
-                checkBox.setSelected(true);
-                assertFalse(aaa.isBoolean2());
-
-                binding.unbind();
-                bindingDesc = new DefaultBindingDesc(Aaa.class, "boolean3");
-                binding = binder.createBinding(bindingDesc, aaa, checkBox);
-                binding.bind();
-
-                checkBox.setSelected(false);
-                aaa.setBoolean3(true);
-                assertTrue(checkBox.isSelected());
-
-                checkBox.setSelected(false); // read-write
-                assertFalse(aaa.isBoolean3());
+                aaa.checkBox1.setSelected(false);
+                assertFalse(bbb.isBoolean1());
             }
         });
     }
 
-    public void testCreateBindingBoolean() throws Exception {
-        SwingUtilities.invokeAndWait(new Runnable() {
+    public void testCreateBindingBoolean() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JCheckBox checkBox = new JCheckBox();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
 
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "boolean4");
-                Binding binding = binder.createBinding(bindingDesc, aaa, checkBox);
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "checkBox1");
+                bindingDesc.setSourceProperty("boolean2");
+                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
                 binding.bind();
 
-                assertFalse(checkBox.isSelected());
+                assertFalse(aaa.checkBox1.isSelected());
 
-                aaa.setBoolean4(true);
-                assertTrue(checkBox.isSelected());
+                bbb.setBoolean2(Boolean.TRUE);
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setBoolean4(false);
-                assertFalse(checkBox.isSelected());
+                aaa.checkBox1.setSelected(false);
+                assertEquals(Boolean.FALSE, bbb.getBoolean2());
 
-                checkBox.setSelected(true);
-                assertTrue(aaa.getBoolean4());
+                aaa.checkBox1.setSelected(true);
+                bbb.setBoolean2(null);
+                assertFalse(aaa.checkBox1.isSelected());
             }
         });
     }
 
-    public void testCreateBindingInt() throws Exception {
-        SwingUtilities.invokeAndWait(new Runnable() {
+    public void testCreateBindingInt() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JCheckBox checkBox = new JCheckBox();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
 
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "int1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, checkBox);
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "checkBox1");
+                bindingDesc.setSourceProperty("int1");
+                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
                 binding.bind();
 
-                assertFalse(checkBox.isSelected());
+                assertFalse(aaa.checkBox1.isSelected());
 
-                aaa.setInt1(1);
-                assertTrue(checkBox.isSelected());
+                bbb.setInt1(1);
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setInt1(100);
-                assertTrue(checkBox.isSelected());
+                bbb.setInt1(-100);
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setInt1(-100);
-                assertTrue(checkBox.isSelected());
+                bbb.setInt1(0);
+                assertFalse(aaa.checkBox1.isSelected());
 
-                aaa.setInt1(0);
-                assertFalse(checkBox.isSelected());
+                bbb.setInt1(1);
+                aaa.checkBox1.setSelected(false);
+                assertEquals(0, bbb.getInt1());
 
-                checkBox.setSelected(true);
-                assertEquals(1, aaa.getInt1());
+                aaa.checkBox1.setSelected(true);
+                assertEquals(1, bbb.getInt1());
             }
         });
     }
 
-    public void testCreateBindingString() throws Exception {
-        SwingUtilities.invokeAndWait(new Runnable() {
+    public void testCreateBindingString() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JCheckBoxBinder binder = new JCheckBoxBinder();
-                Aaa aaa = ObservableBeans.createBean(Aaa.class);
-                JCheckBox checkBox = new JCheckBox();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
 
-                BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class, "string1");
-                Binding binding = binder.createBinding(bindingDesc, aaa, checkBox);
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "checkBox1");
+                bindingDesc.setSourceProperty("string1");
+                Binding binding = binder.createBinding(bindingDesc, bbb, aaa);
                 binding.bind();
 
-                assertFalse(checkBox.isSelected());
+                assertFalse(aaa.checkBox1.isSelected());
 
-                aaa.setString1("true");
-                assertTrue(checkBox.isSelected());
+                bbb.setString1("true");
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setString1("1");
-                assertTrue(checkBox.isSelected());
+                bbb.setString1("1");
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setString1("abc");
-                assertTrue(checkBox.isSelected());
+                bbb.setString1("abc");
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setString1("");
-                assertTrue(checkBox.isSelected());
+                bbb.setString1("");
+                assertTrue(aaa.checkBox1.isSelected());
 
-                aaa.setString1("false");
-                assertFalse(checkBox.isSelected());
+                bbb.setString1("false");
+                assertFalse(aaa.checkBox1.isSelected());
 
-                aaa.setString1("0");
-                assertFalse(checkBox.isSelected());
+                bbb.setString1(null);
+                assertFalse(aaa.checkBox1.isSelected());
 
-                aaa.setString1(null);
-                assertFalse(checkBox.isSelected());
+                aaa.checkBox1.setSelected(true);
+                assertEquals("true", bbb.getString1());
 
-                checkBox.setSelected(true);
-                assertEquals("true", aaa.getString1());
-
-                checkBox.setSelected(false);
-                assertEquals("false", aaa.getString1());
+                aaa.checkBox1.setSelected(false);
+                assertEquals("false", bbb.getString1());
             }
         });
     }

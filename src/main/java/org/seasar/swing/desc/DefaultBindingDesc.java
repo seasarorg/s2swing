@@ -157,6 +157,10 @@ public class DefaultBindingDesc implements BindingDesc {
         return sourceProperty;
     }
 
+    public void setSourceProperty(String sourceProperty) {
+        this.sourceProperty = sourceProperty;
+    }
+
     public PropertyDesc getTargetObjectDesc() {
         return targetObjectDesc;
     }
