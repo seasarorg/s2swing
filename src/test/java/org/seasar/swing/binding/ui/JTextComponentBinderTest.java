@@ -16,6 +16,9 @@
 
 package org.seasar.swing.binding.ui;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -26,7 +29,6 @@ import org.jdesktop.beansbinding.Binding;
 import org.seasar.swing.annotation.ReadWrite;
 import org.seasar.swing.annotation.ReadWriteItems;
 import org.seasar.swing.beans.ObservableBeans;
-import org.seasar.swing.binding.ui.JCheckBoxBinderTest.Aaa;
 import org.seasar.swing.converter.annotation.DateTimeConverter;
 import org.seasar.swing.desc.DefaultBindingDesc;
 
@@ -94,6 +96,15 @@ public class JTextComponentBinderTest extends TestCase {
         private String string1;
         private int int1;
         private Integer integer1;
+        private Date date1;
+
+        public Date getDate1() {
+            return date1;
+        }
+
+        public void setDate1(Date date1) {
+            this.date1 = date1;
+        }
 
         public String getString1() {
             return string1;
@@ -179,76 +190,87 @@ public class JTextComponentBinderTest extends TestCase {
                         aaa.textField1);
                 binding.bind();
 
-                assertEquals("", aaa.textField1.getText());
+                assertEquals("0", aaa.textField1.getText());
+
+                bbb.setInt1(123);
+                assertEquals("123", aaa.textField1.getText());
+
+                aaa.textField1.setText("456");
+                assertEquals(456, bbb.getInt1());
+
+                aaa.textField1.setText("");
+                assertEquals(0, bbb.getInt1());
+
+                aaa.textField1.setText("789");
+                aaa.textField1.setText("abc");
+                assertEquals(789, bbb.getInt1());
             }
         });
     }
 
-    //
-    // public void testCreateBindingInt() throws Exception {
-    // SwingUtilities.invokeAndWait(new Runnable() {
-    // public void run() {
-    // JTextComponentBinder binder = new JTextComponentBinder();
-    // Aaa aaa = ObservableBeans.createBean(Aaa.class);
-    // JTextField textField = new JTextField();
-    //
-    // BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
-    // "int1");
-    // Binding binding = binder.createBinding(bindingDesc, aaa,
-    // textField);
-    // binding.bind();
-    //
-    // assertEquals("0", textField.getText());
-    //
-    // aaa.setInt1(111);
-    // assertEquals("111", textField.getText());
-    //
-    // textField.setText("222");
-    // assertEquals(222, aaa.getInt1());
-    //
-    // // reverse conversion fails and source value remains
-    // textField.setText("abc");
-    // assertEquals(222, aaa.getInt1());
-    //
-    // textField.setText("");
-    // assertEquals(222, aaa.getInt1());
-    //
-    // textField.setText(null);
-    // assertEquals(222, aaa.getInt1());
-    // }
-    // });
-    // }
-    //
-    // public void testCreateBindingWithConverter() throws Exception {
-    // SwingUtilities.invokeAndWait(new Runnable() {
-    // public void run() {
-    // JTextComponentBinder binder = new JTextComponentBinder();
-    // Aaa aaa = ObservableBeans.createBean(Aaa.class);
-    // JTextField textField = new JTextField();
-    //
-    // BindingDesc bindingDesc = new DefaultBindingDesc(Aaa.class,
-    // "date1");
-    // Binding binding = binder.createBinding(bindingDesc, aaa,
-    // textField);
-    // binding.bind();
-    //
-    // assertEquals("", textField.getText());
-    //
-    // aaa.setDate1(new GregorianCalendar(2008, 0, 1).getTime());
-    // assertEquals("2008-01-01", textField.getText());
-    //
-    // textField.setText("2008-02-01");
-    // assertEquals(new GregorianCalendar(2008, 1, 1).getTime(), aaa
-    // .getDate1());
-    //
-    // // reverse conversion fails and source value remains
-    // textField.setText("abc");
-    // assertEquals(new GregorianCalendar(2008, 1, 1).getTime(), aaa
-    // .getDate1());
-    //
-    // textField.setText("");
-    // assertNull(aaa.getDate1());
-    // }
-    // });
-    // }
+    public void testCreateBindingInteger() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                JTextComponentBinder binder = new JTextComponentBinder();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
+
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "textField1");
+                bindingDesc.setSourceProperty("integer1");
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.textField1);
+                binding.bind();
+
+                assertEquals("", aaa.textField1.getText());
+
+                bbb.setInteger1(123);
+                assertEquals("123", aaa.textField1.getText());
+
+                aaa.textField1.setText("456");
+                assertEquals(new Integer(456), bbb.getInteger1());
+
+                aaa.textField1.setText("");
+                assertNull(bbb.getInteger1());
+
+                aaa.textField1.setText("789");
+                aaa.textField1.setText("abc");
+                assertEquals(new Integer(789), bbb.getInteger1());
+            }
+        });
+    }
+
+    public void testCreateBindingDate() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                JTextComponentBinder binder = new JTextComponentBinder();
+                Aaa aaa = new Aaa();
+                Bbb bbb = ObservableBeans.createBean(Bbb.class);
+
+                DefaultBindingDesc bindingDesc = new DefaultBindingDesc(
+                        Aaa.class, "textField3");
+                bindingDesc.setSourceProperty("date1");
+                Binding binding = binder.createBinding(bindingDesc, bbb,
+                        aaa.textField3);
+                binding.bind();
+
+                assertEquals("", aaa.textField3.getText());
+
+                bbb.setDate1(new GregorianCalendar(2008, 3, 1).getTime());
+                assertEquals("2008/04/01", aaa.textField3.getText());
+
+                aaa.textField3.setText("2008/05/01");
+                assertEquals(new GregorianCalendar(2008, 4, 1).getTime(), bbb
+                        .getDate1());
+
+                aaa.textField3.setText("");
+                assertNull(bbb.getDate1());
+
+                aaa.textField3.setText("2008/06/01");
+                aaa.textField3.setText("abc");
+                assertEquals(new GregorianCalendar(2008, 5, 1).getTime(), bbb
+                        .getDate1());
+            }
+        });
+    }
 }

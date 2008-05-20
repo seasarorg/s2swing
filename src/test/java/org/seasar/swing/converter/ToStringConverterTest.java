@@ -19,6 +19,8 @@ package org.seasar.swing.converter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.seasar.framework.exception.EmptyRuntimeException;
+
 import junit.framework.TestCase;
 
 /**
@@ -26,9 +28,17 @@ import junit.framework.TestCase;
  */
 
 public class ToStringConverterTest extends TestCase {
+    public void testCreate() {
+        try {
+            new ToStringConverter(null);
+            fail();
+        } catch (EmptyRuntimeException e) {
+        }
+    }
+
     public void testConvertForward() {
-//        assertEquals("1", new ToStringConverter(Byte.class)
-//                .convertForward((byte) 1));
+        // assertEquals("1", new ToStringConverter(Byte.class)
+        // .convertForward((byte) 1));
         assertEquals("1", new ToStringConverter(Short.class)
                 .convertForward((short) 1));
         assertEquals("1", new ToStringConverter(Integer.class)
@@ -46,16 +56,13 @@ public class ToStringConverterTest extends TestCase {
         assertEquals("true", new ToStringConverter(Boolean.class)
                 .convertForward(true));
 
-        assertEquals("a", new ToStringConverter(Character.class)
-                .convertForward('a'));
-
         assertEquals("xyz", new ToStringConverter(String.class)
                 .convertForward("xyz"));
     }
 
     public void testConvertReverse() {
-//        assertEquals((byte) 1, new ToStringConverter(Byte.class)
-//                .convertReverse("1"));
+        // assertEquals((byte) 1, new ToStringConverter(Byte.class)
+        // .convertReverse("1"));
         assertEquals((short) 1, new ToStringConverter(Short.class)
                 .convertReverse("1"));
         assertEquals(1, new ToStringConverter(Integer.class)
@@ -69,6 +76,8 @@ public class ToStringConverterTest extends TestCase {
         assertEquals(new BigDecimal(1), new ToStringConverter(BigDecimal.class)
                 .convertReverse("1"));
 
+        assertNull(new ToStringConverter(Integer.class).convertReverse(""));
+
         assertEquals(Boolean.TRUE, new ToStringConverter(Boolean.class)
                 .convertReverse("true"));
         assertEquals(Boolean.TRUE, new ToStringConverter(Boolean.class)
@@ -79,11 +88,6 @@ public class ToStringConverterTest extends TestCase {
                 .convertReverse("false"));
         assertEquals(Boolean.FALSE, new ToStringConverter(Boolean.class)
                 .convertReverse("0"));
-
-        assertEquals('a', new ToStringConverter(Character.class)
-                .convertReverse("a"));
-        assertEquals((char) 0, new ToStringConverter(Character.class)
-                .convertReverse("abc"));
 
         assertEquals("xyz", new ToStringConverter(String.class)
                 .convertReverse("xyz"));

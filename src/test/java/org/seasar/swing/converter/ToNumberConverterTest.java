@@ -20,11 +20,33 @@ import java.math.BigInteger;
 
 import junit.framework.TestCase;
 
+import org.seasar.framework.exception.EmptyRuntimeException;
+
 /**
  * @author kaiseh
  */
 
 public class ToNumberConverterTest extends TestCase {
+    public void testCreate() {
+        try {
+            new ToNumberConverter(null, Integer.class);
+            fail();
+        } catch (EmptyRuntimeException e) {
+        }
+
+        try {
+            new ToNumberConverter(Integer.class, null);
+            fail();
+        } catch (EmptyRuntimeException e) {
+        }
+
+        try {
+            new ToNumberConverter(null, null);
+            fail();
+        } catch (EmptyRuntimeException e) {
+        }
+    }
+
     public void testConvertForward() {
         assertEquals(1, new ToNumberConverter(BigInteger.class, Integer.class)
                 .convertForward(new BigInteger("1")));
@@ -36,9 +58,6 @@ public class ToNumberConverterTest extends TestCase {
 
         assertEquals(1, new ToNumberConverter(String.class, Integer.class)
                 .convertForward("1"));
-
-        assertEquals(1, new ToNumberConverter(Character.class, Integer.class)
-                .convertForward('1'));
     }
 
     public void testConvertReverse() {
@@ -52,10 +71,5 @@ public class ToNumberConverterTest extends TestCase {
 
         assertEquals("1", new ToNumberConverter(String.class, Integer.class)
                 .convertReverse(1));
-
-        assertEquals('1', new ToNumberConverter(Character.class, Integer.class)
-                .convertReverse(1));
-        assertEquals((char) 0, new ToNumberConverter(Character.class,
-                Integer.class).convertReverse(123));
     }
 }

@@ -17,6 +17,7 @@
 package org.seasar.swing.converter;
 
 import org.jdesktop.beansbinding.Converter;
+import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.BooleanConversionUtil;
 import org.seasar.framework.util.NumberConversionUtil;
 
@@ -28,6 +29,9 @@ public class ToBooleanConverter extends Converter<Object, Boolean> {
     private Class<?> sourceClass;
 
     public ToBooleanConverter(Class<?> sourceClass) {
+        if (sourceClass == null) {
+            throw new EmptyRuntimeException("sourceClass");
+        }
         this.sourceClass = sourceClass;
     }
 
@@ -42,8 +46,6 @@ public class ToBooleanConverter extends Converter<Object, Boolean> {
             return NumberConversionUtil.convertNumber(sourceClass, value);
         } else if (sourceClass == String.class) {
             return value.toString();
-        } else if (sourceClass == Character.class) {
-            return value.booleanValue() ? '1' : '0';
         }
         return value;
     }

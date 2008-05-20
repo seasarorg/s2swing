@@ -20,6 +20,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Converter;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.converter.ConverterChain;
+import org.seasar.swing.converter.DefaultConverter;
 import org.seasar.swing.converter.NotEnteredConverter;
 import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.ModelDesc;
@@ -72,8 +73,6 @@ public abstract class AbstractBinder implements Binder {
             chain.add(notEnteredConverter);
         }
 
-        binding.setConverter(chain);
-
         Class<?> sourcePropClass = binding.getSourceProperty().getWriteType(
                 source);
         Class<?> targetPropClass = binding.getTargetProperty().getWriteType(
@@ -86,6 +85,10 @@ public abstract class AbstractBinder implements Binder {
             binding.setTargetNullValue(ObjectUtils
                     .getPrimitiveDefaultValue(sourcePropClass));
         }
+
+        chain.add(new DefaultConverter(sourcePropClass, targetPropClass));
+
+        binding.setConverter(chain);
 
         return binding;
     }

@@ -17,7 +17,9 @@
 package org.seasar.swing.converter;
 
 import org.jdesktop.beansbinding.Converter;
+import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.ClassUtil;
+import org.seasar.swing.util.ObjectUtils;
 
 /**
  * @author kaiseh
@@ -25,9 +27,19 @@ import org.seasar.framework.util.ClassUtil;
 
 @SuppressWarnings("unchecked")
 public class DefaultConverter extends Converter {
+    private Class<?> sourceClass;
+    private Class<?> targetClass;
     private Converter converter;
 
     public DefaultConverter(Class<?> sourceClass, Class<?> targetClass) {
+        if (sourceClass == null) {
+            throw new EmptyRuntimeException("sourceClass");
+        }
+        if (targetClass == null) {
+            throw new EmptyRuntimeException("targetClass");
+        }
+        this.sourceClass = sourceClass;
+        this.targetClass = targetClass;
         setupConverter(sourceClass, targetClass);
     }
 
@@ -37,9 +49,9 @@ public class DefaultConverter extends Converter {
         if (Number.class.isAssignableFrom(target)) {
             Class<? extends Number> number = (Class<? extends Number>) target;
             converter = new ToNumberConverter(source, number);
-        } else if (targetClass == String.class) {
+        } else if (target == String.class) {
             converter = new ToStringConverter(source);
-        } else if (targetClass == Boolean.class) {
+        } else if (target == Boolean.class) {
             converter = new ToBooleanConverter(source);
         } else {
             converter = new IdentityConverter();
@@ -48,11 +60,19 @@ public class DefaultConverter extends Converter {
 
     @Override
     public Object convertForward(Object value) {
-        return converter.convertForward(value);
+        Object result = converter.convertForward(value);
+        if (result == null && targetClass.isPrimitive()) {
+            result = ObjectUtils.getPrimitiveDefaultValue(targetClass);
+        }
+        return result;
     }
 
     @Override
     public Object convertReverse(Object value) {
-        return converter.convertReverse(value);
+        Object result = converter.convertReverse(value);
+        if (result == null && sourceClass.isPrimitive()) {
+            result = ObjectUtils.getPrimitiveDefaultValue(sourceClass);
+        }
+        return result;
     }
 }

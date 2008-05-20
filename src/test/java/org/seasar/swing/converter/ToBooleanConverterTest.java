@@ -19,6 +19,8 @@ package org.seasar.swing.converter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.seasar.framework.exception.EmptyRuntimeException;
+
 import junit.framework.TestCase;
 
 /**
@@ -26,8 +28,17 @@ import junit.framework.TestCase;
  */
 
 public class ToBooleanConverterTest extends TestCase {
+    public void testCreate() {
+        try {
+            new ToBooleanConverter(null);
+            fail();
+        } catch (EmptyRuntimeException e) {
+        }
+    }
+
     public void testConvertForward() {
-//        assertTrue(new ToBooleanConverter(Byte.class).convertForward((byte) 1));
+        // assertTrue(new ToBooleanConverter(Byte.class).convertForward((byte)
+        // 1));
         assertTrue(new ToBooleanConverter(Short.class)
                 .convertForward((short) 1));
         assertTrue(new ToBooleanConverter(Integer.class).convertForward(1));
@@ -41,8 +52,8 @@ public class ToBooleanConverterTest extends TestCase {
     }
 
     public void testConvertReverse() {
-//        assertEquals((byte) 1, new ToBooleanConverter(Byte.class)
-//                .convertReverse(true));
+        // assertEquals((byte) 1, new ToBooleanConverter(Byte.class)
+        // .convertReverse(true));
         assertEquals((short) 1, new ToBooleanConverter(Short.class)
                 .convertReverse(true));
         assertEquals(1, new ToBooleanConverter(Integer.class)
