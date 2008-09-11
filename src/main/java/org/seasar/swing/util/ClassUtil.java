@@ -1,0 +1,46 @@
+/*
+ * Copyright 2004-2008 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+package org.seasar.swing.util;
+
+/**
+ * クラスに関するユーティリティクラスです。
+ * 
+ * @author kaiseh
+ */
+
+public class ClassUtil {
+    public static boolean isSystemClass(Class<?> cls) {
+        String name = cls.getName();
+        return name.startsWith("java.") || name.startsWith("javax.")
+                || name.startsWith("org.jdesktop.application");
+    }
+
+    /**
+     * クラスがAOPによってエンハンスされている場合、エンハンス以前のクラスを返します。 エンハンスされていない場合、クラス自身を返します。
+     * 
+     * @param cls
+     *            クラス
+     * @return エンハンス以前のクラス
+     */
+    public static Class<?> getOriginalClass(Class<?> cls) {
+        // detect "$$EnhancedByS2AOP$$"
+        while (cls != null && cls.getName().contains("$$")) {
+            cls = cls.getSuperclass();
+        }
+        return cls;
+    }
+}

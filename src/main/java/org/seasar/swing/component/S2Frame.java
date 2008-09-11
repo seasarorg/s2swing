@@ -1,0 +1,77 @@
+/*
+ * Copyright 2004-2008 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+package org.seasar.swing.component;
+
+import java.awt.Component;
+import java.awt.GraphicsConfiguration;
+import java.awt.HeadlessException;
+
+import javax.swing.JFrame;
+
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ResourceMap;
+import org.seasar.swing.application.Resources;
+import org.seasar.swing.application.S2ViewObject;
+
+/**
+ * {@code JFrame} にS2Swingの機構を付加した基本クラスです。S2Swingアプリケーションのフレームは、通常このクラスを継承するか、
+ * {@code S2ViewObject}インタフェースを実装します。
+ * 
+ * @author kaiseh
+ */
+
+public abstract class S2Frame extends JFrame implements S2ViewObject {
+    private static final long serialVersionUID = 4295605845674806728L;
+
+    public S2Frame() throws HeadlessException {
+        super();
+    }
+
+    public S2Frame(GraphicsConfiguration gc) {
+        super(gc);
+    }
+
+    public S2Frame(String title, GraphicsConfiguration gc) {
+        super(title, gc);
+    }
+
+    public S2Frame(String title) throws HeadlessException {
+        super(title);
+    }
+
+    public Component getRootComponent() {
+        return this;
+    }
+
+    /**
+     * このフレームに対応するアクションマップを返します。
+     * 
+     * @return アクションマップ
+     */
+    public ApplicationActionMap getActionMap() {
+        return Resources.getActionMap(this);
+    }
+
+    /**
+     * このフレームに対応するリソースマップを返します。
+     * 
+     * @return リソースマップ
+     */
+    public ResourceMap getResourceMap() {
+        return Resources.getResourceMap(this);
+    }
+}
