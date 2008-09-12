@@ -5,7 +5,7 @@
   <property name="build.finalName" value="s2swing-0.1.0"/>
   <property name="build.dir" value="target"/>
   <property name="build.outputDir" value="${build.dir}/classes"/>
-  <property name="build.srcDir.0" value="src/main/java"/>
+  <property name="build.sourceDir.0" value="src/main/java"/>
   <property name="build.resourceDir.0" value="src/main/resources"/>
   <property name="build.testOutputDir" value="${build.dir}/test-classes"/>
   <property name="build.testDir.0" value="src/test/java"/>
@@ -36,7 +36,7 @@
            verbose="false" 
            fork="false">
       <src>
-        <pathelement location="${build.srcDir.0}"/>
+        <pathelement location="${build.sourceDir.0}"/>
       </src>
       <classpath refid="build.classpath"/>
     </javac>
@@ -92,7 +92,7 @@
   </target>
 
   <target name="javadoc" depends="compile" description="Generates the Javadoc of the application">
-    <javadoc sourcepath="${build.srcDir.0}"
+    <javadoc sourcepath="${build.sourceDir.0}"
              packagenames="*" 
              destdir="${reporting.outputDirectory}/apidocs" 
              access="protected" 
@@ -125,6 +125,11 @@
          compress="true" 
          index="false" 
          basedir="${build.outputDir}" 
+         excludes="**/package.html"/>
+    <jar jarfile="${dist.dir}/${build.finalName}-sources.jar"
+         compress="true" 
+         index="false" 
+         basedir="${build.sourceDir.0}" 
          excludes="**/package.html"/>
   </target>
 
