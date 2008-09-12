@@ -27,7 +27,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 
 /**
  * 一般のコンポーネントを示すノードです。
- * 通常、このクラスは {@link ComponentBuilder} のヘルパメソッドによってインスタンス化されます。
+ * 通常、このクラスは{@link ComponentBuilder}のヘルパメソッドによってインスタンス化されます。
  * 
  * @author kaiseh
  */

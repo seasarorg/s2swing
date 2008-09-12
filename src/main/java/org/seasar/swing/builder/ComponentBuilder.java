@@ -31,9 +31,9 @@ import javax.swing.JToolBar;
 import org.seasar.swing.application.ViewManager;
 
 /**
- * {@code ComponentBuilder} を使用すると、Swing のコンポーネント階層を簡潔な記述で構築することができます。
+ * {@code ComponentBuilder}を使用すると、Swingのコンポーネント階層を簡潔な記述で構築することができます。
  * <p>
- * 以下のコードは、{@code ComponentBuilder} の使用方法の一例を示しています。
+ * 以下のコードは、{@code ComponentBuilder}の使用方法の一例を示しています。
  * 
  * <pre>
  * ComponentBuilder b = new ComponentBuilder();

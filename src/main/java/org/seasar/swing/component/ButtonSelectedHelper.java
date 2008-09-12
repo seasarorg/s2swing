@@ -21,6 +21,7 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 
 import org.seasar.swing.consts.Constants;
 
@@ -28,14 +29,25 @@ import org.seasar.swing.consts.Constants;
  * @author kaiseh
  */
 
-public class ButtonSelecedHelper implements Serializable,
+public class ButtonSelectedHelper implements Serializable,
         PropertyChangeListener {
     private static final long serialVersionUID = -3360276325990248762L;
 
     private AbstractButton button;
 
-    public ButtonSelecedHelper(AbstractButton button) {
+    public ButtonSelectedHelper(AbstractButton button) {
         this.button = button;
+    }
+
+    public void setAction(Action action) {
+        Action oldAction = button.getAction();
+        if (oldAction != null) {
+            oldAction.removePropertyChangeListener(this);
+        }
+        button.setAction(action);
+        if (action != null) {
+            action.addPropertyChangeListener(this);
+        }
     }
 
     public void propertyChange(PropertyChangeEvent e) {

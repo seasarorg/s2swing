@@ -30,7 +30,7 @@ import javax.swing.JCheckBox;
 public class S2CheckBox extends JCheckBox {
     private static final long serialVersionUID = 1859758240429417497L;
 
-    private ButtonSelecedHelper helper;
+    private ButtonSelectedHelper helper;
 
     public S2CheckBox() {
         super();
@@ -52,22 +52,15 @@ public class S2CheckBox extends JCheckBox {
         super(text);
     }
 
-    private ButtonSelecedHelper getHelper() {
+    private ButtonSelectedHelper getHelper() {
         if (helper == null) {
-            helper = new ButtonSelecedHelper(this);
+            helper = new ButtonSelectedHelper(this);
         }
         return helper;
     }
 
     @Override
     public void setAction(Action action) {
-        Action oldAction = getAction();
-        if (oldAction != null) {
-            oldAction.removePropertyChangeListener(getHelper());
-        }
-        super.setAction(action);
-        if (action != null) {
-            action.addPropertyChangeListener(getHelper());
-        }
+        getHelper().setAction(action);
     }
 }

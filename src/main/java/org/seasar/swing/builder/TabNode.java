@@ -23,8 +23,8 @@ import javax.swing.Icon;
 import org.seasar.framework.exception.EmptyRuntimeException;
 
 /**
- * {@code JTabbedPane} 内のタブを示すノードです。
- * 通常、このクラスは {@link ComponentBuilder} のヘルパメソッドによってインスタンス化されます。
+ * {@code JTabbedPane}内のタブを示すノードです。
+ * 通常、このクラスは{@link ComponentBuilder}のヘルパメソッドによってインスタンス化されます。
  * 
  * @author kaiseh
  */

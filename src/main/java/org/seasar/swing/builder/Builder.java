@@ -23,7 +23,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.application.ViewManager;
 
 /**
- * UI ビルダの基底クラスです。
+ * UIビルダの基底クラスです。
  * 
  * @author kaiseh
  */

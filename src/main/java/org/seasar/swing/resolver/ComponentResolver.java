@@ -30,7 +30,7 @@ public abstract class ComponentResolver {
     }
 
     /**
-     * 与えられた名前をキーとして、SingletonS2Containerからオブジェクトを取得します。
+     * 与えられた名前をキーとして、{@code SingletonS2Container}からオブジェクトを取得します。
      * オブジェクトが見つからない場合は例外がスローされます。
      * 
      * @param name
@@ -42,7 +42,7 @@ public abstract class ComponentResolver {
     }
 
     /**
-     * 与えられたクラスをキーとして、SingletonS2Containerからオブジェクトを取得します。
+     * 与えられたクラスをキーとして、{@code SingletonS2Container}からオブジェクトを取得します。
      * オブジェクトが見つからない場合は例外がスローされます。
      * 
      * @param cls

@@ -14,28 +14,24 @@
  * governing permissions and limitations under the License.
  */
 
-package org.seasar.swing.builder;
+package org.seasar.swing.validator;
+
+import junit.framework.TestCase;
 
 /**
- * レイアウト制約を示すオブジェクトで、オーバーロード曖昧性を回避するために用いられます。
- * 通常、このクラスは{@link ComponentBuilder}のヘルパメソッドによってインスタンス化されます。
- * 
  * @author kaiseh
  */
 
-public class ComponentConstraint {
-    private Object constraint;
+public class RequiredConstraintTest extends TestCase {
+    public void testIsSatisfied() {
+        RequiredConstraint c = new RequiredConstraint();
 
-    public ComponentConstraint(Object constraint) {
-        this.constraint = constraint;
-    }
+        assertTrue(c.isSatisfied("aaa"));
+        assertTrue(c.isSatisfied(Boolean.FALSE));
 
-    /**
-     * レイアウト制約を返します。
-     * 
-     * @return レイアウト制約
-     */
-    public Object getConstraint() {
-        return constraint;
+        assertTrue(c.isSatisfied(" "));
+
+        assertFalse(c.isSatisfied(""));
+        assertFalse(c.isSatisfied(null));
     }
 }

@@ -30,7 +30,7 @@ import javax.swing.JToggleButton;
 public class S2ToggleButton extends JToggleButton {
     private static final long serialVersionUID = -3835693763871849112L;
 
-    private ButtonSelecedHelper helper;
+    private ButtonSelectedHelper helper;
 
     public S2ToggleButton() {
         super();
@@ -52,22 +52,15 @@ public class S2ToggleButton extends JToggleButton {
         super(text);
     }
 
-    private ButtonSelecedHelper getHelper() {
+    private ButtonSelectedHelper getHelper() {
         if (helper == null) {
-            helper = new ButtonSelecedHelper(this);
+            helper = new ButtonSelectedHelper(this);
         }
         return helper;
     }
 
     @Override
     public void setAction(Action action) {
-        Action oldAction = getAction();
-        if (oldAction != null) {
-            oldAction.removePropertyChangeListener(getHelper());
-        }
-        super.setAction(action);
-        if (action != null) {
-            action.addPropertyChangeListener(getHelper());
-        }
+        getHelper().setAction(action);
     }
 }

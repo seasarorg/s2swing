@@ -27,15 +27,27 @@ import org.seasar.swing.component.S2CheckBoxMenuItem;
 import org.seasar.swing.component.S2RadioButtonMenuItem;
 
 /**
- * {@code MenuBuilder} を使用すると、Swing のメニュー階層を簡潔な記述で構築することができます。
+ * {@code MenuBuilder}を使用すると、Swingのメニュー階層を簡潔な記述で構築することができます。
  * <p>
- * 以下のコードは、{@code MenuBuilder} の使用方法の一例を示しています。
+ * 以下のコードは、{@code MenuBuilder}の使用方法の一例を示しています。
  * 
  * <pre>
  * MenuBuilder b = new MenuBuilder();
- * b.build(menuBar, b.menu(fileMenu, newMenuItem, openMenuItem, b.separator(),
- *         saveMenuItem, saveAsMenuItem, b.separator(), exitMenuItem), b.menu(
- *         helpMenu, aboutMenuItem));
+ * b.build(menuBar,
+ *     b.menu(fileMenu,
+ *         newMenuItem,
+ *         openMenuItem,
+ *         b.separator(),
+ *         saveMenuItem,
+ *         saveAsMenuItem,
+ *         b.separator(),
+ *         exitMenuItem
+ *     ),
+ *     b.menu(
+ *         helpMenu,
+ *         aboutMenuItem
+ *     )
+ * );
  * </pre>
  * 
  * @author kaiseh

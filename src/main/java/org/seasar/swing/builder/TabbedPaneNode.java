@@ -21,8 +21,8 @@ import javax.swing.JTabbedPane;
 import org.seasar.framework.exception.EmptyRuntimeException;
 
 /**
- * {@code JTabbedPane} を示すノードです。
- * 通常、このクラスは {@link ComponentBuilder} のヘルパメソッドによってインスタンス化されます。
+ * {@code JTabbedPane}を示すノードです。
+ * 通常、このクラスは{@link ComponentBuilder}のヘルパメソッドによってインスタンス化されます。
  *
  * @author kaiseh
  */

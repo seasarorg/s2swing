@@ -20,8 +20,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 /**
- * メニュー項目間のセパレータを示すノードです。
- * 通常、このクラスは {@link MenuBuilder} のヘルパメソッドによってインスタンス化されます。
+ * メニュー項目間のセパレータを示すノードです。通常、このクラスは{@link MenuBuilder}のヘルパメソッドによってインスタンス化されます。
  * 
  * @author kaiseh
  */

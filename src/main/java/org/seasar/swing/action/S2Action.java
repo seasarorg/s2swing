@@ -25,7 +25,7 @@ import org.seasar.swing.desc.S2ActionDesc;
 import org.seasar.swing.expression.ExpressionEngine;
 
 /**
- * {@code S2Action}アノテーションに対応し、実行可否状態と選択状態の宣言的記述をサポートしたアクションクラスです。
+ * 実行可否状態と選択状態の宣言的記述をサポートしたアクションクラスです。
  * 
  * @author kaiseh
  */

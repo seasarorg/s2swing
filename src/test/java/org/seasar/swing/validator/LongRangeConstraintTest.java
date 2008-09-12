@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 
 public class LongRangeConstraintTest extends TestCase {
     public void testIsSatisfied() {
-        ByteRangeConstraint c = new ByteRangeConstraint((byte) 12, (byte) 34);
+        LongRangeConstraint c = new LongRangeConstraint(12, 34);
 
         assertTrue(c.isSatisfied(12));
         assertTrue(c.isSatisfied(12.0));
@@ -40,19 +40,19 @@ public class LongRangeConstraintTest extends TestCase {
         assertFalse(c.isSatisfied(35.0));
         assertFalse(c.isSatisfied("35"));
 
-        c = new ByteRangeConstraint();
-        c.setMin((byte) 12);
+        c = new LongRangeConstraint();
+        c.setMin(12);
 
         assertTrue(c.isSatisfied(12));
-        assertTrue(c.isSatisfied(Byte.MAX_VALUE));
+        assertTrue(c.isSatisfied(Long.MAX_VALUE));
 
         assertFalse(c.isSatisfied(11));
 
-        c = new ByteRangeConstraint();
-        c.setMax((byte) 34);
+        c = new LongRangeConstraint();
+        c.setMax(34);
 
         assertTrue(c.isSatisfied(34));
-        assertTrue(c.isSatisfied(Byte.MIN_VALUE));
+        assertTrue(c.isSatisfied(Long.MIN_VALUE));
 
         assertFalse(c.isSatisfied(35));
     }
