@@ -69,6 +69,8 @@ public class S2CheckBoxMenuItem extends JCheckBoxMenuItem {
 
     @Override
     public void setAction(Action action) {
-        getHelper().setAction(action);
+        getHelper().release(getAction());
+        super.setAction(action);
+        getHelper().register(action);
     }
 }

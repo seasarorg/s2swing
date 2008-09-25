@@ -39,14 +39,15 @@ public class ButtonSelectedHelper implements Serializable,
         this.button = button;
     }
 
-    public void setAction(Action action) {
-        Action oldAction = button.getAction();
-        if (oldAction != null) {
-            oldAction.removePropertyChangeListener(this);
-        }
-        button.setAction(action);
+    public void register(Action action) {
         if (action != null) {
             action.addPropertyChangeListener(this);
+        }
+    }
+
+    public void release(Action action) {
+        if (action != null) {
+            action.removePropertyChangeListener(this);
         }
     }
 
