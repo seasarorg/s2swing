@@ -19,10 +19,11 @@ package org.seasar.swing.action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
-import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.desc.S2ActionDesc;
 import org.seasar.swing.expression.ExpressionEngine;
+import org.seasar.swing.expression.OgnlEngine;
+import org.seasar.swing.resolver.ComponentResolver;
 
 /**
  * 実行可否状態と選択状態の宣言的記述をサポートしたアクションクラスです。
@@ -34,7 +35,6 @@ public class S2Action extends ApplicationAction {
     private static final long serialVersionUID = -1896748042936856313L;
 
     private ApplicationActionMap actionMap;
-    private ExpressionEngine expressionEngine;
     private String enabledCondition;
     private String selectedCondition;
     private transient Object enabledExpr;
@@ -49,20 +49,23 @@ public class S2Action extends ApplicationAction {
      *            リソースマップ
      * @param actionDesc
      *            アクション記述子
-     * @param expressionEngine
-     *            式言語エンジン
      */
     public S2Action(ApplicationActionMap actionMap, ResourceMap resourceMap,
-            S2ActionDesc actionDesc, ExpressionEngine expressionEngine) {
+            S2ActionDesc actionDesc) {
         super(actionMap, resourceMap, actionDesc.getName(), actionDesc
                 .getMethod(), null, null, actionDesc.getBlockingScope());
-        if (expressionEngine == null) {
-            throw new EmptyRuntimeException("expressionEngine");
-        }
         this.actionMap = actionMap;
-        this.expressionEngine = expressionEngine;
         this.enabledCondition = actionDesc.getEnabledCondition();
         this.selectedCondition = actionDesc.getSelectedCondition();
+    }
+
+    private ExpressionEngine getExpressionEngine() {
+        String key = "expressionEngine";
+        if (ComponentResolver.hasComponent(key)) {
+            return (ExpressionEngine) ComponentResolver.getComponent(key);
+        } else {
+            return new OgnlEngine();
+        }
     }
 
     /**
@@ -70,24 +73,24 @@ public class S2Action extends ApplicationAction {
      */
     public void update() {
         if (!StringUtil.isEmpty(enabledCondition)) {
+            ExpressionEngine engine = getExpressionEngine();
             if (enabledExpr == null) {
-                enabledExpr = expressionEngine.compile(enabledCondition);
+                enabledExpr = engine.compile(enabledCondition);
             }
-            setEnabled(evaluateOnActionObject(enabledExpr));
+            setEnabled(evaluateOnActionObject(enabledExpr, engine));
         }
         if (!StringUtil.isEmpty(selectedCondition)) {
+            ExpressionEngine engine = getExpressionEngine();
             if (selectedExpr == null) {
-                selectedExpr = expressionEngine.compile(selectedCondition);
+                selectedExpr = engine.compile(selectedCondition);
             }
-            boolean selected = evaluateOnActionObject(selectedExpr);
-            setSelected(!selected);
+            boolean selected = evaluateOnActionObject(selectedExpr, engine);
             setSelected(selected);
         }
     }
 
-    private boolean evaluateOnActionObject(Object expr) {
-        Object result = expressionEngine.evaluate(expr, actionMap
-                .getActionsObject());
+    private boolean evaluateOnActionObject(Object expr, ExpressionEngine engine) {
+        Object result = engine.evaluate(expr, actionMap.getActionsObject());
         return Boolean.TRUE.equals(result);
     }
 }

@@ -21,6 +21,7 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.swing.action.S2ActionInjector;
 import org.seasar.swing.util.ClassUtil;
 
 /**
@@ -39,8 +40,15 @@ public abstract class Resources {
         return Application.getInstance().getContext();
     }
 
+    private static ApplicationActionMap enhanceActionMap(Object view,
+            ApplicationActionMap actionMap) {
+        S2ActionInjector actionInjector = new S2ActionInjector();
+        actionInjector.inject(view, actionMap);
+        return actionMap;
+    }
+
     /**
-     * アクションマップを返します。
+     * {@code S2Action}の登録をサポートしたアクションマップを返します。
      * 
      * @param actionsObject
      *            アクションを保持するオブジェクト
@@ -50,11 +58,13 @@ public abstract class Resources {
         if (actionsObject == null) {
             throw new EmptyRuntimeException("actionsObject");
         }
-        return getContext().getActionMap(actionsObject);
+        ApplicationActionMap actionMap = getContext().getActionMap(
+                actionsObject);
+        return enhanceActionMap(actionsObject, actionMap);
     }
 
     /**
-     * アクションマップを返します。
+     * {@code S2Action}の登録をサポートしたアクションマップを返します。
      * 
      * @param actionsClass
      *            クラス
@@ -70,7 +80,9 @@ public abstract class Resources {
         if (actionsObject == null) {
             throw new EmptyRuntimeException("actionsObject");
         }
-        return getContext().getActionMap(actionsClass, actionsObject);
+        ApplicationActionMap actionMap = getContext().getActionMap(
+                actionsClass, actionsObject);
+        return enhanceActionMap(actionsObject, actionMap);
     }
 
     private static Class<?> toTargetClass(Object target) {

@@ -23,9 +23,6 @@ import javax.swing.JFrame;
 
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.View;
-import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.expression.ExpressionEngine;
-import org.seasar.swing.expression.OgnlEngine;
 
 /**
  * {@code SingleFrameApplication}にS2Swingの機構を付加した基本クラスです。 S2Swing
@@ -35,32 +32,8 @@ import org.seasar.swing.expression.OgnlEngine;
  */
 
 public abstract class S2SingleFrameApplication extends SingleFrameApplication {
-    private ExpressionEngine expressionEngine = new OgnlEngine();
-
-    /**
-     * このアプリケーションで使用する式言語エンジンを返します。
-     * 
-     * @return 式言語エンジン
-     */
-    public ExpressionEngine getExpressionEngine() {
-        return expressionEngine;
-    }
-
-    /**
-     * このアプリケーションで使用する式言語エンジンを指定します。デフォルトではOGNLが使用されます。
-     * 
-     * @param expressionEngine
-     *            式言語エンジン
-     */
-    public void setExpressionEngine(ExpressionEngine expressionEngine) {
-        if (expressionEngine == null) {
-            throw new EmptyRuntimeException("expressionEngine");
-        }
-        this.expressionEngine = expressionEngine;
-    }
-
     protected ViewManager createViewManager(S2ViewObject view) {
-        return new ViewManager(view, expressionEngine);
+        return new ViewManager(view);
     }
 
     @Override

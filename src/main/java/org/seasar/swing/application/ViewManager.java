@@ -28,25 +28,21 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.RootPaneContainer;
+import javax.swing.SwingUtilities;
 
-import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
-import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.FieldUtil;
 import org.seasar.framework.util.MethodUtil;
 import org.seasar.framework.util.StringUtil;
-import org.seasar.swing.action.S2Action;
 import org.seasar.swing.action.S2ActionUpdater;
 import org.seasar.swing.desc.ActionSourceDesc;
-import org.seasar.swing.desc.S2ActionDesc;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.desc.ViewDescFactory;
-import org.seasar.swing.expression.ExpressionEngine;
-import org.seasar.swing.expression.OgnlEngine;
 import org.seasar.swing.util.ClassUtil;
 
 /**
@@ -54,10 +50,11 @@ import org.seasar.swing.util.ClassUtil;
  */
 
 public class ViewManager {
+    private static final Logger logger = Logger.getLogger(ViewManager.class);
+
     private static final String KEY_CONFIGURED = "org.seasar.swing.application.ViewManager.configured";
 
     private S2ViewObject view;
-    private ExpressionEngine expressionEngine;
 
     private ViewDesc viewDesc;
     private ApplicationActionMap actionMap;
@@ -66,18 +63,10 @@ public class ViewManager {
     private S2ActionUpdater actionUpdater;
 
     public ViewManager(S2ViewObject view) {
-        this(view, new OgnlEngine());
-    }
-
-    public ViewManager(S2ViewObject view, ExpressionEngine expressionEngine) {
         if (view == null) {
             throw new EmptyRuntimeException("view");
         }
-        if (expressionEngine == null) {
-            throw new EmptyRuntimeException("expressionEngine");
-        }
         this.view = view;
-        this.expressionEngine = expressionEngine;
         setUp();
     }
 
@@ -86,18 +75,8 @@ public class ViewManager {
                 .getOriginalClass(view.getClass());
         viewDesc = ViewDescFactory.getViewDesc(originalViewClass);
 
-        ApplicationContext context = getContext();
-        if (ClassUtil.isSystemClass(originalViewClass)) {
-            actionMap = context.getActionMap();
-            resourceMap = context.getResourceMap();
-        } else {
-            actionMap = context.getActionMap(originalViewClass, view);
-            Class<?> stopClass = originalViewClass;
-            while (!ClassUtil.isSystemClass(stopClass.getSuperclass())) {
-                stopClass = stopClass.getSuperclass();
-            }
-            resourceMap = context.getResourceMap(originalViewClass, stopClass);
-        }
+        actionMap = Resources.getActionMap(view);
+        resourceMap = Resources.getResourceMap(view);
 
         actionUpdater = createActionUpdater();
     }
@@ -116,10 +95,6 @@ public class ViewManager {
 
     public S2ActionUpdater getActionUpdater() {
         return actionUpdater;
-    }
-
-    public ExpressionEngine getExpressionEngine() {
-        return expressionEngine;
     }
 
     private static JComponent findClientPropertyHolder(Component c) {
@@ -144,10 +119,14 @@ public class ViewManager {
 
     public void configure() {
         if (isConfigured()) {
+            if (logger.isDebugEnabled()) {
+                logger.log("DSWI0000", new Object[] { view });
+            }
             return;
         }
-
-        autoInjectS2Actions();
+        if (logger.isDebugEnabled()) {
+            logger.log("DSWI0001", new Object[] { view });
+        }
 
         view.initialize();
 
@@ -155,7 +134,7 @@ public class ViewManager {
         autoInjectComponentProperties();
         autoBindActions();
 
-        actionUpdater.updateActions();
+        actionUpdater.register();
 
         installWindowListener();
 
@@ -163,15 +142,14 @@ public class ViewManager {
         holder.putClientProperty(KEY_CONFIGURED, Boolean.TRUE);
     }
 
-    protected ApplicationContext getContext() {
-        return Application.getInstance().getContext();
-    }
-
     protected void autoInjectComponentNames() {
         for (Field field : viewDesc.getComponentFields()) {
             field.setAccessible(true);
             Component c = (Component) FieldUtil.get(field, view);
             if (c != null && c.getName() == null) {
+                if (logger.isDebugEnabled()) {
+                    logger.log("DSWI0003", new Object[] { field.getName() });
+                }
                 c.setName(field.getName());
             }
         }
@@ -197,22 +175,14 @@ public class ViewManager {
         }
     }
 
-    protected void autoInjectS2Actions() {
-        for (S2ActionDesc actionDesc : viewDesc.getS2ActionDescs()) {
-            S2Action action = new S2Action(actionMap, resourceMap, actionDesc,
-                    expressionEngine);
-            actionMap.put(action.getName(), action);
-        }
-    }
-
     protected void autoBindActions() {
-        for (ActionSourceDesc targetDesc : viewDesc.getActionSourceDescs()) {
-            Action action = actionMap.get(targetDesc.getActionName());
+        for (ActionSourceDesc actionDesc : viewDesc.getActionSourceDescs()) {
+            Action action = actionMap.get(actionDesc.getActionName());
             if (action == null) {
                 // TODO warn
                 continue;
             }
-            Field field = targetDesc.getField();
+            Field field = actionDesc.getField();
             field.setAccessible(true);
             Object source = FieldUtil.get(field, view);
             if (source == null) {
@@ -223,6 +193,10 @@ public class ViewManager {
             Method method = sourceDesc.getMethodNoException("setAction",
                     new Class[] { Action.class });
             if (method != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.log("DSWI0004", new Object[] { field.getName(),
+                            actionDesc.getActionName() });
+                }
                 MethodUtil.invoke(method, source, new Object[] { action });
             } else {
                 // TODO warn
@@ -232,8 +206,8 @@ public class ViewManager {
 
     protected void installWindowListener() {
         Component root = view.getRootComponent();
-        if (root instanceof Window) {
-            Window window = (Window) root;
+        Window window = SwingUtilities.getWindowAncestor(root);
+        if (window != null) {
             window.addWindowListener(new ViewWindowListener());
         }
     }

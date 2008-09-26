@@ -52,4 +52,15 @@ public abstract class ComponentResolver {
     public static <T> T getComponent(Class<T> cls) {
         return (T) SingletonS2ContainerFactory.getContainer().getComponent(cls);
     }
+
+    /**
+     * 与えられたキーに対応するコンポーネントを{@code SingletonS2Container}が持つかどうかを返します。
+     * 
+     * @param key
+     *            キー
+     * @return コンポーネントが存在する場合は{@code true}
+     */
+    public static boolean hasComponent(Object key) {
+        return SingletonS2ContainerFactory.getContainer().hasComponentDef(key);
+    }
 }

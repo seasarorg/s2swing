@@ -38,6 +38,7 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
 
     private ActionMap actionMap;
     private long eventMask;
+    private boolean registered;
 
     /**
      * 指定されたアクションマップを元にインスタンスを作成します。
@@ -97,14 +98,23 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
      * このオブジェクトをAWTのイベントリスナとして登録し、イベントの監視を開始します。
      */
     public void register() {
+        if (registered) {
+            return;
+        }
         Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
+        updateActions();
+        registered = true;
     }
 
     /**
      * このオブジェクトをAWTのイベントリスナから解除し、イベントの監視を停止します。
      */
     public void deregister() {
+        if (!registered) {
+            return;
+        }
         Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+        registered = false;
     }
 
     public void eventDispatched(AWTEvent e) {
