@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.swing.annotation.ActionSource;
+import org.seasar.swing.annotation.ActionTarget;
 import org.seasar.swing.annotation.S2Action;
 import org.seasar.swing.util.ClassUtil;
 
@@ -39,7 +39,7 @@ public class DefaultViewDesc implements ViewDesc {
     private Class<?> viewClass;
 
     private List<S2ActionDesc> s2ActionDescs;
-    private List<ActionSourceDesc> actionSourceDescs;
+    private List<ActionTargetDesc> actionTargetDescs;
     private List<Field> componentFields;
 
     public DefaultViewDesc(Class<?> viewClass) {
@@ -48,7 +48,7 @@ public class DefaultViewDesc implements ViewDesc {
         }
         this.viewClass = viewClass;
         setUpS2ActionDescs();
-        setUpActionSourceDescs();
+        setUpActionTargetDescs();
         setUpComponentFields();
     }
 
@@ -63,25 +63,25 @@ public class DefaultViewDesc implements ViewDesc {
         }
     }
 
-    private void setUpActionSourceDescs() {
-        actionSourceDescs = new ArrayList<ActionSourceDesc>();
-        setUpActionSourceDescsByClass(viewClass);
+    private void setUpActionTargetDescs() {
+        actionTargetDescs = new ArrayList<ActionTargetDesc>();
+        setUpActionTargetDescsByClass(viewClass);
     }
 
-    private void setUpActionSourceDescsByClass(Class<?> cls) {
+    private void setUpActionTargetDescsByClass(Class<?> cls) {
         for (Field field : cls.getDeclaredFields()) {
-            ActionSource source = field.getAnnotation(ActionSource.class);
-            if (source != null) {
-                String actionName = source.value();
-                ActionSourceDesc desc = new DefaultActionSourceDesc(field,
+            ActionTarget target = field.getAnnotation(ActionTarget.class);
+            if (target != null) {
+                String actionName = target.value();
+                ActionTargetDesc desc = new DefaultActionTargetDesc(field,
                         actionName);
-                actionSourceDescs.add(desc);
+                actionTargetDescs.add(desc);
             }
         }
 
         Class<?> superclass = cls.getSuperclass();
         if (superclass != Object.class && superclass != null) {
-            setUpActionSourceDescsByClass(superclass);
+            setUpActionTargetDescsByClass(superclass);
         }
     }
 
@@ -115,8 +115,8 @@ public class DefaultViewDesc implements ViewDesc {
         return Collections.unmodifiableList(s2ActionDescs);
     }
 
-    public Collection<ActionSourceDesc> getActionSourceDescs() {
-        return Collections.unmodifiableList(actionSourceDescs);
+    public Collection<ActionTargetDesc> getActionTargetDescs() {
+        return Collections.unmodifiableList(actionTargetDescs);
     }
 
     public Collection<Field> getComponentFields() {

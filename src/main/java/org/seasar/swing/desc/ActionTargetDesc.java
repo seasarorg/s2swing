@@ -18,34 +18,14 @@ package org.seasar.swing.desc;
 
 import java.lang.reflect.Field;
 
-import org.seasar.framework.exception.EmptyRuntimeException;
-
 /**
- * {@code ActionSourceDesc}の標準実装です。
+ * 記述子です。
  * 
  * @author kaiseh
  */
 
-public class DefaultActionSourceDesc implements ActionSourceDesc {
-    private Field field;
-    private String actionName;
+public interface ActionTargetDesc {
+    Field getField();
 
-    public DefaultActionSourceDesc(Field field, String actionName) {
-        if (field == null) {
-            throw new EmptyRuntimeException("field");
-        }
-        if (actionName == null) {
-            throw new EmptyRuntimeException("actionName");
-        }
-        this.field = field;
-        this.actionName = actionName;
-    }
-
-    public Field getField() {
-        return field;
-    }
-
-    public String getActionName() {
-        return actionName;
-    }
+    String getActionName();
 }

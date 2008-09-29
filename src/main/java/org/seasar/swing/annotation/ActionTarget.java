@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * 
  * <pre>
  * public class MyFrame extends JFrame {
- *     &#064;ActionSource(&quot;ok&quot;)
+ *     &#064;ActionTarget(&quot;ok&quot;)
  *     private JButton okButton;
  * 
  *     &#064;Action
@@ -42,6 +42,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ActionSource {
+public @interface ActionTarget {
     String value();
 }

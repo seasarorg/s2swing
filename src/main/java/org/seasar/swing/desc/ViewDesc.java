@@ -26,7 +26,7 @@ import java.util.Collection;
 public interface ViewDesc {
     Class<?> getViewClass();
 
-    Collection<ActionSourceDesc> getActionSourceDescs();
+    Collection<ActionTargetDesc> getActionTargetDescs();
 
     Collection<S2ActionDesc> getS2ActionDescs();
 

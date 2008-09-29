@@ -40,7 +40,7 @@ import org.seasar.framework.util.FieldUtil;
 import org.seasar.framework.util.MethodUtil;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.action.S2ActionUpdater;
-import org.seasar.swing.desc.ActionSourceDesc;
+import org.seasar.swing.desc.ActionTargetDesc;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.desc.ViewDescFactory;
 import org.seasar.swing.util.ClassUtil;
@@ -176,7 +176,7 @@ public class ViewManager {
     }
 
     protected void autoBindActions() {
-        for (ActionSourceDesc actionDesc : viewDesc.getActionSourceDescs()) {
+        for (ActionTargetDesc actionDesc : viewDesc.getActionTargetDescs()) {
             Action action = actionMap.get(actionDesc.getActionName());
             if (action == null) {
                 // TODO warn
