@@ -16,6 +16,8 @@
 
 package org.seasar.swing.action;
 
+import java.awt.event.ActionEvent;
+
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
@@ -73,24 +75,45 @@ public class S2Action extends ApplicationAction {
      */
     public void update() {
         if (!StringUtil.isEmpty(enabledCondition)) {
-            ExpressionEngine engine = getExpressionEngine();
-            if (enabledExpr == null) {
-                enabledExpr = engine.compile(enabledCondition);
-            }
-            setEnabled(evaluateOnActionObject(enabledExpr, engine));
+            setEnabled(evaluateEnabled());
         }
         if (!StringUtil.isEmpty(selectedCondition)) {
-            ExpressionEngine engine = getExpressionEngine();
-            if (selectedExpr == null) {
-                selectedExpr = engine.compile(selectedCondition);
-            }
-            boolean selected = evaluateOnActionObject(selectedExpr, engine);
-            setSelected(selected);
+            setSelected(evaluateSelected());
         }
+    }
+
+    private boolean evaluateEnabled() {
+        if (StringUtil.isEmpty(enabledCondition)) {
+            return true;
+        }
+        ExpressionEngine engine = getExpressionEngine();
+        if (enabledExpr == null) {
+            enabledExpr = engine.compile(enabledCondition);
+        }
+        return evaluateOnActionObject(enabledExpr, engine);
+    }
+
+    private boolean evaluateSelected() {
+        if (StringUtil.isEmpty(selectedCondition)) {
+            return true;
+        }
+        ExpressionEngine engine = getExpressionEngine();
+        if (selectedExpr == null) {
+            selectedExpr = engine.compile(selectedCondition);
+        }
+        return evaluateOnActionObject(selectedExpr, engine);
     }
 
     private boolean evaluateOnActionObject(Object expr, ExpressionEngine engine) {
         Object result = engine.evaluate(expr, actionMap.getActionsObject());
         return Boolean.TRUE.equals(result);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (!evaluateEnabled()) {
+            return;
+        }
+        super.actionPerformed(e);
     }
 }
