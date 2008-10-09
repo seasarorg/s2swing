@@ -20,18 +20,29 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
-import org.seasar.framework.util.OgnlUtil;
 
 /**
- * コンパイル済みオブジェクトのキャッシュ機構を持つ、OGNLの式言語エンジンです。
+ * 既存の式言語エンジンにキャッシュ機構を付加します。
  * 
  * @author kaiseh
  */
 
-public class CachedOgnlEngine implements ExpressionEngine {
-    private static final long serialVersionUID = 4901636417074556167L;
+public class CachedEngine implements ExpressionEngine {
+    private static final long serialVersionUID = 350718720220429566L;
 
-    private Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
+    private ExpressionEngine baseEngine;
+    private transient Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
+
+    public CachedEngine(ExpressionEngine baseEngine) {
+        if (baseEngine == null) {
+            throw new EmptyRuntimeException("baseEngine");
+        }
+        this.baseEngine = baseEngine;
+    }
+
+    public ExpressionEngine getBaseEngine() {
+        return baseEngine;
+    }
 
     public Object compile(String expression) {
         if (expression == null) {
@@ -39,13 +50,18 @@ public class CachedOgnlEngine implements ExpressionEngine {
         }
         Object compiled = cache.get(expression);
         if (compiled == null) {
-            compiled = OgnlUtil.parseExpression(expression);
+            compiled = baseEngine.compile(expression);
             cache.put(expression, compiled);
         }
         return compiled;
     }
 
     public Object evaluate(Object compiled, Object contextRoot) {
-        return OgnlUtil.getValue(compiled, contextRoot);
+        return baseEngine.evaluate(compiled, contextRoot);
+    }
+
+    public Object evaluate(Object compiled, Object contextRoot,
+            String sourceExpression) {
+        return baseEngine.evaluate(compiled, contextRoot, sourceExpression);
     }
 }

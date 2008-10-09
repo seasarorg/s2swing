@@ -17,6 +17,8 @@
 package org.seasar.swing.expression;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.framework.exception.OgnlRuntimeException;
+import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.OgnlUtil;
 
 /**
@@ -28,6 +30,8 @@ import org.seasar.framework.util.OgnlUtil;
 public class OgnlEngine implements ExpressionEngine {
     private static final long serialVersionUID = 4901636417074556167L;
 
+    private static final Logger logger = Logger.getLogger(OgnlEngine.class);
+
     public Object compile(String expression) {
         if (expression == null) {
             throw new EmptyRuntimeException("expression");
@@ -36,6 +40,24 @@ public class OgnlEngine implements ExpressionEngine {
     }
 
     public Object evaluate(Object compiled, Object contextRoot) {
-        return OgnlUtil.getValue(compiled, contextRoot);
+        return evaluate(compiled, contextRoot, null);
+    }
+
+    public Object evaluate(Object compiled, Object contextRoot,
+            String sourceExpression) {
+        try {
+            return OgnlUtil.getValue(compiled, contextRoot);
+        } catch (OgnlRuntimeException e) {
+            String className = null;
+            if (contextRoot != null) {
+                className = contextRoot.getClass().getName();
+            }
+            String hint = sourceExpression;
+            if (hint == null) {
+                hint = "Unknown Source";
+            }
+            logger.log("ESWI0104", new Object[] { className, hint });
+            throw e;
+        }
     }
 }

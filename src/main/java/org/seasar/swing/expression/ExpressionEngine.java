@@ -44,4 +44,17 @@ public interface ExpressionEngine extends Serializable {
      * @return 実行結果
      */
     Object evaluate(Object compiled, Object contextRoot);
+
+    /**
+     * コンパイル済みの式を実行します。
+     * 
+     * @param compiled
+     *            コンパイル済みのオブジェクト
+     * @param contextRoot
+     *            コンテキストルートオブジェクト
+     * @param sourceExpression
+     *            コンパイル元の式言語文字列。デバッグヒント出力に使用
+     * @return 実行結果
+     */
+    Object evaluate(Object compiled, Object contextRoot, String sourceExpression);
 }
