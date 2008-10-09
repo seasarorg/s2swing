@@ -16,23 +16,33 @@
 
 package org.seasar.swing.expression;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.framework.util.OgnlUtil;
 
 /**
- * OGNLの式言語エンジンです。
+ * コンパイル済みオブジェクトのキャッシュ機構を持つ、OGNLの式言語エンジンです。
  * 
  * @author kaiseh
  */
 
-public class OgnlEngine implements ExpressionEngine {
+public class CachedOgnlEngine implements ExpressionEngine {
     private static final long serialVersionUID = 4901636417074556167L;
+
+    private Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
 
     public Object compile(String expression) {
         if (expression == null) {
             throw new EmptyRuntimeException("expression");
         }
-        return OgnlUtil.parseExpression(expression);
+        Object compiled = cache.get(expression);
+        if (compiled == null) {
+            compiled = OgnlUtil.parseExpression(expression);
+            cache.put(expression, compiled);
+        }
+        return compiled;
     }
 
     public Object evaluate(Object compiled, Object contextRoot) {

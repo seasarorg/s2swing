@@ -23,8 +23,8 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.desc.S2ActionDesc;
+import org.seasar.swing.expression.CachedOgnlEngine;
 import org.seasar.swing.expression.ExpressionEngine;
-import org.seasar.swing.expression.OgnlEngine;
 import org.seasar.swing.resolver.ComponentResolver;
 
 /**
@@ -35,6 +35,8 @@ import org.seasar.swing.resolver.ComponentResolver;
 
 public class S2Action extends ApplicationAction {
     private static final long serialVersionUID = -1896748042936856313L;
+
+    private static final ExpressionEngine DEFAULT_ENGINE = new CachedOgnlEngine();
 
     private ApplicationActionMap actionMap;
     private String enabledCondition;
@@ -66,7 +68,7 @@ public class S2Action extends ApplicationAction {
         if (ComponentResolver.hasComponent(key)) {
             return (ExpressionEngine) ComponentResolver.getComponent(key);
         } else {
-            return new OgnlEngine();
+            return DEFAULT_ENGINE;
         }
     }
 
