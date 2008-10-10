@@ -52,8 +52,11 @@ public class DefaultBindingDesc implements BindingDesc {
     private Object source;
     private Property sourceProperty;
     private Property sourceDetailProperty;
+    private Object sourceNullValue;
+    private Object sourceUnreadableValue;
     private Object target;
     private Property targetProperty;
+    private Object targetNullValue;
     private UpdateStrategy updateStrategy;
 
     private ModelPropertyDesc sourcePropertyDesc;
@@ -159,6 +162,30 @@ public class DefaultBindingDesc implements BindingDesc {
         return sourcePropertyDesc;
     }
 
+    public Object getSourceNullValue() {
+        return sourceNullValue;
+    }
+
+    public void setSourceNullValue(Object sourceNullValue) {
+        this.sourceNullValue = sourceNullValue;
+    }
+
+    public Object getSourceUnreadableValue() {
+        return sourceUnreadableValue;
+    }
+
+    public void setSourceUnreadableValue(Object sourceUnreadableValue) {
+        this.sourceUnreadableValue = sourceUnreadableValue;
+    }
+
+    public Object getTargetNullValue() {
+        return targetNullValue;
+    }
+
+    public void setTargetNullValue(Object targetNullValue) {
+        this.targetNullValue = targetNullValue;
+    }
+
     public void addConstraint(Constraint constraint) {
         constraints.add(constraint);
     }
@@ -237,6 +264,10 @@ public class DefaultBindingDesc implements BindingDesc {
             }
         }
 
+        binding.setSourceNullValue(sourceNullValue);
+        binding.setSourceUnreadableValue(sourceUnreadableValue);
+        binding.setTargetNullValue(targetNullValue);
+        
         return binding;
     }
 

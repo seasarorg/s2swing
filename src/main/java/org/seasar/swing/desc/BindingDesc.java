@@ -38,9 +38,15 @@ public interface BindingDesc {
 
     ModelPropertyDesc getSourcePropertyDesc();
 
+    Object getSourceNullValue();
+
+    Object getSourceUnreadableValue();
+
     Object getTarget();
 
     Property getTargetProperty();
+
+    Object getTargetNullValue();
 
     UpdateStrategy getUpdateStrategy();
 
@@ -51,8 +57,6 @@ public interface BindingDesc {
     void removeConstraint(Constraint constraint);
 
     Converter getConverter();
-
-    void setConverter(Converter converter);
 
     Binding toBinding();
 }

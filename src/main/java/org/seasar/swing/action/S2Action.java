@@ -23,6 +23,7 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.desc.S2ActionDesc;
+import org.seasar.swing.exception.ExceptionHandler;
 import org.seasar.swing.expression.CachedEngine;
 import org.seasar.swing.expression.ExpressionEngine;
 import org.seasar.swing.expression.OgnlEngine;
@@ -38,6 +39,8 @@ public class S2Action extends ApplicationAction {
     private static final long serialVersionUID = -1896748042936856313L;
 
     private static final ExpressionEngine DEFAULT_ENGINE = createDefaultEngine();
+
+    private static ExceptionHandler exceptionHandler;
 
     private ApplicationActionMap actionMap;
     private String enabledCondition;
@@ -118,11 +121,33 @@ public class S2Action extends ApplicationAction {
         return Boolean.TRUE.equals(result);
     }
 
+    public static ExceptionHandler getExceptionHandler() {
+        return exceptionHandler;
+    }
+
+    public static void setExceptionHandler(ExceptionHandler handler) {
+        exceptionHandler = handler;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!evaluateEnabled()) {
             return;
         }
-        super.actionPerformed(e);
+        try {
+            super.actionPerformed(e);
+        } catch (Error error) {
+            if (exceptionHandler != null) {
+                exceptionHandler.handle(error);
+            } else {
+                throw error;
+            }
+        } catch (RuntimeException ex) {
+            if (exceptionHandler != null) {
+                exceptionHandler.handle(ex);
+            } else {
+                throw ex;
+            }
+        }
     }
 }

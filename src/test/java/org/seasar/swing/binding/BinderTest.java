@@ -23,7 +23,6 @@ import junit.framework.TestCase;
 import org.seasar.framework.exception.EmptyRuntimeException;
 import org.seasar.swing.annotation.Column;
 import org.seasar.swing.converter.DateToStringConverter;
-import org.seasar.swing.desc.BindingDesc;
 import org.seasar.swing.desc.DefaultBindingDesc;
 import org.seasar.swing.exception.IllegalRegistrationException;
 
@@ -113,7 +112,7 @@ public class BinderTest extends TestCase {
         }
 
         // converter makes (String <-> Date) compatible
-        BindingDesc desc = new DefaultBindingDesc(foo1, "aaa", foo2, "bbb");
+        DefaultBindingDesc desc = new DefaultBindingDesc(foo1, "aaa", foo2, "bbb");
         desc.setConverter(new DateToStringConverter());
         binder.add(desc);
 
