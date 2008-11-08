@@ -27,7 +27,10 @@ import org.jdesktop.beansbinding.Converter;
 public class TrimConverter extends Converter<String, String> {
     @Override
     public String convertForward(String value) {
-        return value;
+        if (value == null) {
+            return null;
+        }
+        return value.trim();
     }
 
     @Override

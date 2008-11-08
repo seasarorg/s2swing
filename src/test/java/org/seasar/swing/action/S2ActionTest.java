@@ -18,11 +18,11 @@ package org.seasar.swing.action;
 
 import java.awt.event.ActionEvent;
 
+import junit.framework.TestCase;
+
 import org.jdesktop.application.ApplicationActionMap;
 import org.seasar.swing.application.Resources;
 import org.seasar.swing.exception.ExceptionHandler;
-
-import junit.framework.TestCase;
 
 /**
  * @author kaiseh
@@ -30,7 +30,8 @@ import junit.framework.TestCase;
 
 public class S2ActionTest extends TestCase {
     public void testSetExceptionHandler() {
-        ApplicationActionMap actionMap = Resources.getActionMap(this);
+        ApplicationActionMap actionMap = Resources
+                .getActionMap(S2ActionTest.this);
         S2Action action = (S2Action) actionMap.get("throwException");
 
         try {

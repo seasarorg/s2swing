@@ -16,6 +16,8 @@
 
 package org.seasar.swing.util;
 
+import org.seasar.framework.exception.EmptyRuntimeException;
+
 /**
  * クラスに関するユーティリティクラスです。
  * 
@@ -24,6 +26,9 @@ package org.seasar.swing.util;
 
 public class ClassUtil {
     public static boolean isSystemClass(Class<?> cls) {
+        if (cls == null) {
+            throw new EmptyRuntimeException("cls");
+        }
         String name = cls.getName();
         return name.startsWith("java.") || name.startsWith("javax.")
                 || name.startsWith("org.jdesktop.application");
@@ -37,6 +42,9 @@ public class ClassUtil {
      * @return エンハンス以前のクラス
      */
     public static Class<?> getOriginalClass(Class<?> cls) {
+        if (cls == null) {
+            throw new EmptyRuntimeException("cls");
+        }
         // detect "$$EnhancedByS2AOP$$"
         while (cls != null && cls.getName().contains("$$")) {
             cls = cls.getSuperclass();

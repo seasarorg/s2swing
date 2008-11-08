@@ -28,7 +28,7 @@ import org.seasar.swing.application.Resources;
 import org.seasar.swing.application.S2ViewObject;
 
 /**
- * {@code JFrame} にS2Swingの機構を付加した基本クラスです。S2Swingアプリケーションのフレームは、通常このクラスを継承するか、
+ * {@code JFrame}にS2Swingの機構を付加した基本クラスです。S2Swingアプリケーションのフレームは、通常このクラスを継承するか、
  * {@code S2ViewObject}インタフェースを実装します。
  * 
  * @author kaiseh

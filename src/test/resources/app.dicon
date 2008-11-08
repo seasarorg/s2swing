@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+
+	<component name="appendConverter"
+		class="org.seasar.swing.converter.annotation.CustomConverterTest$AppendConverter"/>
+
+	<component name="fooConstraint"
+		class="org.seasar.swing.validator.annotation.CustomConstraintTest$FooConstraint"/>
+
+	<component name="foo" class="java.util.Date"/>
+
+</components>

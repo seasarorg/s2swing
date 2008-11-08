@@ -17,6 +17,7 @@
 package org.seasar.swing.resolver;
 
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
+import org.seasar.framework.exception.EmptyRuntimeException;
 
 /**
  * SingletonS2Containerに登録されたオブジェクトを取得します。
@@ -30,27 +31,18 @@ public abstract class ComponentResolver {
     }
 
     /**
-     * 与えられた名前をキーとして、{@code SingletonS2Container}からオブジェクトを取得します。
+     * 与えられたキーを使用して、{@code SingletonS2Container}からオブジェクトを取得します。
      * オブジェクトが見つからない場合は例外がスローされます。
      * 
-     * @param name
-     *            オブジェクト名
+     * @param key
+     *            キー
      * @return オブジェクト
      */
-    public static Object getComponent(String name) {
-        return SingletonS2ContainerFactory.getContainer().getComponent(name);
-    }
-
-    /**
-     * 与えられたクラスをキーとして、{@code SingletonS2Container}からオブジェクトを取得します。
-     * オブジェクトが見つからない場合は例外がスローされます。
-     * 
-     * @param cls
-     *            クラス
-     * @return オブジェクト
-     */
-    public static <T> T getComponent(Class<T> cls) {
-        return (T) SingletonS2ContainerFactory.getContainer().getComponent(cls);
+    public static Object getComponent(Object key) {
+        if (key == null) {
+            throw new EmptyRuntimeException("key");
+        }
+        return SingletonS2ContainerFactory.getContainer().getComponent(key);
     }
 
     /**
@@ -61,6 +53,9 @@ public abstract class ComponentResolver {
      * @return コンポーネントが存在する場合は{@code true}
      */
     public static boolean hasComponent(Object key) {
+        if (key == null) {
+            throw new EmptyRuntimeException("key");
+        }
         return SingletonS2ContainerFactory.getContainer().hasComponentDef(key);
     }
 }

@@ -26,7 +26,7 @@ import org.seasar.swing.converter.DateToStringConverter;
 
 /**
  * {@link java.util.Date}オブジェクトと文字列の相互変換を指示するコンバータアノテーションです。 {@code type}パラメータに
- * {@code DATE, TIME, DATE_TIME}を指定した場合、デフォルトロケールに対する規定のフォーマットが使用されます。
+ * {@code DATE, TIME, DATE_TIME}のいずれかを指定した場合、デフォルトロケールに対する規定のフォーマットが使用されます。
  * 
  * {@code type}パラメータに{@code CUSTOM}を指定した場合、{@code pattern}
  * パラメータまたはプロパティファイルにフォーマットを記述します。

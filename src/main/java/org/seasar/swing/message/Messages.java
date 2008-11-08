@@ -55,6 +55,9 @@ public class Messages {
     }
 
     public synchronized void addBundle(String baseName) {
+        if (baseName == null) {
+            throw new EmptyRuntimeException("baseName");
+        }
         bundles.add(0, ResourceBundle.getBundle(baseName));
     }
 

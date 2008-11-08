@@ -26,7 +26,7 @@ import org.seasar.swing.converter.NumberToStringConverter;
 
 /**
  * 数値と文字列の相互変換を指示するコンバータアノテーションです。 {@code type}パラメータに{@code NUMBER, INTEGER,
- * PERCENT, CURRENCY}を指定した場合、デフォルトロケールに対する規定のフォーマットが使用されます。
+ * PERCENT, CURRENCY}のいずれかを指定した場合、デフォルトロケールに対する規定のフォーマットが使用されます。
  * 
  * {@code type}パラメータに{@code CUSTOM}を指定した場合、{@code pattern}
  * パラメータまたはプロパティファイルにフォーマットを記述します。

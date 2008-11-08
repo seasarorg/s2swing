@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 
 import org.jdesktop.application.Task.BlockingScope;
 import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.framework.util.ClassUtil;
 import org.seasar.swing.annotation.S2Action;
 
 /**
@@ -34,6 +35,10 @@ public class DefaultS2ActionDesc implements S2ActionDesc {
     private String enabledCondition;
     private String selectedCondition;
     private BlockingScope blockingScope;
+
+    public DefaultS2ActionDesc(Class<?> objectClass, String methodName) {
+        this(ClassUtil.getMethod(objectClass, methodName, new Class[0]));
+    }
 
     public DefaultS2ActionDesc(Method method) {
         if (method == null) {

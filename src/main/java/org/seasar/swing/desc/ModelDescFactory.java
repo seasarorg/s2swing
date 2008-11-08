@@ -16,8 +16,8 @@
 
 package org.seasar.swing.desc;
 
-import org.seasar.swing.util.MultiKey;
 import org.seasar.swing.util.Cache;
+import org.seasar.swing.util.MultiKey;
 
 /**
  * @author kaiseh
