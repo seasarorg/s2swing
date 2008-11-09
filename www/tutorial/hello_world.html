@@ -1,0 +1,103 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" type="text/css" href="../syntax/css/SyntaxHighlighter.css" />
+	<script type="text/javascript" src="../syntax/js/shCore.js"></script>
+	<script type="text/javascript" src="../syntax/js/shBrushJava.js"></script>
+	<script type="text/javascript" src="../syntax/js/shBrushXml.js"></script>
+	<title>Hello World - S2Swing チュートリアル</title>
+</head>
+<body>
+
+<h1>Hello World</h1>
+
+<p class="ref">
+このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのhelloworldパッケージ以下にあります。
+</p>
+
+<p>
+S2Swingの最初の一歩として、ウィンドウに"Hello World!"と表示する単純なアプリケーションを作成してみましょう。
+</p>
+
+<h2>フレームクラスの作成</h2>
+
+<p>
+初めに、"Hello World!"と表示するフレームクラスを用意しましょう。クラス名はHelloWorldFrameとし、JFrameを継承して作成します。
+</p>
+
+<pre name="code" class="java">
+package helloworld;
+
+import java.awt.Container;
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class HelloWorldFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
+
+    public HelloWorldFrame() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        c.add(new JLabel("Hello World!"));
+    }
+}
+</pre>
+
+<h2>アプリケーションクラスの作成</h2>
+
+<p>
+次に、アプリケーションクラスを用意しましょう。S2SingleFrameApplicationクラスを以下のように継承して、HelloWorldクラスを作成します。
+</p>
+
+<pre name="code" class="java">
+package helloworld;
+
+import org.seasar.swing.application.S2SingleFrameApplication;
+
+public class HelloWorld extends S2SingleFrameApplication {
+    @Override
+    protected void startup() {
+        show(new HelloWorldFrame());
+    }
+
+    public static void main(String[] args) {
+        launch(HelloWorld.class, args);
+    }
+}
+</pre>
+
+<p>
+HelloWorldクラスは、基底クラスのstartup()メソッドをオーバーライドしています。
+このメソッド内で、先ほどのHelloWorldFrameオブジェクトを引数とし、show()メソッドを呼び出します。
+この記述によって、アプリケーションの起動時に、フレームが画面に表示されるようになります。
+</p>
+
+<p>
+また、main()メソッドにも注目してください。HelloWorldクラス自身を引数にして、launch()メソッドを呼び出しています。
+これは、Swing Application Frameworkでアプリケーションを起動するときの定型コードになります。
+</p>
+
+<h2>アプリケーションの実行</h2>
+
+<p>
+それでは、HelloWorldクラスを実行してみましょう。次のように、小さなウィンドウが画面上に表示されます。
+</p>
+
+<p>
+<img src="images/helloworld.png" />
+</p>
+
+<p>
+以上が、S2Swingによるアプリケーション開発の基本スタイルになります。
+</p>
+
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
+</body>
+</html>

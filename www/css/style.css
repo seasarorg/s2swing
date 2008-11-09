@@ -1,0 +1,34 @@
+body {
+	font-size: small;
+	line-height: 140%;
+}
+
+h1 {
+}
+
+h2 {
+	padding: 4px;
+	border-style: none none solid none;
+	border-width: 2px;
+	border-color: #666688;
+}
+
+p {
+	margin: 8px;
+}
+
+p.remark {
+	margin: 8px 24px;
+	padding: 8px;
+	border: 1px dotted #666666;
+	background-color: #FFFFF0;
+}
+
+pre {
+	margin: 8px;
+}
+
+pre.properties {
+	color: #004400;
+	padding: 8px;
+}

@@ -1,0 +1,156 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" type="text/css" href="../syntax/css/SyntaxHighlighter.css" />
+	<script type="text/javascript" src="../syntax/js/shCore.js"></script>
+	<script type="text/javascript" src="../syntax/js/shBrushJava.js"></script>
+	<script type="text/javascript" src="../syntax/js/shBrushXml.js"></script>
+	<title>リソース - S2Swing チュートリアル</title>
+</head>
+<body>
+
+<h1>リソース</h1>
+
+<p class="ref">
+このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのresourceパッケージ以下にあります。
+</p>
+
+<p>
+S2Swingでは、コンポーネントの表示テキストやメッセージなどのリソースをソースコード中にハードコーディングする代わりに、
+propertiesファイルに記述しておき、実行時にインジェクションすることができます。このようにリソースファイルを外出ししておくことによって、リソースの一元管理や国際化が容易になります。
+</p>
+
+<h2>プロパティエディタプラグイン（Eclipse）</h2>
+
+<p>
+propertiesファイル中に記述したマルチバイト文字は、native2asciiツールを使用してUnicode表記(\udddd)に変換する必要があります。
+Eclipseは、デフォルトではこの作業を行ってくれません。EclipseでS2Swingアプリケーションの開発を行う場合は、マルチバイト文字変換の手間を省くため、
+以下のプロパティエディタプラグインの導入を強く推奨します。
+</p>
+
+<ul>
+	<li><a target="_blank" href="http://propedit.sourceforge.jp/">プロパティエディタ</a></li>
+</ul>
+
+<h2>リソースファイル名の規約</h2>
+
+<p>
+リソースファイルの名前は、インジェクション対象のクラス名に基づいて以下のように決定されます。
+</p>
+
+<pre>
+[対象クラスのパッケージ]/resources/[対象クラス名]{ロケール}.properties
+</pre>
+
+<p>
+例えば、com.example.ExampleFrameというクラスを対象とするリソースファイルの名前は、com/example/resources/ExampleFrame.propertiesとなります。
+</p>
+
+<h2>フレームクラスの作成</h2>
+
+<p>
+それでは早速、リソースファイルを使ったアプリケーションを作成してみましょう。
+フレームにラベルを表示し、そのテキストやフォントをリソースファイルで指定することにします。
+</p>
+
+<p>
+Hello Worldのときと同様、まずフレームのクラスを作成します。ただし、今回はJFrameクラスではなく、S2Frameクラスを継承します。
+</p>
+
+<pre name="code" class="java">
+package resource;
+
+import java.awt.Container;
+import java.awt.FlowLayout;
+
+import javax.swing.JLabel;
+
+import org.seasar.swing.component.S2Frame;
+
+public class ResourceUsageFrame extends S2Frame {
+    private static final long serialVersionUID = 1L;
+
+    private JLabel messageLabel = new JLabel();
+
+    public void initialize() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        c.add(messageLabel);
+    }
+}
+</pre>
+
+<p>
+HelloWorldFrameクラスではコンストラクタで画面を構築していましたが、S2Frameの継承クラスでは代わりにinitialize()メソッドを使用します。
+messageLabelという名前のフィールドでラベルを作成し、特にプロパティの設定をせず、そのまま画面に追加しています。
+</p>
+
+<p>
+ResourceUsageFrameクラスの作成が終わったら、前回と同じ要領で、アプリケーションクラスとなるResourceUsageクラスを作成します。
+</p>
+
+<h2>フレーム用リソースファイルの作成</h2>
+
+<p>
+次に、このフレームに対応するリソースファイルを作成します。ここでは、フレームのクラス名はresource.ResourceUsageFrameですので、
+リソースファイルの名前は上の規約に従い、resource/resources/ResourceUsageFrame.propertiesとなります。
+</p>
+
+<pre class="properties">
+title = ResourceUsage
+messageLabel.text = こんにちは
+messageLabel.font = Dialog-PLAIN-32
+messageLabel.foreground = #FF0000
+</pre>
+
+<p>
+このように、[コンポーネントのフィールド名].[プロパティ名]の書式で、コンポーネントのプロパティを指定することができます。
+</p>
+
+<p class="remark">
+リソースインジェクションは、Swing Application Framework自身が持つ機能です。
+本来、リソースインジェクションでは、コンポーネント名の明示的な設定が必要です。
+S2Swingの役割は、フィールド名からコンポーネント名（今回の例では"messageLabel"）を自動的に設定することです。
+</p>
+
+<h2>アプリケーション用リソースファイルの作成</h2>
+
+<p>
+S2Swingでは、アプリケーションクラスのリソースファイルに、アプリケーションの基本情報を記述することになっています。
+resource/resources/ResourceUsage.propertiesファイルを、以下のように作成しておきましょう。
+この記述がなくてもアプリケーションの実行は可能ですが、警告が表示されます。
+</p>
+
+<pre class="properties">
+Application.id = ResourceUsage
+Application.title = Resource Usage Application
+Application.version = 1.0
+Application.vendor = Seasar Project
+Application.vendorId = S2Swing
+Application.homepage = http://s2swing.sandbox.seasar.org/
+Application.description = リソースファイルの使用例です。
+Application.lookAndFeel = system
+</pre>
+
+<h2>アプリケーションの実行</h2>
+
+<p>
+では、ResourceUsageアプリケーションを実行してみましょう。
+</p>
+
+<p>
+<img src="images/resource.png" />
+</p>
+
+<p>
+リソースファイルの指定が、正しくラベルに反映されていますね。
+</p>
+
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
+</body>
+</html>
