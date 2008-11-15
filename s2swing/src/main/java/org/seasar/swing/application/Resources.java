@@ -43,7 +43,7 @@ public abstract class Resources {
     private static ApplicationActionMap enhanceActionMap(Object view,
             ApplicationActionMap actionMap) {
         S2ActionInjector actionInjector = new S2ActionInjector();
-        actionInjector.inject(view, actionMap);
+        actionInjector.injectIfNecessary(view, actionMap);
         return actionMap;
     }
 

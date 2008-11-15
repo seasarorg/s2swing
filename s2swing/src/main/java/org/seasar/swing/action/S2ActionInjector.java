@@ -16,6 +16,10 @@
 
 package org.seasar.swing.action;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.seasar.framework.exception.EmptyRuntimeException;
@@ -33,6 +37,21 @@ import org.seasar.swing.util.ClassUtil;
 public class S2ActionInjector {
     private static final Logger logger = Logger
             .getLogger(S2ActionInjector.class);
+
+    private static final String INJECTED_KEY = "org.seasar.swing.action.S2ActionInjector.injected";
+
+    public void injectIfNecessary(Object view, ApplicationActionMap actionMap) {
+        if (view == null) {
+            throw new EmptyRuntimeException("view");
+        }
+        if (actionMap == null) {
+            throw new EmptyRuntimeException("actionMap");
+        }
+        if (actionMap.get(INJECTED_KEY) != null) {
+            return;
+        }
+        inject(view, actionMap);
+    }
 
     public void inject(Object view, ApplicationActionMap actionMap) {
         if (view == null) {
@@ -52,6 +71,15 @@ public class S2ActionInjector {
                 logger.log("DSWI0002", new Object[] { action.getName(), view });
             }
             actionMap.put(action.getName(), action);
+        }
+
+        actionMap.put(INJECTED_KEY, new DummyAction());
+    }
+
+    private static class DummyAction extends AbstractAction {
+        private static final long serialVersionUID = -3113635971362328743L;
+
+        public void actionPerformed(ActionEvent e) {
         }
     }
 }
