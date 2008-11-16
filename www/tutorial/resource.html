@@ -22,18 +22,17 @@
 			<li><a href="binding.html">バインディング</a></li>
 			<li><a href="validation.html">バリデーション</a></li>
 			<li><a href="converter.html">コンバータ</a></li>
-			<li><a href="component_builder.html">コンポーネントビルダ</a></li>
-			<li><a href="menu_builder.html">メニュービルダ</a></li>
 		</ul>
 	</li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
+	<li><a href="../faq/index.html">FAQ</a>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
 
 <div class="center">
 
-<h1>リソース</h1>
+<h1>リソース - S2Swing チュートリアル</h1>
 
 <p class="ref">
 このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのresourceパッケージ以下にあります。
@@ -62,12 +61,13 @@ Eclipseは、デフォルトではこの作業を行ってくれません。Ecli
 リソースファイルの名前は、インジェクション対象のクラス名に基づいて以下のように決定されます。
 </p>
 
-<pre>
+<pre class="console">
 [対象クラスのパッケージ]/resources/[対象クラス名]{ロケール}.properties
 </pre>
 
 <p>
-例えば、com.example.ExampleFrameというクラスを対象とするリソースファイルの名前は、com/example/resources/ExampleFrame.propertiesとなります。
+例えば、example.ExampleFrameという名前のクラスを対象とするリソースファイルは、example/resources/ExampleFrame.propertiesとなります。
+デフォルトロケール以外のリソースファイルも用意したい場合は、ExampleFrame_ja.properties, ExampleFrame_en.propertiesなど、ロケールに対応したサフィックスを付けます。
 </p>
 
 <h2>フレームクラスの作成</h2>

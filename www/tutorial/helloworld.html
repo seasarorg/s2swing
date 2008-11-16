@@ -22,18 +22,17 @@
 			<li><a href="binding.html">バインディング</a></li>
 			<li><a href="validation.html">バリデーション</a></li>
 			<li><a href="converter.html">コンバータ</a></li>
-			<li><a href="component_builder.html">コンポーネントビルダ</a></li>
-			<li><a href="menu_builder.html">メニュービルダ</a></li>
 		</ul>
 	</li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
+	<li><a href="../faq/index.html">FAQ</a>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
 
 <div class="center">
 
-<h1>Hello World</h1>
+<h1>Hello World - S2Swing チュートリアル</h1>
 
 <p class="ref">
 このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのhelloworldパッケージ以下にあります。
@@ -94,13 +93,13 @@ public class HelloWorld extends S2SingleFrameApplication {
 </pre>
 
 <p>
-HelloWorldクラスは、基底クラスのstartup()メソッドをオーバーライドしています。
+7行目では、基底クラスのstartup()メソッドをオーバーライドしています。
 このメソッド内で、先ほどのHelloWorldFrameオブジェクトを引数とし、show()メソッドを呼び出します。
 この記述によって、アプリケーションの起動時に、フレームが画面に表示されるようになります。
 </p>
 
 <p>
-また、main()メソッドにも注目してください。HelloWorldクラス自身を引数にして、launch()メソッドを呼び出しています。
+11行目からのmain()メソッドにも注目してください。HelloWorldクラス自身を引数にして、launch()メソッドを呼び出しています。
 これは、Swing Application Frameworkでアプリケーションを起動するときの定型コードになります。
 </p>
 

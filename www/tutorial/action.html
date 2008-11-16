@@ -22,18 +22,17 @@
 			<li><a href="binding.html">バインディング</a></li>
 			<li><a href="validation.html">バリデーション</a></li>
 			<li><a href="converter.html">コンバータ</a></li>
-			<li><a href="component_builder.html">コンポーネントビルダ</a></li>
-			<li><a href="menu_builder.html">メニュービルダ</a></li>
 		</ul>
 	</li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
+	<li><a href="../faq/index.html">FAQ</a>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
 
 <div class="center">
 
-<h1>アクション</h1>
+<h1>アクション - S2Swing チュートリアル</h1>
 
 <p class="ref">
 このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのactionパッケージ以下にあります。
@@ -46,12 +45,18 @@
 <h2>アクションとは</h2>
 
 <p>
-javax.swing.Actionインタフェースで提供されるアクションを使用すると、ボタンやメニュー項目のクリックに対応する
-「新規作成」や「上書き保存」といったひとまとまりの機能を、統一的に記述することが可能になります。
-S2Swingでは、アノテーションやリソースファイルを活用して、このアクションをより便利に定義することができます。
+Swingのjavax.swing.Actionインタフェースは、ボタンやメニュー項目のクリックに対応する
+「新規作成」や「上書き保存」といったひとまとまりの機能を、統一的に記述するための仕組みです。
+S2Swingでは、@S2Actionアノテーションやリソースファイルを活用して、このアクションをより便利に定義することができます。
 </p>
 
 <h2>フレームクラスの作成</h2>
+
+<p>
+アクションの使用例として、チェックボックスとボタンが配置してあるフレームを考えます。
+ボタンにはアクションが関連付けられており、クリック時にアクションが実行されるものとします。
+また、チェックボックスがチェックされているときに限り、アクションを実行可能とします。
+</p>
 
 <p>
 それでは、以下のActionUsageFrameクラスを見てみましょう。
@@ -100,19 +105,19 @@ public class ActionUsageFrame extends S2Frame {
 
 <p>
 19行目では、buttonフィールドに、@ActionTargetアノテーションで"showMessage"という文字列が指定されています。
-これは、「buttonのクリック時にshowMessageアクションを呼び出しなさい」という指示になります。
+このアノテーションによって、buttonとshowMessageアクションが関連付けられています。
 </p>
 
 <p>
 showMessageアクションの処理内容は、35行目からのshowMessage()メソッドに記述されています。
-S2Swingでは、引数を持たないpublicメソッドに@S2Actionアノテーションを付与することで、アクションを表現します。
+無引数のpublicメソッドに@S2Actionアノテーションを付与することで、そのメソッドがアクションハンドラとなります。
 このとき、メソッド名がそのままアクション名になります。
 </p>
 
 <p>
 さらに34行目では、@S2Actionアノテーションにenabled引数として"showMessageEnabled"が指定されています。
-これは、showMessageEnabledプロパティ、つまりisShowMessageEnabled()メソッドの戻り値がtrueのときに限り、
-アクションを実行可能とすることを指示しています。この引数には、任意のOGNL式を指定できます。
+これは、showMessageEnabledプロパティ、つまり30行目からのisShowMessageEnabled()メソッドの戻り値がtrueのときに限り、
+アクションを実行可能とすることを指示しています。なお、この引数には任意のOGNL式を指定できます。
 </p>
 
 <p class="remark">

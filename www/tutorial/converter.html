@@ -22,18 +22,167 @@
 			<li><a href="binding.html">バインディング</a></li>
 			<li><a href="validation.html">バリデーション</a></li>
 			<li><a href="converter.html">コンバータ</a></li>
-			<li><a href="component_builder.html">コンポーネントビルダ</a></li>
-			<li><a href="menu_builder.html">メニュービルダ</a></li>
 		</ul>
 	</li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
+	<li><a href="../faq/index.html">FAQ</a>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
 
 <div class="center">
 
-<h1>コンバータ</h1>
+<h1>コンバータ - S2Swing チュートリアル</h1>
+
+<p class="ref">
+このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのconverterパッケージ以下にあります。
+</p>
+
+<p>
+S2Swingでは、@DateToStringや@NumberToStringといったコンバータアノテーションを使うことで、モデルオブジェクトの値を整形してUIコンポーネントに表示したり、
+逆にコンポーネントの入力を適切に変換してモデルオブジェクトへ代入することができます。
+</p>
+
+<h2>コンバータによる変換の流れ</h2>
+
+<p>
+S2Swingでは、基本的に次のような流れで変換を記述します。
+</p>
+
+<ol>
+	<li>モデルクラスのプロパティに、コンバータアノテーションを付加します。</li>
+	<li>ObservableBeans.create()メソッドを使用して、モデルクラスのオブジェクトを作成します。</li>
+	<li>Binderクラスを使用して、モデルオブジェクトのプロパティと画面コンポーネントをバインディングします。</li>
+	<li>（必要であれば）Binder#addBindingStateListener()メソッドを使用して、変換成功/失敗の状態変更リスナーを登録します。</li>
+</ol>
+
+<h2>モデルクラスの作成</h2>
+
+<p>
+上記の流れを具体的に見ていきましょう。例として、誕生日の日付を"yyyy-MM-dd"の書式でテキストフィールドにバインディングする場合を考えます。
+このような書式付き入力はJFormattedTextFieldでも実現できますが、S2Swingのコンバータ機構を使用すれば、よりスマートに記述が可能です。
+</p>
+
+<p>
+以下のように、Birthクラスを作成します。
+</p>
+
+<pre name="code" class="java">
+package converter;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import org.seasar.swing.converter.annotation.DateToString;
+import org.seasar.swing.converter.annotation.DateToString.DateFormatType;
+
+public class Birth implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @DateToString(type = DateFormatType.CUSTOM, pattern = "yyyy-MM-dd")
+    private Date birthday;
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+}
+</pre>
+
+<p>
+@DateToStringアノテーションを使い、birthdayプロパティのカスタム書式として"yyyy-MM-dd"を指定しています。
+なお、アノテーションの位置は、フィールド、getter、setterのいずれでも認識されます。
+</p>
+
+<h2>フレームクラスの作成</h2>
+
+<p>
+次に、誕生日の入力画面となるConverterUsageFrameクラスを作りましょう。
+</p>
+
+<pre name="code" class="java">
+package converter;
+
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.GregorianCalendar;
+
+import javax.swing.JTextField;
+
+import org.seasar.swing.beans.ObservableBeans;
+import org.seasar.swing.binding.Binder;
+import org.seasar.swing.binding.BindingStateEvent;
+import org.seasar.swing.binding.BindingStateListener;
+import org.seasar.swing.component.S2Frame;
+
+public class ConverterUsageFrame extends S2Frame {
+    private static final long serialVersionUID = 1L;
+
+    private JTextField textField = new JTextField();
+
+    private Birth birth;
+
+    public void initialize() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        textField.setPreferredSize(new Dimension(360, 24));
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        c.add(textField);
+
+        birth = ObservableBeans.create(Birth.class);
+        birth.setBirthday(new GregorianCalendar(1996, 0, 23).getTime());
+
+        Binder binder = new Binder();
+        binder.add(birth, "birthday", textField, "text");
+
+        binder.addBindingStateListener(new BindingStateListener() {
+            public void bindingStateChanged(BindingStateEvent e) {
+                setTitle(e.getSimpleErrorMessage());
+            }
+        });
+
+        binder.bind();
+    }
+}
+</pre>
+
+<p>
+このコードのように、変換は通常、バインディングとセットで行われます。ちなみに、31行目で誕生日の初期値としている1996年1月23日は、JDK 1.0のリリース日です。
+</p>
+
+<p>
+バインディングのソースプロパティ（birth.birthday）が変更されると、ただちに正方向の変換（Date → String）が行われて、ターゲットプロパティ（textField.text）に代入されます。
+また、ターゲットプロパティが変更されると、ただちに逆方向の変換（String → Date）が行われて、ソースプロパティに代入されます。
+変換が失敗した場合、プロパティの更新は行われません。
+</p>
+
+<p>
+この変換の結果は、BindingStateEvent型のイベントとしてリスナーへ通知されます。
+36行目からは、変換が失敗した場合のエラーメッセージをフレームのタイトルに表示するよう、BindingStateEventのイベントハンドラを記述しています。
+</p>
+
+<h2>アプリケーションの実行</h2>
+
+<p>
+それでは、アプリケーションを実行してみましょう。初期状態で「1996-01-23」と、指定した書式通りに日付が表示されていますね。
+</p>
+
+<p>
+<img src="images/converter1.png" />
+</p>
+
+<p>
+テキストフィールドの入力を変更して、フレームタイトルがどう変化するか観察してみてください。
+不正な書式の場合は、「birthday : 入力の書式が正しくありません。」とエラーが表示されることが確認できます。
+</p>
+
+<p>
+<img src="images/converter2.png" />
+</p>
 
 </div>
 <div style="clear: both;"></div>
@@ -42,5 +191,9 @@
 Copyright &copy; 2008 The Seasar Foundation and the others. All rights reserved.
 </address>
 
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
 </body>
 </html>

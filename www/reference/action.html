@@ -1,0 +1,161 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" type="text/css" href="../syntax/css/SyntaxHighlighter.css" />
+	<script type="text/javascript" src="../syntax/js/shCore.js"></script>
+	<script type="text/javascript" src="../syntax/js/shBrushJava.js"></script>
+	<script type="text/javascript" src="../syntax/js/shBrushXml.js"></script>
+	<title>アクション - S2Swing リファレンス</title>
+</head>
+<body>
+
+<div class="left">
+<ul class="menu">
+	<li><a href="../download/index.html">ダウンロード</a></li>
+	<li><a href="../tutorial/index.html">チュートリアル</a></li>
+	<li><a href="../reference/index.html">リファレンス</a>
+		<ul class="submenu">
+			<li><a href="action.html">アクション</a></li>
+			<li><a href="binding.html">バインディング</a></li>
+			<li><a href="validation.html">バリデーション</a></li>
+			<li><a href="converter.html">コンバータ</a></li>
+		</ul>
+	</li>
+	<li><a href="../faq/index.html">FAQ</a>
+	<li><a href="../javadoc/index.html">Javadoc</a></li>
+</ul>
+</div>
+
+<div class="center">
+
+<h1>アクション - S2Swing リファレンス</h1>
+
+<p>
+アクションの具体的な使用手順については、<a href="../tutorial/action.html">チュートリアル</a>を参照してください。
+</p>
+
+<ul>
+	<li><a href="#s2action">@S2Actionアノテーション</a></li>
+	<li><a href="#action_target">@ActionTargetアノテーション</a></li>
+	<li><a href="#action_map">アクションマップ</a></li>
+	<li><a href="#resource">リソースファイル</a></li>
+</ul>
+
+<a name="s2action"></a>
+<h2>@S2Actionアノテーション</h2>
+
+<p>
+@S2Actionは、Swing Application Frameworkの@Actionに相当するアノテーションで、メソッドをアクションハンドラ化する機能を持ちます。
+@S2Actionアノテーションは@Actionと比較して、アクションの実行可能状態（enabled）と選択状態（selected）をよりスマートに記述できるという特徴があります。
+</p>
+
+<p>
+@S2Actionアノテーションを付与するメソッドは、以下の要件を満たす必要があります。
+</p>
+
+<ul>
+	<li>引数を持たないpublicメソッドである。</li>
+	<li>メソッド名がそのまま、アクション名を示す。</li>
+	<li>アクション処理を非同期的に実行する場合は、非同期処理を受け持つorg.jdesktop.application.Taskオブジェクトを戻り値とする。それ以外の場合は戻り値を持たない。</li>
+</ul>
+
+<p>
+また@S2Actionアノテーションには、オプションとして以下の引数を指定可能です。
+</p>
+
+<table class="grid">
+<tr>
+	<th>引数名</th>
+	<th>説明</th>
+</tr>
+<tr>
+	<td>enabled</td>
+	<td>アクションの実行可能条件を評価する式。メソッドを所有するオブジェクトを評価の基点としたOGNL式で記述します。</td>
+</tr>
+<tr>
+	<td>property</td>
+	<td>アクションが選択状態となる条件を評価する式。メソッドを所有するオブジェクトを評価の基点としたOGNL式で記述します。</td>
+</tr>
+<tr>
+	<td>block</td>
+	<td>アクションを非同期実行する場合、そのブロッキングレベル。NONE, ACTION, COMPONENT, WINDOW, APPLICATIONのいずれかを指定します。</td>
+</tr>
+</table>
+
+<a name="action_target"></a>
+<h2>@ActionTargetアノテーション</h2>
+
+<p>
+アクションと特定のUIコンポーネントを結び付ける場合、@ActionTargetアノテーションを使用することができます。
+AbstractButtonクラスを継承したコンポーネント（JButton, JToggleButton, JMenuItemなど）のフィールドに対して@ActionTarget
+アノテーションを付与すると、そのコンポーネントにアクションが自動設定されます。
+</p>
+
+<p>
+例えば以下のコードでは、buttonコンポーネントにfooアクションが設定されます。
+</p>
+
+<pre name="code" class="java">
+public class MyFrame extends S2Frame {
+    @ActionTarget("foo")
+    private JButton button = new JButton();
+
+    @S2Action
+    public void foo() {
+        // ...
+    }
+}
+</pre>
+
+<a name="action_map"></a>
+<h2>アクションマップ</h2>
+
+<p>
+アクションをUIコンポーネントに対して手動で設定する場合は、S2FrameクラスやS2Dialogクラスが持つgetActionMap()メソッドを使用し、
+アクションマップを取得します。アクションマップのget()メソッドで、@S2Actionアノテーションで定義されたアクションを取り出すことができます。
+</p>
+
+<a name="resource"></a>
+<h2>リソースファイル</h2>
+
+<p>
+アクションの表示テキストやショートカットキー、アイコンなどは、リソースファイルに記述します。書式は以下のようになります。
+</p>
+
+<table class="grid">
+<tr>
+	<th>キー</th>
+	<th>内容</th>
+</tr>
+<tr>
+	<td>[actionName].Action.text</td>
+	<td>テキスト。ボタンやメニュー項目のキャプションになります。</td>
+</tr>
+<tr>
+	<td>[actionName].Action.shortDescription</td>
+	<td>簡単な説明。ボタンやメニュー項目のツールチップテキストになります。</td>
+</tr>
+<tr>
+	<td>[actionName].Action.accelerator</td>
+	<td>ショートカットキー。"ctrl A"のように指定します。</td>
+</tr>
+<tr>
+	<td>[actionName].Action.icon</td>
+	<td>アイコン。画像ファイル名を、リソースファイルからの相対パスで記述します。</td>
+</tr>
+</table>
+
+</div>
+<div style="clear: both;"></div>
+
+<address>
+Copyright &copy; 2008 The Seasar Foundation and the others. All rights reserved.
+</address>
+
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
+</body>
+</html>

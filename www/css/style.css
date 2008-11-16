@@ -3,6 +3,10 @@ body {
 	line-height: 140%;
 }
 
+table {
+	font-size: small;
+}
+
 h1 {
 }
 
@@ -42,8 +46,18 @@ p.remark {
 	background-color: #FFFFF0;
 }
 
+p.ref {
+	color: #006600;
+	font-weight: bold;
+}
+
 pre {
 	margin: 8px;
+}
+
+pre.console {
+	padding: 8px;
+	background-color: #FFEEEE;
 }
 
 pre.properties {
@@ -70,4 +84,20 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+table.grid {
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table.grid th {
+	border: 1px solid #444444;
+	padding: 2px 4px;
+	background-color: #FFEEEE;
+}
+
+table.grid td {
+	border: 1px solid #444444;
+	padding: 2px 4px;
 }

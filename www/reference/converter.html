@@ -6,11 +6,131 @@
 	<script type="text/javascript" src="../syntax/js/shCore.js"></script>
 	<script type="text/javascript" src="../syntax/js/shBrushJava.js"></script>
 	<script type="text/javascript" src="../syntax/js/shBrushXml.js"></script>
-	<title>バリデーション - S2Swing リファレンス</title>
+	<title>コンバータ - S2Swing リファレンス</title>
 </head>
 <body>
 
-<h1>バリデーション</h1>
+<div class="left">
+<ul class="menu">
+	<li><a href="../download/index.html">ダウンロード</a></li>
+	<li><a href="../tutorial/index.html">チュートリアル</a></li>
+	<li><a href="../reference/index.html">リファレンス</a>
+		<ul class="submenu">
+			<li><a href="action.html">アクション</a></li>
+			<li><a href="binding.html">バインディング</a></li>
+			<li><a href="validation.html">バリデーション</a></li>
+			<li><a href="converter.html">コンバータ</a></li>
+		</ul>
+	</li>
+	<li><a href="../faq/index.html">FAQ</a>
+	<li><a href="../javadoc/index.html">Javadoc</a></li>
+</ul>
+</div>
 
+<div class="center">
+
+<h1>コンバータ - S2Swing リファレンス</h1>
+
+<p>
+コンバータの具体的な使用手順については、<a href="../tutorial/converter.html">チュートリアル</a>を参照してください。
+</p>
+
+<ul>
+	<li><a href="#list">コンバータアノテーション一覧</a></li>
+	<li><a href="#with_binding">バインディングとの併用</a></li>
+	<li><a href="#custom_validation">カスタムコンバータ</a></li>
+</ul>
+
+<a name="list"></a>
+<h2>コンバータアノテーション一覧</h2>
+
+<p>
+S2Swingで定義済みのコンバータアノテーションは、以下の通りです。
+各アノテーションの詳細はAPIドキュメントを参照してください。
+</p>
+
+<table class="grid">
+	<tr>
+		<th>アノテーション名</th>
+		<th>内容</th>
+	</tr>
+	<tr>
+		<td><a href="">@DateToString</a></td>
+		<td>Date型とString型の相互変換を行います。</td>
+	</tr>
+	<tr>
+		<td><a href="">@NumberToString</a></td>
+		<td>数値型とString型の相互変換を行います。</td>
+	</tr>
+	<tr>
+		<td><a href="">@Trim</a></td>
+		<td>文字列から先頭と末尾の空白を削除します。</td>
+	</tr>
+</table>
+
+<a name="with_binding"></a>
+<h2>バインディングとの併用</h2>
+
+<p>
+コンバータは通常、バインディングと併用することになります。
+
+バインディングでは、ソースプロパティが変更された場合は正方向、ターゲットプロパティが変更された場合は逆方向に変換が行われます。
+変換が成功すれば、その値がバインディング先に代入されます。変換が失敗した場合、代入は行われません。
+<p>
+
+<p>
+変換の結果はBindingStateEvent型のイベントとして、BindingStateListenerリスナーに通知されます。
+このリスナーに、エラーメッセージの表示処理などを記述します。
+</p>
+
+<a name="custom_converter"></a>
+<h2>カスタムコンバータ</h2>
+
+<p>
+以下の手順にしたがって、独自のコンバータを定義することができます。
+</p>
+
+<h3>コンバータクラスの作成</h3>
+
+<p>
+org.jdesktop.beansbinding.Converterクラスを継承し、コンバータクラスを作成します。
+</p>
+
+<h3>コンバータクラスの指定</h3>
+
+<p>
+変換を行いたいモデルクラスのプロパティに対し、定義済みコンバータアノテーションの代わりに
+<a href="">@CustomConverter</a>アノテーションを付加し、独自に作成したコンバータクラス名を引数で指定します。
+</p>
+
+<p>
+例えば、ModelクラスのaddressプロパティにMyConverterというコンバータクラスを適用したい場合には、
+</p>
+
+<pre name="code" class="java">
+public class Model {
+    @CustomConverter(type = MyConverter.class)
+    private String address;
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+}
+</pre>
+
+<p>
+のように指定します。
+</p>
+
+</div>
+<div style="clear: both;"></div>
+
+<address>
+Copyright &copy; 2008 The Seasar Foundation and the others. All rights reserved.
+</address>
+
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
 </body>
 </html>

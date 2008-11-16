@@ -10,7 +10,252 @@
 </head>
 <body>
 
-<h1>バリデーション</h1>
+<div class="left">
+<ul class="menu">
+	<li><a href="../download/index.html">ダウンロード</a></li>
+	<li><a href="../tutorial/index.html">チュートリアル</a></li>
+	<li><a href="../reference/index.html">リファレンス</a>
+		<ul class="submenu">
+			<li><a href="action.html">アクション</a></li>
+			<li><a href="binding.html">バインディング</a></li>
+			<li><a href="validation.html">バリデーション</a></li>
+			<li><a href="converter.html">コンバータ</a></li>
+		</ul>
+	</li>
+	<li><a href="../faq/index.html">FAQ</a>
+	<li><a href="../javadoc/index.html">Javadoc</a></li>
+</ul>
+</div>
 
+<div class="center">
+
+<h1>バリデーション - S2Swing リファレンス</h1>
+
+<p>
+バリデーションの具体的な使用手順については、<a href="../tutorial/validation.html">チュートリアル</a>を参照してください。
+</p>
+
+<ul>
+	<li><a href="#list">制約アノテーション一覧</a></li>
+	<li><a href="#with_binding">バインディングとの併用</a></li>
+	<li><a href="#without_binding">バインディングを使用しない単独バリデーション</a></li>
+	<li><a href="#custom_error_message">エラーメッセージのカスタマイズ</a></li>
+	<li><a href="#custom_validation">カスタムバリデーション</a></li>
+</ul>
+
+<a name="list"></a>
+<h2>制約アノテーション一覧</h2>
+
+<p>
+S2Swingで定義済みの制約アノテーションは、以下の通りです。
+各アノテーションの詳細はAPIドキュメントを参照してください。
+</p>
+
+<table class="grid">
+	<tr>
+		<th>アノテーション名</th>
+		<th>内容</th>
+	</tr>
+	<tr>
+		<td><a href="">@Required</a></td>
+		<td>入力が必須であることを指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@NotBlank</a></td>
+		<td>文字列が非空白であることを指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@Length</a></td>
+		<td>文字列の長さの範囲を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@Pattern</a></td>
+		<td>文字列が従うべき正規表現を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@ByteRange</a></td>
+		<td>byte型数値の範囲を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@ShortRange</a></td>
+		<td>short型数値の範囲を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@IntRange</a></td>
+		<td>int型数値の範囲を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@LongRange</a></td>
+		<td>long型数値の範囲を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@FloatRange</a></td>
+		<td>float型数値の範囲を指定します。</td>
+	</tr>
+	<tr>
+		<td><a href="">@DoubleRange</a></td>
+		<td>double型数値の範囲を指定します。</td>
+	</tr>
+</table>
+
+<a name="with_binding"></a>
+<h2>バインディングとの併用</h2>
+
+<p>
+バリデーションは通常、バインディングと併用することになります。
+バインディングでは、ターゲットプロパティが変更された時点で制約が検証され、成功すればその値がソースプロパティに代入されます。
+バリデーションが失敗した場合、ソースプロパティは変更されません。
+<p>
+
+<p>
+バリデーションの結果はBindingStateEvent型のイベントとして、BindingStateListenerリスナーに通知されます。
+このリスナーに、エラーメッセージの表示処理などを記述します。
+</p>
+
+<a name="without_binding"></a>
+<h2>バインディングを使用しない単独バリデーション</h2>
+
+<p>
+<a href="">ModelValidator</a>クラスを使用することで、モデルクラスのプロパティに付加した制約を、単独で検証することも可能です。
+</p>
+
+<a name="custom_error_message"></a>
+<h2>エラーメッセージのカスタマイズ</h2>
+
+<p>
+デフォルトでは、バリデーションが失敗したときに生成されるエラーメッセージは、以下の形式をとります。
+</p>
+
+<pre class="console">
+propertyName : errorMessage
+</pre>
+
+<p>
+例えば、"age"という名前のプロパティが@Required制約に違反したときのエラーメッセージは、次のようになります。
+</p>
+
+<pre class="console">
+age : 入力が必須です。
+</pre>
+
+<p>
+リソースファイルを使って、このpropertyName側とerrorMessage側の両方をカスタマイズすることができます。
+</p>
+
+<h3>プロパティ名のカスタマイズ</h3>
+
+<p>
+エラーメッセージ中のプロパティ名をカスタマイズするには、制約アノテーションを持つモデルクラスに対応するリソースファイルに、以下の形式で記述を行います。
+</p>
+
+<pre class="console">
+[propertyName].[label] = [customLabel]
+</pre>
+
+<p>
+例えば、example.Modelクラスのageプロパティの表示名を「年齢」としたい場合には、example/resources/Model.propertiesファイルに
+</p>
+
+<pre class="console">
+age.label = 年齢
+</pre>
+
+<p>
+と記述します。
+</p>
+
+<h3>メッセージ本体のカスタマイズ</h3>
+
+<p>
+エラーメッセージの本体部分をカスタマイズするには、制約アノテーションを持つモデルクラスに対応するリソースファイルに、以下の形式で記述を行います。
+</p>
+
+<pre class="console">
+[propertyName].[constraintName].[errorType] = [customMessage]
+</pre>
+
+<p>
+[constraintName]には、制約アノテーションの名前がそのまま入ります。@Requiredアノテーションの場合は"Required"となります。
+</p>
+
+<p>
+[errorType]には、エラーの種類を示す識別子が入ります。この識別子は、制約によって異なります。例えば@IntRangeアノテーションの場合、
+</p>
+
+<pre class="console">
+min.failed = 入力は {min} 以上でなければいけません。
+max.failed = 入力は {max} 以下でなければいけません。
+both.failed = 入力は {min} 以上 {max} 以下でなければいけません。
+</pre>
+
+<p>
+の3種類が定義されています。詳細はAPIドキュメントを参照してください。
+</p>
+
+<p>
+実際の記述例として、example.Modelクラスのageプロパティに@IntRange制約があり、この制約違反のメッセージをカスタマイズするケースを考えます。
+この場合は、example/resources/Model.propertiesファイルに
+</p>
+
+<pre class="console">
+age.IntRange.min.failed = 入力は最低 {min} 歳からです。
+age.IntRange.max.failed = 入力は最高 {max} 歳までです。
+age.IntRange.both.failed = 入力は {min} 歳から {max} 歳までです。
+</pre>
+
+<p>
+のように記述します。
+</p>
+
+<a name="custom_validation"></a>
+<h2>カスタムバリデーション</h2>
+
+<p>
+以下の手順にしたがって、独自のバリデーションを定義することができます。
+</p>
+
+<h3>制約クラスの作成</h3>
+
+<p>
+<a href="">Constraint</a>インタフェースを実装し、制約クラスを作成します。
+このとき、<a href="">AbstractConstraint</a>クラスを継承すると便利です。
+</p>
+
+<h3>制約クラスの指定</h3>
+
+<p>
+制約を課したいモデルクラスのプロパティに対し、定義済み制約アノテーションの代わりに
+<a href="">@CustomConstraint</a>アノテーションを付加し、独自に作成した制約クラス名を引数で指定します。
+</p>
+
+<p>
+例えば、ModelクラスのaddressプロパティにMyConstraintという制約クラスを適用したい場合には、
+</p>
+
+<pre name="code" class="java">
+public class Model {
+    @CustomConstraint(type = MyConstraint.class)
+    private String address;
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+}
+</pre>
+
+<p>
+のように指定します。
+</p>
+
+</div>
+<div style="clear: both;"></div>
+
+<address>
+Copyright &copy; 2008 The Seasar Foundation and the others. All rights reserved.
+</address>
+
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
 </body>
 </html>

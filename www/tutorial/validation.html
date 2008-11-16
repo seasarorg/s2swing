@@ -22,18 +22,159 @@
 			<li><a href="binding.html">バインディング</a></li>
 			<li><a href="validation.html">バリデーション</a></li>
 			<li><a href="converter.html">コンバータ</a></li>
-			<li><a href="component_builder.html">コンポーネントビルダ</a></li>
-			<li><a href="menu_builder.html">メニュービルダ</a></li>
 		</ul>
 	</li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
+	<li><a href="../faq/index.html">FAQ</a>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
 
 <div class="center">
 
-<h1>バリデーション</h1>
+<h1>バリデーション - S2Swing チュートリアル</h1>
+
+<p class="ref">
+このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのvalidationパッケージ以下にあります。
+</p>
+
+<p>
+S2Swingには、@Requiredや@Lengthといった制約アノテーションが用意されています。
+モデルクラスのプロパティにこれらのアノテーションを付加することで、アプリケーションにバリデーション機構を簡単に組み込むことができます。
+</p>
+
+<h2>バリデーションの流れ</h2>
+
+<p>
+S2Swingでは、基本的に次のような流れでバリデーションを記述します。
+</p>
+
+<ol>
+	<li>モデルクラスのプロパティに、制約アノテーションを付加します。</li>
+	<li>ObservableBeans.create()メソッドを使用して、モデルクラスのオブジェクトを作成します。</li>
+	<li>Binderクラスを使用して、モデルオブジェクトのプロパティと画面コンポーネントをバインディングします。</li>
+	<li>Binder#addBindingStateListener()メソッドを使用して、バリデーション成功/失敗の状態変更リスナーを登録します。</li>
+</ol>
+
+<h2>モデルクラスの作成</h2>
+
+<p>
+上記の流れを具体的に見ていきましょう。ここでは、テキストフィールドに4文字以上のユーザ名を入力させる場面を考えてみます。
+まず、ユーザ情報を示すUserクラスを作成します。ユーザ名を示すnameプロパティに、@Lengthアノテーションを使って制約を指定します。
+</p>
+
+<pre name="code" class="java">
+package validation;
+
+import java.io.Serializable;
+
+import org.seasar.swing.validator.annotation.Length;
+
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Length(min = 4)
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+</pre>
+
+<p>
+@Length(min = 4)として、nameプロパティが4文字以上でなければならないことを指示しています。
+なお、アノテーションの位置は、フィールド、getter、setterのいずれでも認識されます。
+</p>
+
+<h2>フレームクラスの作成</h2>
+
+<p>
+次に、ユーザ名の入力画面となるValidationUsageFrameクラスを作りましょう。
+</p>
+
+<pre name="code" class="java">
+package validation;
+
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+import javax.swing.JTextField;
+
+import org.seasar.swing.beans.ObservableBeans;
+import org.seasar.swing.binding.Binder;
+import org.seasar.swing.binding.BindingStateEvent;
+import org.seasar.swing.binding.BindingStateListener;
+import org.seasar.swing.component.S2Frame;
+
+public class ValidationUsageFrame extends S2Frame {
+    private static final long serialVersionUID = 1L;
+
+    private JTextField textField = new JTextField();
+
+    private User user;
+
+    public void initialize() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        textField.setPreferredSize(new Dimension(360, 24));
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        c.add(textField);
+
+        user = ObservableBeans.create(User.class);
+
+        Binder binder = new Binder();
+        binder.add(user, "name", textField, "text");
+
+        binder.addBindingStateListener(new BindingStateListener() {
+            public void bindingStateChanged(BindingStateEvent e) {
+                setTitle(e.getSimpleErrorMessage());
+            }
+        });
+
+        binder.bind();
+    }
+}
+</pre>
+
+<p>
+このコードのように、バリデーションは通常、バインディングとセットで行われます。
+</p>
+
+<p>
+バインディングのターゲットオブジェクト（ここではtextFieldコンポーネント）のプロパティが変更されると、ただちにバリデーションが行われます。
+バリデーションが成功すれば、ターゲット値がソースプロパティ（ここではuser.name）に代入されます。バリデーションが失敗した場合、ソースプロパティは変更されません。
+このバリデーションの結果は、BindingStateEvent型のイベントとしてリスナーへ通知されます。
+</p>
+
+<p>
+34行目では、Binder#addBindingStateListener()を呼び出して、BindingStateEventのイベントハンドラを記述しています。
+ハンドラの内容は、エラーメッセージをフレームのタイトルに設定するという単純なものです。
+</p>
+
+<h2>アプリケーションの実行</h2>
+
+<p>
+それでは、アプリケーションを実行してみましょう。初期状態で、フレームのタイトルが「name : 入力は4文字以上でなければいけません。」となっていますね。
+</p>
+
+<p>
+<img src="images/validation1.png" />
+</p>
+
+<p>
+テキストフィールドに文字を入力して、フレームタイトルがどう変化するか観察してみてください。
+入力が4文字以上に達したとき、エラーメッセージが消えることが確認できます。
+</p>
+
+<p>
+<img src="images/validation2.png" />
+</p>
 
 </div>
 <div style="clear: both;"></div>
@@ -42,5 +183,9 @@
 Copyright &copy; 2008 The Seasar Foundation and the others. All rights reserved.
 </address>
 
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
 </body>
 </html>

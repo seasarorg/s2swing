@@ -10,7 +10,148 @@
 </head>
 <body>
 
-<h1>バインディング</h1>
+<div class="left">
+<ul class="menu">
+	<li><a href="../download/index.html">ダウンロード</a></li>
+	<li><a href="../tutorial/index.html">チュートリアル</a></li>
+	<li><a href="../reference/index.html">リファレンス</a>
+		<ul class="submenu">
+			<li><a href="action.html">アクション</a></li>
+			<li><a href="binding.html">バインディング</a></li>
+			<li><a href="validation.html">バリデーション</a></li>
+			<li><a href="converter.html">コンバータ</a></li>
+		</ul>
+	</li>
+	<li><a href="../faq/index.html">FAQ</a>
+	<li><a href="../javadoc/index.html">Javadoc</a></li>
+</ul>
+</div>
 
+<div class="center">
+
+<h1>バインディング - S2Swing リファレンス</h1>
+
+<p>
+バインディングの具体的な使用手順については、<a href="../tutorial/binding.html">チュートリアル</a>を参照してください。
+</p>
+
+<ul>
+	<li><a href="#observable_beans">ObservableBeansクラスの使用</a></li>
+	<li><a href="#with_jlist">JListとのバインディング</a></li>
+	<li><a href="#with_jcombobox">JComboBoxとのバインディング</a></li>
+	<li><a href="#with_jtable">JTableとのバインディング</a></li>
+</ul>
+
+<a name="observable_beans"></a>
+<h2>ObservableBeansクラスの使用</h2>
+
+<p>
+</p>
+
+<a name="with_jlist"></a>
+<h2>JListとのバインディング</h2>
+
+<p>
+JListとのバインディングには、以下のバリエーションがあります。
+</p>
+
+<h3>選択可能項目</h3>
+
+<p>
+JListの選択可能項目に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>ソースプロパティを、java.util.Listを実装する型で宣言する。</li>
+	<li>ソースプロパティに対する要素の追加や削除も監視対象とする場合は、ソースプロパティをObservableCollections.observableList()メソッドでラップする。</li>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名をnullとする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、選択可能項目とのバインディングは読み取り専用（ソース→ターゲット方向のみ）となります。
+</p>
+
+<h3>単一選択値</h3>
+
+<p>
+JListの単一選択値に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名を"selectedElement"とする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、単一選択値とのバインディングは書き込み専用（ターゲット→ソース方向のみ）となります。
+</p>
+
+<h3>複数選択値</h3>
+
+<p>
+JListの複数選択値に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>ソースプロパティを、java.util.Listを実装する型で宣言する。</li>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名を"selectedElements"とする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、複数選択値とのバインディングは書き込み専用（ターゲット→ソース方向のみ）となります。
+</p>
+
+<a name="with_jcombobox"></a>
+<h2>JComboBoxとのバインディング</h2>
+
+<p>
+JComboBoxとのバインディングには、以下のバリエーションがあります。
+</p>
+
+<h3>選択可能項目</h3>
+
+<p>
+JComboBoxの選択可能項目に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>ソースプロパティを、java.util.Listを実装する型で宣言する。</li>
+	<li>ソースプロパティに対する要素の追加や削除も監視対象とする場合は、ソースプロパティをObservableCollections.observableList()メソッドでラップする。</li>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名をnullとする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、選択可能項目とのバインディングは読み取り専用（ソース→ターゲット方向のみ）となります。
+</p>
+
+<h3>選択値</h3>
+
+<p>
+JComboBoxの選択値に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名を"selectedItem"とする。</li>
+</ul>
+
+<a name="with_jtable"></a>
+<h2>JTableとのバインディング</h2>
+
+<p>
+JTableとのバインディング
+</p>
+
+
+
+</div>
+<div style="clear: both;"></div>
+
+<address>
+Copyright &copy; 2008 The Seasar Foundation and the others. All rights reserved.
+</address>
+
+<script type="text/javascript">
+dp.SyntaxHighlighter.ClipboardSwf = "../syntax/swf/clipboard.swf";
+dp.SyntaxHighlighter.HighlightAll("code");
+</script>
 </body>
 </html>

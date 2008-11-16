@@ -22,18 +22,17 @@
 			<li><a href="binding.html">バインディング</a></li>
 			<li><a href="validation.html">バリデーション</a></li>
 			<li><a href="converter.html">コンバータ</a></li>
-			<li><a href="component_builder.html">コンポーネントビルダ</a></li>
-			<li><a href="menu_builder.html">メニュービルダ</a></li>
 		</ul>
 	</li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
+	<li><a href="../faq/index.html">FAQ</a>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
 
 <div class="center">
 
-<h1>バインディング</h1>
+<h1>バインディング - S2Swing チュートリアル</h1>
 
 <p class="ref">
 このページの内容に対応するソースコードは、s2swing-tutorialアーカイブのbindingパッケージ以下にあります。
@@ -60,6 +59,8 @@ S2Swingでは、Beans Bindingをベースとして、さらに簡潔にバイン
 
 <p>
 モデルクラスの例として、Counterクラスを作成しましょう。Counterクラスはint型のcountプロパティを持つ、いわゆるPOJO(Plain Old Java Object)クラスです。
+なお、後述するObservableBeans.create()メソッドでモデルクラスのインスタンスを生成する場合、クラスが必ずデフォルトコンストラクタ
+（引数のないコンストラクタ）を持つようにしてください。
 </p>
 
 <pre name="code" class="java">
@@ -142,7 +143,7 @@ public class BindingUsageFrame extends S2Frame {
 
 <p>
 33行目で、ObservableBeans.create()メソッドを使ってCounterオブジェクトを作成しているところに注目してください。
-ObservableBeans.create()は、バインディングで「監視可能」なPOJOオブジェクトを生成するためのメソッドです。
+ObservableBeans.create()は、「監視可能」なPOJOオブジェクトを生成するためのメソッドです（内部的には、AOPでsetterメソッドをエンハンスしています）。
 POJOオブジェクトを双方向のバインディング対象とする場合は、必ずこのメソッドを使用する必要があります。
 </p>
 
@@ -153,7 +154,7 @@ POJOオブジェクトを双方向のバインディング対象とする場合�
 </p>
 
 <p>
-ボタンのクリックに対応するincrementアクションでは、counterオブジェクト側のgetterとsetterを呼び出して、カウンタをインクリメントしています。
+41行目以降、ボタンのクリックに対応するincrement()メソッドでは、counterオブジェクト側のgetterとsetterを呼び出して、カウンタをインクリメントしています。
 </p>
 
 <p>
@@ -168,16 +169,20 @@ increment.Action.text = インクリメント
 <h2>アプリケーションの実行</h2>
 
 <p>
-それでは、BindingUsageクラスを実行してみましょう。
+それでは、BindingUsageアプリケーションを実行してみましょう。
 </p>
 
 <p>
-<img src="images/binding.png" />
+<img src="images/binding1.png" />
 </p>
 
 <p>
-ボタンをクリックすると、（ソースコード中ではcounterオブジェクトしか操作していないにも関わらず）テキストフィールドの値が正しく更新されます。
-また、テキストフィールドを直接、別の数値で書き換えてからボタンをクリックすると、書き換え後の値が正しくcounterオブジェクトに伝わっていることが確認できます。
+ボタンをクリックすると、（<b>ソースコード中ではcounterオブジェクトしか操作していないにも関わらず</b>）テキストフィールドの値が正しく更新されます。
+また、画面上でテキストフィールドを直接、別の数値で書き換えてからボタンをクリックすると、UI側での値の変更が正しくcounterオブジェクトに伝わっていることが確認できます。
+</p>
+
+<p>
+<img src="images/binding2.png" />
 </p>
 
 </div>
