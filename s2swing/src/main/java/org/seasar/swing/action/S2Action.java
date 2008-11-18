@@ -27,7 +27,6 @@ import org.seasar.swing.exception.ExceptionHandler;
 import org.seasar.swing.expression.CachedEngine;
 import org.seasar.swing.expression.ExpressionEngine;
 import org.seasar.swing.expression.OgnlEngine;
-import org.seasar.swing.resolver.ComponentResolver;
 
 /**
  * 実行可否状態と選択状態の宣言的記述をサポートしたアクションクラスです。
@@ -72,12 +71,8 @@ public class S2Action extends ApplicationAction {
     }
 
     private ExpressionEngine getExpressionEngine() {
-        String key = "expressionEngine";
-        if (ComponentResolver.hasComponent(key)) {
-            return (ExpressionEngine) ComponentResolver.getComponent(key);
-        } else {
-            return DEFAULT_ENGINE;
-        }
+        // TODO 置き換え可能にする？
+        return DEFAULT_ENGINE;
     }
 
     /**
