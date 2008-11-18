@@ -99,7 +99,7 @@ S2ContainerのAOP機能やイントロスペクション機能を使用してい
 
 <p>
 NetBeansではSwing開発用にIDEが充実していますので、S2Swingの一部の機能は使用する必要がないでしょう。
-しかし、@S2Actionアノテーションや、ObservableBeansによるピュアなJavaBeansクラスのバインディング、またバリデーションやコンバータの機能は、
+しかし、@S2Actionアノテーションや、ObservableBeansによるバインディングの支援、またバリデーションやコンバータの機能は、
 NetBeans環境下でも十分に有用です。
 </p>
 
@@ -108,9 +108,9 @@ NetBeans環境下でも十分に有用です。
 <h3>S2Swingを使用する場合、フレームやダイアログは必ずS2FrameクラスやS2Dialogクラスを継承しないといけないのですか？</h3>
 
 <p>
-必ずしもS2FrameクラスやS2Dialogクラスを継承する必要はありません。リソースやアクションのインジェクションが不要なウィンドウは、
+S2FrameクラスやS2Dialogクラスの継承は必須ではありません。リソースやアクションのインジェクションが不要なウィンドウについては、
 JFrameやJDialogを直接使用しても全く問題ありません。また、インジェクションが必要な場合で、ウィンドウがS2FrameクラスやS2Dialogクラスを
-基底クラスにできないときには、ウィンドウクラスにS2ViewObjectインタフェースを実装させてください。
+基底クラスにできないときには、ウィンドウクラスにS2ViewObjectインタフェースを実装してください。
 </p>
 
 <h3>ウィンドウをsetVisible()メソッドで表示すると、アクションやリソースが設定されません。</h3>
@@ -122,8 +122,8 @@ JFrameやJDialogを直接使用しても全く問題ありません。また、�
 <h3>バインディングの際には、モデルオブジェクトを必ずObservableBeans.create()メソッドで生成しなくてはならないのですか？</h3>
 
 <p>
-必ずしもそうではありません。ObservableBeans.create()メソッドの役割は、モデルクラスのプロパティのsetterメソッドにfirePropertyChange()メソッドを
-埋め込んで、プロパティの変更を監視可能にすることです。setter中にすでにfirePropertyChange()メソッドの呼び出しが記述済みである場合や、
+必ずしもそうではありません。ObservableBeans.create()メソッドの役割は、モデルクラスのプロパティのsetterメソッドにfirePropertyChange()
+メソッドの呼び出しを埋め込んで、プロパティの変更を監視可能にすることです。setter中にすでにfirePropertyChange()メソッドの呼び出しが記述済みである場合や、
 モデルのプロパティ変更をUIコンポーネントに伝搬する必要がない場合は、ObservableBeans.create()メソッドを使用する必要はありません。
 </p>
 

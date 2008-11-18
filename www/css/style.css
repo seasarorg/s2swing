@@ -32,7 +32,7 @@ div.left {
 }
 
 div.center {
-	margin-left: 176px;
+	margin-left: 184px;
 }
 
 p {
@@ -47,7 +47,6 @@ p.remark {
 }
 
 p.ref {
-	color: #006600;
 	font-weight: bold;
 }
 

@@ -55,7 +55,7 @@ S2Swingでは、@S2Actionアノテーションやリソースファイルを活�
 <p>
 アクションの使用例として、チェックボックスとボタンが配置してあるフレームを考えます。
 ボタンにはアクションが関連付けられており、クリック時にアクションが実行されるものとします。
-また、チェックボックスがチェックされているときに限り、アクションを実行可能とします。
+またアクションは、チェックボックスがチェックされているときに限り実行できるものとします。
 </p>
 
 <p>
@@ -121,8 +121,8 @@ showMessageアクションの処理内容は、35行目からのshowMessage()メ
 </p>
 
 <p class="remark">
-@S2Actionアノテーションのenabledプロパティでは、Swing Application Frameworkの@Actionアノテーションにおける
-enabledPropertyプロパティと違い、PropertyChangeEventを扱う必要がありません。
+@S2Actionアノテーションのenabled引数では、Swing Application Frameworkの@Actionアノテーションにおける
+enabledProperty引数と違い、PropertyChangeEventを扱う必要がありません。
 </p>
 
 <h2>リソースファイルの作成</h2>
