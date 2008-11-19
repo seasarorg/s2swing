@@ -25,11 +25,11 @@ import org.seasar.swing.annotation.ConverterTarget;
 import org.seasar.swing.converter.DateToStringConverter;
 
 /**
- * {@link java.util.Date}オブジェクトと文字列の相互変換を指示するコンバータアノテーションです。 {@code type}パラメータに
- * {@code DATE, TIME, DATE_TIME}のいずれかを指定した場合、デフォルトロケールに対する規定のフォーマットが使用されます。
+ * {@link java.util.Date}オブジェクトと文字列の相互変換を指示するコンバータアノテーションです。 {@code type}引数に
+ * {@code DATE, TIME, DATE_TIME}のいずれかを指定した場合、ロケールにおける規定の書式が使用されます。
  * 
- * {@code type}パラメータに{@code CUSTOM}を指定した場合、{@code pattern}
- * パラメータまたはプロパティファイルにフォーマットを記述します。
+ * {@code type}引数に{@code CUSTOM}を指定した場合、{@code pattern}
+ * 引数またはリソースファイルに書式文字列を記述します。
  * 
  * @author kaiseh
  */
@@ -42,7 +42,15 @@ public @interface DateToString {
         DATE, TIME, DATE_TIME, CUSTOM;
     }
 
+    /**
+     * 変換書式の種類です。
+     */
     DateFormatType type();
 
+    /**
+     * {@code type}引数に{@code CUSTOM}が指定されている場合、この引数が書式文字列として使用されます。 {@code type}
+     * 引数に{@code CUSTOM}が指定されており、かつこの引数が指定されていない場合は、モデルクラスの リソースファイルに{@code
+     * [propertyName].DateToString.pattern}キーで指定された値が書式文字列となります。
+     */
     String pattern() default "";
 }

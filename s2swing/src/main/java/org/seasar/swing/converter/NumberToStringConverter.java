@@ -80,7 +80,7 @@ public class NumberToStringConverter extends Converter<Object, String>
             Class<?> propertyClass, Annotation annotation) {
         checkAndSetNumberClass(propertyClass);
 
-        NumberFormatType type = (NumberFormatType) AnnotationUtil.getParameter(
+        NumberFormatType type = (NumberFormatType) AnnotationUtil.getArgument(
                 annotation, "type");
         switch (type) {
         case NUMBER:
@@ -96,7 +96,7 @@ public class NumberToStringConverter extends Converter<Object, String>
             format = NumberFormat.getCurrencyInstance();
             break;
         case CUSTOM:
-            String pattern = (String) AnnotationUtil.getParameter(annotation,
+            String pattern = (String) AnnotationUtil.getArgument(annotation,
                     "pattern");
             if (pattern.length() == 0) {
                 pattern = Resources.getString(modelClass,

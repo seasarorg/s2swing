@@ -61,7 +61,7 @@ public class DateToStringConverter extends Converter<Date, String> implements
 
     public void read(Class<?> modelClass, String propertyName,
             Class<?> propertyClass, Annotation annotation) {
-        DateFormatType type = (DateFormatType) AnnotationUtil.getParameter(
+        DateFormatType type = (DateFormatType) AnnotationUtil.getArgument(
                 annotation, "type");
         switch (type) {
         case DATE:
@@ -74,7 +74,7 @@ public class DateToStringConverter extends Converter<Date, String> implements
             format = DateFormat.getDateTimeInstance();
             break;
         case CUSTOM:
-            String pattern = (String) AnnotationUtil.getParameter(annotation,
+            String pattern = (String) AnnotationUtil.getArgument(annotation,
                     "pattern");
             if (pattern.length() == 0) {
                 pattern = Resources.getString(modelClass,

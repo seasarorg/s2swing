@@ -159,10 +159,10 @@ public class DefaultModelPropertyDesc implements ModelPropertyDesc {
 
     private <T> T createFromAnnotation(Annotation annotation,
             Class<T> targetType) {
-        Class<?> type = (Class<?>) AnnotationUtil.getParameter(annotation,
+        Class<?> type = (Class<?>) AnnotationUtil.getArgument(annotation,
                 "type");
-        String name = (String) AnnotationUtil.getParameter(annotation, "name");
-        String[] args = (String[]) AnnotationUtil.getParameter(annotation,
+        String name = (String) AnnotationUtil.getArgument(annotation, "name");
+        String[] args = (String[]) AnnotationUtil.getArgument(annotation,
                 "args");
 
         Object result = null;

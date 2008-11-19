@@ -34,7 +34,13 @@ import org.seasar.swing.validator.LongRangeConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(LongRangeConstraint.class)
 public @interface LongRange {
+    /**
+     * 最小値です。指定しない場合、無制限となります。
+     */
     long min() default Long.MIN_VALUE;
 
+    /**
+     * 最大値です。指定しない場合、無制限となります。
+     */
     long max() default Long.MAX_VALUE;
 }

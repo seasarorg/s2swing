@@ -19,7 +19,7 @@ package org.seasar.swing.converter;
 import java.lang.annotation.Annotation;
 
 /**
- * コンバータが、アノテーションからパラメータを読み取り可能であることを示します。
+ * コンバータが、アノテーションから引数を読み取り可能であることを示します。
  * 
  * @author kaiseh
  */

@@ -38,16 +38,16 @@ public class AnnotationUtilTest extends TestCase {
         Field field = Foo.class.getField("aaa");
         Length length = field.getAnnotation(Length.class);
 
-        assertEquals(10, AnnotationUtil.getParameter(length, "max"));
+        assertEquals(10, AnnotationUtil.getArgument(length, "max"));
 
         try {
-            AnnotationUtil.getParameter(length, "nonExistentProperty");
+            AnnotationUtil.getArgument(length, "nonExistentProperty");
             fail();
         } catch (NoSuchMethodRuntimeException e) {
         }
 
         try {
-            AnnotationUtil.getParameter(null, null);
+            AnnotationUtil.getArgument(null, null);
             fail();
         } catch (EmptyRuntimeException e) {
         }

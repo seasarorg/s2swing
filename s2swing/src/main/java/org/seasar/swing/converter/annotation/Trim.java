@@ -25,7 +25,7 @@ import org.seasar.swing.annotation.ConverterTarget;
 import org.seasar.swing.converter.TrimConverter;
 
 /**
- * 文字列の先頭と末尾からの空白除去を指示するコンバータアノテーションです。
+ * 文字列の先頭と末尾からの空白文字の除去を指示するコンバータアノテーションです。
  * 
  * @author kaiseh
  */

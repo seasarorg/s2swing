@@ -34,7 +34,13 @@ import org.seasar.swing.validator.ByteRangeConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(ByteRangeConstraint.class)
 public @interface ByteRange {
+    /**
+     * 最小値です。指定しない場合、無制限となります。
+     */
     byte min() default Byte.MIN_VALUE;
 
+    /**
+     * 最大値です。指定しない場合、無制限となります。
+     */
     byte max() default Byte.MAX_VALUE;
 }

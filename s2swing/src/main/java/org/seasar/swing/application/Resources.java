@@ -25,8 +25,6 @@ import org.seasar.swing.action.S2ActionInjector;
 import org.seasar.swing.util.ClassUtil;
 
 /**
- * 特定のクラスに対応したプロパティファイルを持つアクションマップとリソースマップの組を管理します。
- * 
  * @author kaiseh
  */
 
@@ -119,7 +117,7 @@ public abstract class Resources {
     }
 
     /**
-     * 特定のクラスに対応するプロパティファイルから、メッセージを作成して返します。
+     * 特定のクラスに対応するリソースファイルから、文字列を作成して返します。
      * 
      * @param targetClass
      *            クラス

@@ -34,7 +34,13 @@ import org.seasar.swing.validator.LengthConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(LengthConstraint.class)
 public @interface Length {
+    /**
+     * 最小の文字数です。指定しない場合、無制限となります。
+     */
     int min() default 0;
 
+    /**
+     * 最大の文字数です。指定しない場合、無制限となります。
+     */
     int max() default Integer.MAX_VALUE;
 }

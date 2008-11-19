@@ -34,7 +34,13 @@ import org.seasar.swing.validator.DoubleRangeConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(DoubleRangeConstraint.class)
 public @interface DoubleRange {
+    /**
+     * 最小値です。指定しない場合、無制限となります。
+     */
     double min() default Double.MIN_VALUE;
 
+    /**
+     * 最大値です。指定しない場合、無制限となります。
+     */
     double max() default Double.MAX_VALUE;
 }

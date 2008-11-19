@@ -25,8 +25,8 @@ import java.lang.annotation.Target;
  * リストオブジェクトと{@code JTable}
  * コンポーネントをバインドする際に、リスト項目のプロパティとテーブルカラムのバインディングを指示するアノテーションです。
  * 
- * {@code index}パラメータでカラムの序数を指定することができます。また、{@code editable}
- * パラメータでカラムの編集可否を指定することができます。
+ * {@code index}引数でカラムの位置を指定することができます。また、{@code editable}
+ * 引数でカラムの編集可否を指定することができます。
  * 
  * @author kaiseh
  */
@@ -34,7 +34,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target( { ElementType.FIELD, ElementType.METHOD })
 public @interface Column {
+    /**
+     * カラムの位置をインデックスで指定します。この引数が指定されていない場合は、位置の規定を行いません。
+     */
     int index() default -1;
 
+    /**
+     * カラムが編集可能かどうかを指定します。デフォルトでは{@code true}です。
+     */
     boolean editable() default true;
 }

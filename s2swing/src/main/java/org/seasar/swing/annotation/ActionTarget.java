@@ -43,5 +43,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ActionTarget {
+    /**
+     * UIコンポーネントと関連付けるアクション名です。
+     */
     String value();
 }

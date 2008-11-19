@@ -34,5 +34,8 @@ import org.seasar.swing.validator.PatternConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(PatternConstraint.class)
 public @interface Pattern {
+    /**
+     * 文字列が満たすべき正規表現です。
+     */
     String value();
 }

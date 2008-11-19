@@ -22,7 +22,7 @@ import javax.swing.JToggleButton;
 
 /**
  * アクションの{@code selected}プロパティを反映可能なトグルボタンです。
- * Java5以下の環境で、トグルボタンの押下状態をアクションから制御したい場合に使用します。
+ * Java5の環境で、トグルボタンの押下状態をアクションから制御したい場合に使用します。
  * 
  * @author kaiseh
  */

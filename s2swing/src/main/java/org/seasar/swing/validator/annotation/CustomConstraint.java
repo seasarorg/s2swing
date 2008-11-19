@@ -24,10 +24,10 @@ import java.lang.annotation.Target;
 import org.seasar.swing.validator.Constraint;
 
 /**
- * カスタム制約の適用を指示するアノテーションです。{@code type}パラメータで制約クラスを指定するか、{@code name}
- * パラメータを使用してSingletonS2Containerからコンバータを取得します。{@code type}
- * パラメータを使用し、かつ制約クラスが文字列引数のコンストラクタを持つ場合は、{@code args}
- * パラメータでコンストラクタに文字列を渡すことができます。
+ * カスタム制約の適用を指示するアノテーションです。{@code type}引数で制約クラスを指定するか、{@code name}
+ * 引数を使用してSingletonS2Containerからコンバータを取得します。{@code type}
+ * 引数を使用し、かつ制約クラスが文字列引数のコンストラクタを持つ場合は、{@code args}
+ * 引数でコンストラクタに文字列を渡すことができます。
  * 
  * @author kaiseh
  */

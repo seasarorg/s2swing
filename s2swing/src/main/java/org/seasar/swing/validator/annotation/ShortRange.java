@@ -34,7 +34,13 @@ import org.seasar.swing.validator.ShortRangeConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(ShortRangeConstraint.class)
 public @interface ShortRange {
+    /**
+     * 最小値です。指定しない場合、無制限となります。
+     */
     short min() default Short.MIN_VALUE;
 
+    /**
+     * 最大値です。指定しない場合、無制限となります。
+     */
     short max() default Short.MAX_VALUE;
 }

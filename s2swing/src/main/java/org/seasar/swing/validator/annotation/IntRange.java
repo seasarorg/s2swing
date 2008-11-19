@@ -34,7 +34,13 @@ import org.seasar.swing.validator.IntRangeConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(IntRangeConstraint.class)
 public @interface IntRange {
+    /**
+     * 最小値です。指定しない場合、無制限となります。
+     */
     int min() default Integer.MIN_VALUE;
 
+    /**
+     * 最大値です。指定しない場合、無制限となります。
+     */
     int max() default Integer.MAX_VALUE;
 }

@@ -25,11 +25,11 @@ import org.seasar.swing.annotation.ConverterTarget;
 import org.seasar.swing.converter.NumberToStringConverter;
 
 /**
- * 数値と文字列の相互変換を指示するコンバータアノテーションです。 {@code type}パラメータに{@code NUMBER, INTEGER,
- * PERCENT, CURRENCY}のいずれかを指定した場合、デフォルトロケールに対する規定のフォーマットが使用されます。
+ * 数値と文字列の相互変換を指示するコンバータアノテーションです。 {@code type}引数に{@code NUMBER, INTEGER,
+ * PERCENT, CURRENCY}のいずれかを指定した場合、ロケールにおける規定の書式が使用されます。
  * 
- * {@code type}パラメータに{@code CUSTOM}を指定した場合、{@code pattern}
- * パラメータまたはプロパティファイルにフォーマットを記述します。
+ * {@code type}引数に{@code CUSTOM}を指定した場合、{@code pattern}
+ * 引数またはリソースファイルに書式文字列を記述します。
  * 
  * @author kaiseh
  */
@@ -42,7 +42,15 @@ public @interface NumberToString {
         NUMBER, INTEGER, PERCENT, CURRENCY, CUSTOM;
     }
 
+    /**
+     * 変換書式の種類です。
+     */
     NumberFormatType type();
 
+    /**
+     * {@code type}引数に{@code CUSTOM}が指定されている場合、この引数が書式文字列として使用されます。 {@code type}
+     * 引数に{@code CUSTOM}が指定されており、かつこの引数が指定されていない場合は、モデルクラスの リソースファイルに{@code
+     * [propertyName].NumberToString.pattern}キーで指定された値が書式文字列となります。
+     */
     String pattern() default "";
 }

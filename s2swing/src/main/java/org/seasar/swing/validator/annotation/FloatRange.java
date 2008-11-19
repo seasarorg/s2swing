@@ -34,7 +34,13 @@ import org.seasar.swing.validator.FloatRangeConstraint;
 @Target( { ElementType.FIELD, ElementType.METHOD })
 @ConstraintTarget(FloatRangeConstraint.class)
 public @interface FloatRange {
+    /**
+     * 最小値です。指定しない場合、無制限となります。
+     */
     float min() default Float.MIN_VALUE;
 
+    /**
+     * 最大値です。指定しない場合、無制限となります。
+     */
     float max() default Float.MAX_VALUE;
 }

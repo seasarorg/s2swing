@@ -31,15 +31,15 @@ import org.seasar.framework.util.MethodUtil;
 
 public class AnnotationUtil {
     /**
-     * アノテーションからパラメータを取得します。
+     * アノテーションから引数を取得します。
      * 
      * @param annotation
      *            アノテーション
      * @param name
-     *            パラメータ名
-     * @return パラメータ
+     *            引数名
+     * @return 引数
      */
-    public static Object getParameter(Annotation annotation, String name) {
+    public static Object getArgument(Annotation annotation, String name) {
         if (annotation == null) {
             throw new EmptyRuntimeException("annotation");
         }
