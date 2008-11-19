@@ -1,5 +1,6 @@
 body {
 	font-size: small;
+	font-family: Verdana;
 	line-height: 140%;
 }
 
@@ -8,6 +9,9 @@ table {
 }
 
 h1 {
+	background-color: #EEEEEE;
+	padding: 8px;
+	margin: 0px 0px 16px 0px;
 }
 
 h2 {
@@ -99,4 +103,17 @@ table.grid th {
 table.grid td {
 	border: 1px solid #444444;
 	padding: 2px 4px;
+}
+
+img {
+	border-width: 0px;
+}
+
+img.logo {
+	vertical-align: middle;
+}
+
+span.title {
+	font-size: 250%;
+	font-weight: bold;
 }

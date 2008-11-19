@@ -10,8 +10,14 @@
 </head>
 <body>
 
+<div class="top">
+<a href="../index.html"><img class="logo" src="http://www.seasar.org/wiki/image/seasar.png"/></a>
+<span class="title">S2Swing</span>
+</div>
+
 <div class="left">
 <ul class="menu">
+	<li><a href="../index.html">トップページ</a></li>
 	<li><a href="../download/index.html">ダウンロード</a></li>
 	<li><a href="../tutorial/index.html">チュートリアル</a></li>
 	<li><a href="../reference/index.html">リファレンス</a>
@@ -23,6 +29,8 @@
 		</ul>
 	</li>
 	<li><a href="../faq/index.html">FAQ</a>
+	<li><a href="../changelog/index.html">更新履歴</a></li>
+	<li><a href="../link/index.html">リンク集</a></li>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
@@ -46,6 +54,32 @@
 <h2>ObservableBeansクラスの使用</h2>
 
 <p>
+Beans Bindingでは、バインディング対象となるオブジェクトの状態変更を監視する場合、
+setterメソッド内で以下のようにしてPropertyChangeEventの発行をサポートする必要があります。
+</p>
+
+<pre name="code" class="java">
+public class Model {
+    private PropertyChangeSupport support = new PropertyChangeSupport();
+
+    private int value;
+
+    ...
+
+    public void setValue(int value) {
+        if (value == this.value) {
+            return;
+        }
+        int oldValue = this.value;
+        this.value = value;
+        support.firePropertyChange("value", oldValue, value);
+    }
+}
+</pre>
+
+<p>
+この煩雑な記述を自動化するのがObservableBeansクラスです。ObservableBeans.create()メソッドを使用して
+JavaBeansオブジェクトを作成すると、setter中にPropertyChangeEventの発行処理が埋め込まれたプロキシオブジェクトを得ることができます。
 </p>
 
 <a name="with_jlist"></a>
@@ -68,7 +102,7 @@ JListの選択可能項目に対してバインディングを行うには、以
 </ul>
 
 <p class="remark">
-現在のBeans Bindingの仕様により、選択可能項目とのバインディングは読み取り専用（ソース→ターゲット方向のみ）となります。
+現在のBeans Bindingの仕様により、選択可能項目とのバインディングは<b>読み取り専用</b>（モデル→JList方向のみ）となります。
 </p>
 
 <h3>単一選択値</h3>
@@ -82,7 +116,7 @@ JListの単一選択値に対してバインディングを行うには、以下
 </ul>
 
 <p class="remark">
-現在のBeans Bindingの仕様により、単一選択値とのバインディングは書き込み専用（ターゲット→ソース方向のみ）となります。
+現在のBeans Bindingの仕様により、単一選択値とのバインディングは<b>書き込み専用</b>（JList→モデル方向のみ）となります。
 </p>
 
 <h3>複数選択値</h3>
@@ -97,7 +131,7 @@ JListの複数選択値に対してバインディングを行うには、以下
 </ul>
 
 <p class="remark">
-現在のBeans Bindingの仕様により、複数選択値とのバインディングは書き込み専用（ターゲット→ソース方向のみ）となります。
+現在のBeans Bindingの仕様により、複数選択値とのバインディングは<b>書き込み専用</b>（JList→モデル方向のみ）となります。
 </p>
 
 <a name="with_jcombobox"></a>
@@ -120,7 +154,7 @@ JComboBoxの選択可能項目に対してバインディングを行うには�
 </ul>
 
 <p class="remark">
-現在のBeans Bindingの仕様により、選択可能項目とのバインディングは読み取り専用（ソース→ターゲット方向のみ）となります。
+現在のBeans Bindingの仕様により、選択可能項目とのバインディングは<b>読み取り専用</b>（モデル→JComboBox方向のみ）となります。
 </p>
 
 <h3>選択値</h3>
@@ -137,10 +171,54 @@ JComboBoxの選択値に対してバインディングを行うには、以下�
 <h2>JTableとのバインディング</h2>
 
 <p>
-JTableとのバインディング
+JTableとのバインディングには、以下のバリエーションがあります。
 </p>
 
+<h3>テーブルデータ</h3>
 
+<p>
+JTableのテーブルデータに対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>ソースプロパティを、java.util.Listを実装する型で宣言する。</li>
+	<li>ソースプロパティ宣言部に<a href="">@Rowアノテーション</a>を付加し、行オブジェクトのクラスを明示する。</li>
+	<li>@Rowアノテーションで示した行クラス内で、カラムとバインディングするプロパティ宣言部に<a href="">@Columnアノテーション</a>を付加する。</li>
+	<li>ソースプロパティに対する要素の追加や削除も監視対象とする場合は、ソースプロパティをObservableCollections.observableList()メソッドでラップする。</li>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名をnullとする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、選択可能項目とのバインディングは<b>読み取り専用</b>（モデル→JTable方向のみ）となります。
+</p>
+
+<h3>単一選択行</h3>
+
+<p>
+JTableの単一選択行に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名を"selectedElement"とする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、単一選択行とのバインディングは<b>書き込み専用</b>（JTable→モデル方向のみ）となります。
+</p>
+
+<h3>複数選択行</h3>
+
+<p>
+JTableの複数選択行に対してバインディングを行うには、以下のようにします。
+</p>
+
+<ul>
+	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名を"selectedElements"とする。</li>
+</ul>
+
+<p class="remark">
+現在のBeans Bindingの仕様により、複数選択行とのバインディングは<b>書き込み専用</b>（JTable→モデル方向のみ）となります。
+</p>
 
 </div>
 <div style="clear: both;"></div>

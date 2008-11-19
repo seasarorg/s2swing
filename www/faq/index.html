@@ -10,12 +10,20 @@
 </head>
 <body>
 
+<div class="top">
+<a href="../index.html"><img class="logo" src="http://www.seasar.org/wiki/image/seasar.png"/></a>
+<span class="title">S2Swing</span>
+</div>
+
 <div class="left">
 <ul class="menu">
+	<li><a href="../index.html">トップページ</a></li>
 	<li><a href="../download/index.html">ダウンロード</a></li>
 	<li><a href="../tutorial/index.html">チュートリアル</a></li>
 	<li><a href="../reference/index.html">リファレンス</a></li>
 	<li><a href="../faq/index.html">FAQ</a>
+	<li><a href="../changelog/index.html">更新履歴</a></li>
+	<li><a href="../link/index.html">リンク集</a></li>
 	<li><a href="../javadoc/index.html">Javadoc</a></li>
 </ul>
 </div>
@@ -67,6 +75,13 @@ Beans Binding(JSR 295)は、複数のオブジェクトのプロパティ同期�
 	<li>コンポーネントビルダとメニュービルダ。コンポーネント階層やメニュー階層を簡潔なJavaコードで構築できます。</li>
 </ul>
 
+<h3>S2Swingのサンプルコードはありますか？</h3>
+
+<p>
+個別機能の使用法を示すサンプルコードは、<a href="../tutorial/index.html">チュートリアル</a>の中にあります。
+また、s2swing-tutorialパッケージには、より本格的なサンプルとして、メモ帳アプリケーション（notepad）のコードがあります。
+</p>
+
 <h3>S2Swingを使用するメリットは何ですか？Swing Application FrameworkとBeans Bindingだけで十分ではないのですか？</h3>
 
 <p>
@@ -103,7 +118,7 @@ NetBeansではSwing開発用にIDEが充実していますので、S2Swingの一
 NetBeans環境下でも十分に有用です。
 </p>
 
-<h2>個別機能</h2>
+<h2>使用方法</h2>
 
 <h3>S2Swingを使用する場合、フレームやダイアログは必ずS2FrameクラスやS2Dialogクラスを継承しないといけないのですか？</h3>
 
@@ -119,6 +134,16 @@ JFrameやJDialogを直接使用しても全く問題ありません。また、�
 アクションやリソースのインジェクションを行うためには、S2SingleFrameApplication#show()メソッドを使用してウィンドウを表示する必要があります。
 </p>
 
+<h3>Java5の環境で、@S2Actionアノテーションのselected引数が機能しません。</h3>
+
+<p>
+Java5の環境でselected引数を機能させるには、アクションに対応するUIコンポーネントを
+JButton / JToggleButton / JCheckBox / JRadioButton / JCheckBoxMenuItem / JRadioButtonMenuItem
+の代わりに
+S2Button / S2ToggleButton / S2CheckBox / S2RadioButton / S2CheckBoxMenuItem / S2RadioButtonMenuItem
+とする必要があります。
+</p>
+
 <h3>バインディングの際には、モデルオブジェクトを必ずObservableBeans.create()メソッドで生成しなくてはならないのですか？</h3>
 
 <p>
@@ -126,8 +151,6 @@ JFrameやJDialogを直接使用しても全く問題ありません。また、�
 メソッドの呼び出しを埋め込んで、プロパティの変更を監視可能にすることです。setter中にすでにfirePropertyChange()メソッドの呼び出しが記述済みである場合や、
 モデルのプロパティ変更をUIコンポーネントに伝搬する必要がない場合は、ObservableBeans.create()メソッドを使用する必要はありません。
 </p>
-
-<h3></h3>
 
 </div>
 <div style="clear: both;"></div>
