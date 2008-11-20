@@ -54,6 +54,7 @@
 	            <include name="**/*.java" />
 	            <include name="**/*.properties" />
 	            <include name="**/*.dicon" />
+	            <include name="**/*.gif" />
 	        </fileset>
 		</copy>
 		<copy todir="${dist.dir}/licenses">
