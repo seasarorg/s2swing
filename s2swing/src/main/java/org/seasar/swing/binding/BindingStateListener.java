@@ -19,11 +19,17 @@ package org.seasar.swing.binding;
 import java.util.EventListener;
 
 /**
- * {@link BindingStateEvent}を待機するリスナーオブジェクトを定義します。
+ * {@link BindingStateEvent}を受け取るためのリスナーインタフェースです。
  * 
  * @author kaiseh
  */
 
 public interface BindingStateListener extends EventListener {
+    /**
+     * バインディングの状態変更時に呼び出されます。
+     * 
+     * @param e
+     *            イベント
+     */
     void bindingStateChanged(BindingStateEvent e);
 }

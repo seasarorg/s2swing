@@ -20,18 +20,18 @@ import org.seasar.swing.util.MultiKey;
 import org.seasar.swing.util.Cache;
 
 /**
- * {@code ViewDesc}オブジェクトを生成するファクトリです。
+ * ビュー記述子を生成するファクトリです。
  * 
  * @author kaiseh
  */
 
 public abstract class ViewDescFactory {
     /**
-     * 指定されたクラスに対応する{@code ViewDesc}オブジェクトをメモリキャッシュから検索し、存在しなければ新たに作成して返します。
+     * ビュー記述子をキャッシュから検索し、存在しなければ新しく作成して返します。
      * 
      * @param viewClass
-     *            クラス
-     * @return {@code ViewDesc}オブジェクト
+     *            ビュークラス
+     * @return ビュー記述子
      */
     public static ViewDesc getViewDesc(Class<?> viewClass) {
         MultiKey key = new MultiKey(ViewDescFactory.class, viewClass);

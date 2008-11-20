@@ -25,6 +25,8 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.seasar.swing.validator.Constraint;
 
 /**
+ * バインディングの記述子です。
+ * 
  * @author kaiseh
  */
 

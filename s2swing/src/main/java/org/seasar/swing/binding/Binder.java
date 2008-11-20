@@ -36,6 +36,8 @@ import org.seasar.swing.exception.ConverterException;
 import org.seasar.swing.message.Messages;
 
 /**
+ * バインディングを実行するクラスです。Beans BindingのSwingBindings
+ * 
  * @author kaiseh
  */
 
@@ -64,14 +66,31 @@ public class Binder {
         return new ArrayList<SyncFailure>(syncFailureMap.values());
     }
 
+    /**
+     * バインディングの状態変更リスナーを追加します。
+     * 
+     * @param listener
+     *            リスナー
+     */
     public void addBindingStateListener(BindingStateListener listener) {
         stateListeners.add(listener);
     }
 
+    /**
+     * バインディングの状態変更リスナーを削除します。
+     * 
+     * @param listener
+     *            リスナー
+     */
     public void removeBindingStateListenr(BindingStateListener listener) {
         stateListeners.remove(listener);
     }
 
+    /**
+     * 現在登録されている状態変更リスナーの一覧を取得します。
+     * 
+     * @return リスナーの一覧
+     */
     public BindingStateListener[] getBindingStateListeners() {
         return stateListeners.toArray(new BindingStateListener[stateListeners
                 .size()]);
@@ -156,6 +175,9 @@ public class Binder {
         bindingGroup.addBinding(binding);
     }
 
+    /**
+     * バインディングを開始します。
+     */
     public void bind() {
         bindingGroup.bind();
         for (Binding binding : bindingGroup.getBindings()) {
@@ -163,6 +185,9 @@ public class Binder {
         }
     }
 
+    /**
+     * バインディングを解除します。
+     */
     public void unbind() {
         bindingGroup.unbind();
     }

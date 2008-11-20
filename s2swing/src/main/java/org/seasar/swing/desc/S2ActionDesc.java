@@ -21,17 +21,44 @@ import java.lang.reflect.Method;
 import org.jdesktop.application.Task.BlockingScope;
 
 /**
+ * {@code S2Action}アノテーションに対応するアクションの記述子です。
+ * 
  * @author kaiseh
  */
 
 public interface S2ActionDesc {
+    /**
+     * アクション名を返します。
+     * 
+     * @return アクション名
+     */
     String getName();
 
+    /**
+     * アクションメソッドを返します。
+     * 
+     * @return アクションメソッド
+     */
     Method getMethod();
 
+    /**
+     * アクションの実行可能条件を示す式言語表現を返します。
+     * 
+     * @return 実行可能条件
+     */
     String getEnabledCondition();
 
+    /**
+     * アクションの選択条件を示す式言語表現を返します。
+     * 
+     * @return 選択条件
+     */
     String getSelectedCondition();
 
+    /**
+     * 非同期アクションのブロッキングスコープを返します。
+     * 
+     * @return ブロッキングスコープ
+     */
     BlockingScope getBlockingScope();
 }

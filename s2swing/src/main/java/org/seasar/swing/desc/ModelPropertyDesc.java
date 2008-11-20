@@ -24,25 +24,72 @@ import org.seasar.swing.annotation.Column;
 import org.seasar.swing.validator.Constraint;
 
 /**
+ * モデルオブジェクトが持つプロパティの記述子です。
+ * 
  * @author kaiseh
  */
 
 public interface ModelPropertyDesc {
+    /**
+     * プロパティを保持するモデルのクラスを返します。
+     * 
+     * @return モデルクラス
+     */
     Class<?> getModelClass();
 
+    /**
+     * プロパティのクラスを返します。
+     * 
+     * @return プロパティクラス
+     */
     Class<?> getPropertyClass();
 
+    /**
+     * プロパティ名を返します。
+     * 
+     * @return プロパティ名
+     */
     String getPropertyName();
 
+    /**
+     * Seasarのプロパティ記述子を返します。
+     * 
+     * @return Seasarのプロパティ記述子
+     */
     PropertyDesc getPropertyDesc();
 
+    /**
+     * プロパティに関連付けられた制約の一覧を返します。
+     * 
+     * @return 制約の一覧
+     */
     List<Constraint> getConstraints();
 
+    /**
+     * プロパティに関連付けられたコンバータを返します。
+     * 
+     * @return コンバータ
+     */
     Converter<?, ?> getConverter();
 
+    /**
+     * プロパティに{@code @Row}アノテーションが付与されている場合、その引数で指定された行クラスを返します。
+     * 
+     * @return 行クラス
+     */
     Class<?> getRowClass();
 
+    /**
+     * プロパティに{@code @Column}アノテーションが付与されている場合、そのアノテーションを返します。
+     * 
+     * @return {code @Column}アノテーション
+     */
     Column getColumn();
 
+    /**
+     * 画面上でプロパティ名として表示するラベルを返します。
+     * 
+     * @return ラベル
+     */
     String getLabel();
 }

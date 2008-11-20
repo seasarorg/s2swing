@@ -20,10 +20,19 @@ import org.seasar.swing.util.Cache;
 import org.seasar.swing.util.MultiKey;
 
 /**
+ * モデル記述子を生成するファクトリです。
+ * 
  * @author kaiseh
  */
 
 public abstract class ModelDescFactory {
+    /**
+     * モデル記述子をキャッシュから検索し、存在しなければ新しく作成して返します。
+     * 
+     * @param modelClass
+     *            モデルクラス
+     * @return モデル記述子
+     */
     public static ModelDesc getModelDesc(Class<?> modelClass) {
         MultiKey key = new MultiKey(ModelDescFactory.class, modelClass);
         ModelDesc desc = (ModelDesc) Cache.get(key);

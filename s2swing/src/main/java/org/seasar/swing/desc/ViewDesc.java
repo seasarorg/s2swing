@@ -20,15 +20,37 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 /**
+ * ビューオブジェクトの記述子です。アクションとコンポーネントの情報を保持します。
+ * 
  * @author kaiseh
  */
 
 public interface ViewDesc {
+    /**
+     * ビューのクラスを返します。
+     * 
+     * @return クラス
+     */
     Class<?> getViewClass();
 
+    /**
+     * ビューが持つアクションターゲットの記述子一覧を返します。
+     * 
+     * @return アクションターゲットの記述子一覧
+     */
     Collection<ActionTargetDesc> getActionTargetDescs();
 
+    /**
+     * ビューが持つアクションの記述子一覧を返します。
+     * 
+     * @return アクションの記述子一覧
+     */
     Collection<S2ActionDesc> getS2ActionDescs();
 
+    /**
+     * ビューが持つUIコンポーネントのフィールド一覧を返します。
+     * 
+     * @return UIコンポーネントのフィールド一覧
+     */
     Collection<Field> getComponentFields();
 }
