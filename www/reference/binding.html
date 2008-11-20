@@ -78,7 +78,7 @@ public class Model {
 </pre>
 
 <p>
-この煩雑な記述を自動化するのがObservableBeansクラスです。ObservableBeans.create()メソッドを使用して
+この煩雑な記述を自動化するのが<a href="../javadoc/org/seasar/swing/beans/ObservableBeans.html">ObservableBeans</a>クラスです。ObservableBeans.create()メソッドを使用して
 JavaBeansオブジェクトを作成すると、setter中にPropertyChangeEventの発行処理が埋め込まれたプロキシオブジェクトを得ることができます。
 </p>
 
@@ -182,8 +182,8 @@ JTableのテーブルデータに対してバインディングを行うには�
 
 <ul>
 	<li>ソースプロパティを、java.util.Listを実装する型で宣言する。</li>
-	<li>ソースプロパティ宣言部に<a href="">@Rowアノテーション</a>を付加し、行オブジェクトのクラスを明示する。</li>
-	<li>@Rowアノテーションで示した行クラス内で、カラムとバインディングするプロパティ宣言部に<a href="">@Columnアノテーション</a>を付加する。</li>
+	<li>ソースプロパティ宣言部に<a href="../javadoc/org/seasar/swing/annotation/Row.html">@Row</a>アノテーションを付加し、行オブジェクトのクラスを明示する。</li>
+	<li>@Rowアノテーションで示した行クラス内で、カラムとバインディングするプロパティ宣言部に<a href="../javadoc/org/seasar/swing/annotation/Column.html">@Column</a>アノテーションを付加する。</li>
 	<li>ソースプロパティに対する要素の追加や削除も監視対象とする場合は、ソースプロパティをObservableCollections.observableList()メソッドでラップする。</li>
 	<li>Binder#add()メソッドにおいて、ターゲットプロパティ名をnullとする。</li>
 </ul>
