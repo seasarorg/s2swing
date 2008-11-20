@@ -26,6 +26,17 @@ import org.seasar.swing.validator.DoubleRangeConstraint;
 
 /**
  * {@code double}型の数値範囲を指定する制約アノテーションです。
+ * <p>
+ * このアノテーションに対応する、リソースファイル中でのカスタムエラーメッセージのキーとその内容は、以下の通りです。
+ * 
+ * <ul>
+ * <li>{@code [propertyName].DoubleRange.min.failed} -
+ * 最小値に違反した場合のメッセージ。変数として{min}を使用可能</li>
+ * <li>{@code [propertyName].DoubleRange.max.failed} -
+ * 最大値に違反した場合のメッセージ。変数として{max}を使用可能</li>
+ * <li>{@code [propertyName].DoubleRange.both.failed} -
+ * 最小値と最大値の両方に違反した場合のメッセージ。変数として{min}と{max}を使用可能</li>
+ * </ul>
  * 
  * @author kaiseh
  */

@@ -24,10 +24,7 @@ import java.lang.annotation.Target;
 import org.seasar.swing.validator.Constraint;
 
 /**
- * カスタム制約の適用を指示するアノテーションです。{@code type}引数で制約クラスを指定するか、{@code name}
- * 引数を使用してSingletonS2Containerからコンバータを取得します。{@code type}
- * 引数を使用し、かつ制約クラスが文字列引数のコンストラクタを持つ場合は、{@code args}
- * 引数でコンストラクタに文字列を渡すことができます。
+ * カスタム制約の適用を指示するアノテーションです。
  * 
  * @author kaiseh
  */
@@ -35,9 +32,19 @@ import org.seasar.swing.validator.Constraint;
 @Retention(RetentionPolicy.RUNTIME)
 @Target( { ElementType.FIELD, ElementType.METHOD })
 public @interface CustomConstraint {
+    /**
+     * 制約クラスを指定します。この引数を指定しない場合は、代わりに{@code name}引数を使って、SingletonS2Containerから
+     * 制約オブジェクトを取得します。
+     */
     Class<? extends Constraint> type() default Constraint.class;
 
+    /**
+     * {@code type}引数を指定した場合、そのコンストラクタに渡す引数を（必要であれば）指定します。引数は全て文字列でなくてはなりません。
+     */
     String[] args() default {};
 
+    /**
+     * SingletonS2Containerから制約オブジェクトを取得する場合、検索キーとなる名前を指定します。
+     */
     String name() default "";
 }

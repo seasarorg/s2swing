@@ -26,6 +26,13 @@ import org.seasar.swing.validator.PatternConstraint;
 
 /**
  * 文字列が正規表現に従うことを指示する制約アノテーションです。
+ * <p>
+ * このアノテーションに対応する、リソースファイル中でのカスタムエラーメッセージのキーとその内容は、以下の通りです。
+ * 
+ * <ul>
+ * <li>{@code [propertyName].Pattern.failed} -
+ * 制約に違反した場合のメッセージ。</li>
+ * </ul>
  * 
  * @author kaiseh
  */

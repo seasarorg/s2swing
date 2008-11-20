@@ -25,12 +25,14 @@ import org.seasar.swing.action.S2ActionInjector;
 import org.seasar.swing.util.ClassUtil;
 
 /**
+ * リソースとアクションに関するユーティリティクラスです。
+ * 
  * @author kaiseh
  */
 
 public abstract class Resources {
     /**
-     * 共通のアプリケーションコンテキストを取得します。
+     * アプリケーションコンテキストを取得します。
      * 
      * @return アプリケーションコンテキスト
      */
@@ -117,10 +119,10 @@ public abstract class Resources {
     }
 
     /**
-     * 特定のクラスに対応するリソースファイルから、文字列を作成して返します。
+     * 特定のオブジェクトに対応するリソースファイルから、文字列を作成して返します。
      * 
-     * @param targetClass
-     *            クラス
+     * @param target
+     *            ターゲットオブジェクト
      * @param key
      *            メッセージキー
      * @param args

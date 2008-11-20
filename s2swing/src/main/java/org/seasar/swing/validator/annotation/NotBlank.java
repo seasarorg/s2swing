@@ -27,6 +27,13 @@ import org.seasar.swing.validator.NotBlankConstraint;
 /**
  * 文字列が非空白であることを指示する制約アノテーションです。文字列が{@code null}
  * でなく、ホワイトスペース以外の文字を含む場合に制約が満たされます。
+ * <p>
+ * このアノテーションに対応する、リソースファイル中でのカスタムエラーメッセージのキーとその内容は、以下の通りです。
+ * 
+ * <ul>
+ * <li>{@code [propertyName].NotBlank.failed} -
+ * 制約に違反した場合のメッセージ。</li>
+ * </ul>
  * 
  * @author kaiseh
  */

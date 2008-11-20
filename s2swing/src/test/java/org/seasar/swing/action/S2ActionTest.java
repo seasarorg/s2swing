@@ -30,8 +30,9 @@ import org.seasar.swing.exception.ExceptionHandler;
 
 public class S2ActionTest extends TestCase {
     public void testSetExceptionHandler() {
-        ApplicationActionMap actionMap = Resources
-                .getActionMap(S2ActionTest.this);
+        ApplicationActionMap actionMap = Resources.getActionMap(this);
+        S2ActionInjector injector = new S2ActionInjector();
+        injector.inject(this, actionMap);
         S2Action action = (S2Action) actionMap.get("throwException");
 
         try {

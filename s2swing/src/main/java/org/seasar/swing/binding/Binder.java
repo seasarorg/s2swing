@@ -136,18 +136,83 @@ public class Binder {
         }
     }
 
+    /**
+     * 読み出し・書き込み両用の更新モード({@code UpdateStrategy.READ_WRITE})でバインディングを追加します。
+     * 
+     * @param source
+     *            ソースオブジェクト
+     * @param sourceProperty
+     *            ソースプロパティの文字列表現
+     * @param target
+     *            ターゲットオブジェクト
+     * @param targetProperty
+     *            ターゲットプロパティの文字列表現
+     */
     public void add(Object source, String sourceProperty, Object target,
             String targetProperty) {
         add(new DefaultBindingDesc(source, sourceProperty, target,
                 targetProperty));
     }
 
+    /**
+     * 読み出し・書き込み両用の更新モード({@code UpdateStrategy.READ_WRITE}
+     * )で、詳細プロパティ情報が付加されたバインディングを追加します。 このメソッドシグネチャは、{@code JList}
+     * の選択可能項目が対象のバインディングで、リスト項目名として表示するテキストを指定するために使用されます。
+     * 
+     * @param source
+     *            ソースオブジェクト
+     * @param sourceProperty
+     *            ソースプロパティの文字列表現
+     * @param sourceDetailProperty
+     *            ソース詳細プロパティの文字列表現
+     * @param target
+     *            ターゲットオブジェクト
+     * @param targetProperty
+     *            ターゲットプロパティの文字列表現
+     */
     public void add(Object source, String sourceProperty,
             String sourceDetailProperty, Object target, String targetProperty) {
         add(new DefaultBindingDesc(source, sourceProperty,
                 sourceDetailProperty, target, targetProperty));
     }
 
+    /**
+     * 更新モードを指定して、バインディングを追加します。
+     * 
+     * @param source
+     *            ソースオブジェクト
+     * @param sourceProperty
+     *            ソースプロパティの文字列表現
+     * @param target
+     *            ターゲットオブジェクト
+     * @param targetProperty
+     *            ターゲットプロパティの文字列表現
+     * @param updateStrategy
+     *            更新モード
+     */
+    public void add(Object source, String sourceProperty, Object target,
+            String targetProperty, UpdateStrategy updateStrategy) {
+        add(new DefaultBindingDesc(source, sourceProperty, target,
+                targetProperty, updateStrategy));
+    }
+
+    /**
+     * 更新モードを指定して、バインディングを追加します。このメソッドシグネチャは、{@code JList}
+     * の選択可能項目が対象のバインディングで、リスト項目名として表示するテキストを指定するために使用されます。
+     * 
+     * @param source
+     *            ソースオブジェクト
+     * @param sourceProperty
+     *            ソースプロパティの文字列表現
+     * @param sourceDetailProperty
+     *            ソース詳細プロパティの文字列表現
+     * @param target
+     *            ターゲットオブジェクト
+     * @param targetProperty
+     *            ターゲットプロパティの文字列表現
+     * @param updateStrategy
+     *            更新モード
+     */
     public void add(Object source, String sourceProperty,
             String sourceDetailProperty, Object target, String targetProperty,
             UpdateStrategy updateStrategy) {
@@ -155,12 +220,12 @@ public class Binder {
                 sourceDetailProperty, target, targetProperty, updateStrategy));
     }
 
-    public void add(Object source, String sourceProperty, Object target,
-            String targetProperty, UpdateStrategy updateStrategy) {
-        add(new DefaultBindingDesc(source, sourceProperty, target,
-                targetProperty, updateStrategy));
-    }
-
+    /**
+     * 指定した記述子に基づいて、バインディングを追加します。
+     * 
+     * @param bindingDesc
+     *            バインディング記述子
+     */
     public void add(BindingDesc bindingDesc) {
         if (bindingDesc == null) {
             throw new EmptyRuntimeException("bindingDesc");

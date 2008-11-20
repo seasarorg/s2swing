@@ -19,6 +19,8 @@ package org.seasar.swing.application;
 import java.awt.Component;
 
 /**
+ * S2Swingにおけるビューオブジェクトを規定するインタフェースです。
+ * 
  * @author kaiseh
  */
 
@@ -34,5 +36,10 @@ public interface S2ViewObject {
      */
     void initialize();
 
+    /**
+     * ルートコンポーネントを返します。
+     * 
+     * @return ルートコンポーネント
+     */
     Component getRootComponent();
 }

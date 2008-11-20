@@ -54,6 +54,8 @@ public class S2ActionUpdaterTest extends TestCase {
     public void testUpdateActions() throws Exception {
         Aaa aaa = new Aaa();
         ApplicationActionMap actionMap = Resources.getActionMap(aaa);
+        S2ActionInjector injector = new S2ActionInjector();
+        injector.inject(aaa, actionMap);
         S2Action action1 = (S2Action) actionMap.get("action1");
         
         S2ActionUpdater updater = new S2ActionUpdater(actionMap);

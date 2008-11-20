@@ -65,7 +65,7 @@ public class BindingStateEvent extends EventObject {
     /**
      * エラーが存在する場合は、最初のエラーメッセージを返します。エラーが存在しない場合は{@code null}を返します。
      * 
-     * @return エラーメッセージまたは{@null}
+     * @return エラーメッセージまたは{@code null}
      */
     public String getSimpleErrorMessage() {
         if (errorMessages.isEmpty()) {
