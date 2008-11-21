@@ -152,6 +152,14 @@ S2Button / S2ToggleButton / S2CheckBox / S2RadioButton / S2CheckBoxMenuItem / S2
 モデルのプロパティ変更をUIコンポーネントに伝搬する必要がない場合は、ObservableBeans.create()メソッドを使用する必要はありません。
 </p>
 
+<h3>フレームやダイアログに対して、S2Containerからロジック等を自動的にDIする機能はありますか？</h3>
+
+<p>
+S2Swingとしては、バリデータとコンバータをS2ContainerからDIする機能を持っています。
+バリデータとコンバータ以外については、DIに関する独自機能は今のところ特にありません。
+もちろん、アプリケーションコードからS2Containerを適宜呼び出すことによって、DIを行うことは自由にできます。
+</p>
+
 </div>
 <div style="clear: both;"></div>
 
