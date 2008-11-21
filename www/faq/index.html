@@ -91,12 +91,12 @@ S2Swingには、Swing Application FrameworkとBeans Bindingだけでは実現で
 <ul>
 	<li>
 		アクションの簡略化。Swing Application Frameworkの@Actionアノテーションでは、アクションの実行可能条件と
-		選択条件をプロパティ形式でしか指定できません。また、プロパティはfirePropertyChange()メソッドをサポートする必要があります。
+		選択条件をプロパティ形式でしか指定できません。また、プロパティはPropertyChangeEventの発行をサポートする必要があります。
 		これに対し、S2Swingの@S2ActionアノテーションではOGNLを使用できるため、条件式の記述が簡単になります。
 	</li>
 	<li>
 		バインディングの簡略化。Beans Bindingでは、モデルオブジェクトのプロパティ変更を通知するために、モデルクラスの各プロパティが
-		firePropertyChange()メソッドをサポートする必要があります。S2SwingではAOPによって、このプロパティ変更通知機構を自動化し、
+		PropertyChangeEventの発行をサポートする必要があります。S2SwingではAOPによって、このプロパティ変更通知を自動化し、
 		シンプルなJavaBeansクラスでバインディングを可能にします。
 	</li>
 	<li>
