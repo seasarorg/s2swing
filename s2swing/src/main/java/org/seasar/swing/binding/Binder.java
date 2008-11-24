@@ -36,7 +36,7 @@ import org.seasar.swing.exception.ConverterException;
 import org.seasar.swing.message.Messages;
 
 /**
- * バインディングを実行するクラスです。Beans BindingのSwingBindings
+ * バインディングを実行するクラスです。
  * 
  * @author kaiseh
  */
