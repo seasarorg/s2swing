@@ -30,7 +30,7 @@ import org.seasar.swing.validator.RequiredConstraint;
  * このアノテーションに対応する、リソースファイル中でのカスタムエラーメッセージのキーとその内容は、以下の通りです。
  * 
  * <ul>
- * <li>{@code [propertyName].NotBlank.failed} -
+ * <li>{@code [propertyName].Required.failed} -
  * 制約に違反した場合のメッセージ。</li>
  * </ul>
  * 

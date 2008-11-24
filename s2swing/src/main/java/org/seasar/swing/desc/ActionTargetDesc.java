@@ -19,13 +19,19 @@ package org.seasar.swing.desc;
 import java.lang.reflect.Field;
 
 /**
- * 記述子です。
+ * {@code S2Action}アノテーションに対応するアクションターゲットの記述子です。
  * 
  * @author kaiseh
  */
 
 public interface ActionTargetDesc {
+    /**
+     * アクションを関連付けるUIコンポーネントのフィールドです。
+     */
     Field getField();
 
+    /**
+     * ターゲットアクションの名前です。
+     */
     String getActionName();
 }
