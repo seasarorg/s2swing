@@ -24,7 +24,7 @@ import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.util.StringUtil;
 
 /**
- * JavaBeansのsetterメソッド内に{@code firePropertyChange}の呼び出しを 埋め込むインターセプタです。
+ * JavaBeansのsetterメソッド内に{@code firePropertyChange()}の呼び出しを埋め込むインターセプタです。
  * 
  * @author kaiseh
  */
@@ -47,9 +47,9 @@ public class PropertyChangeInterceptor implements MethodInterceptor {
             return invocation.proceed();
         }
 
-        Object oldValue = propDesc.getValue(invocation.getThis());
+        Object oldValue = propDesc.getValue(bean);
         Object result = invocation.proceed();
-        Object newValue = propDesc.getValue(invocation.getThis());
+        Object newValue = propDesc.getValue(bean);
 
         ObservableBeans.firePropertyChange(bean, propertyName, oldValue,
                 newValue);

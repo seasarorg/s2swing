@@ -119,7 +119,7 @@ public abstract class ObservableBeans {
 
     public static <T> T copyAndUnwrap(T enhancedBean) {
         if (enhancedBean == null) {
-            throw new EmptyRuntimeException("bean");
+            throw new EmptyRuntimeException("enhancedBean");
         }
         Class<?> originalClass = org.seasar.swing.util.ClassUtil
                 .getOriginalClass(enhancedBean.getClass());
