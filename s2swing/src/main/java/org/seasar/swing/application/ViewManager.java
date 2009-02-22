@@ -206,7 +206,12 @@ public class ViewManager {
 
     protected void installWindowListener() {
         Component root = view.getRootComponent();
-        Window window = SwingUtilities.getWindowAncestor(root);
+        Window window;
+        if (root instanceof Window) {
+            window = (Window) root;
+        } else {
+            window = SwingUtilities.getWindowAncestor(root);
+        }
         if (window != null) {
             window.addWindowListener(new ViewWindowListener());
         }
