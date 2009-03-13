@@ -2,72 +2,72 @@
 
 <project name="s2swing-tutorial-build" default="package" basedir=".">
 
-    <property name="build.finalName" value="s2swing-tutorial-0.1.1" />
-    <property name="build.dir" value="target" />
-    <property name="build.outputDir" value="${build.dir}/classes" />
-    <property name="build.sourceDir" value="src/main/java" />
-    <property name="build.resourceDir" value="src/main/resources" />
-    <property name="dist.dir" value="dist" />
-    <property name="lib" value="lib" />
+	<property name="build.finalName" value="s2swing-tutorial-0.1.1" />
+	<property name="build.dir" value="target" />
+	<property name="build.outputDir" value="${build.dir}/classes" />
+	<property name="build.sourceDir" value="src/main/java" />
+	<property name="build.resourceDir" value="src/main/resources" />
+	<property name="dist.dir" value="dist" />
+	<property name="lib" value="lib" />
 
-    <path id="build.classpath">
-        <fileset dir="${lib}">
-            <include name="*.jar" />
-        </fileset>
-    </path>
+	<path id="build.classpath">
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 
-    <target name="clean" description="Clean the output directory">
-        <delete dir="${build.dir}" />
-    </target>
+	<target name="clean" description="Clean the output directory">
+		<delete dir="${build.dir}" />
+	</target>
 
-    <target name="compile" description="Compile the code">
-        <mkdir dir="${build.outputDir}" />
-        <javac destdir="${build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true" verbose="false" fork="false">
-            <src>
-                <pathelement location="${build.sourceDir}" />
-            </src>
-            <classpath refid="build.classpath" />
-        </javac>
-        <copy todir="${build.outputDir}">
-            <fileset dir="${build.resourceDir}" />
-        </copy>
-    </target>
+	<target name="compile" description="Compile the code">
+		<mkdir dir="${build.outputDir}" />
+		<javac destdir="${build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true" verbose="false" fork="false" source="1.5" target="1.5" encoding="UTF-8">
+			<src>
+				<pathelement location="${build.sourceDir}" />
+			</src>
+			<classpath refid="build.classpath" />
+		</javac>
+		<copy todir="${build.outputDir}">
+			<fileset dir="${build.resourceDir}" />
+		</copy>
+	</target>
 
-    <target name="package" depends="compile" description="Package the application">
-        <mkdir dir="${dist.dir}" />
-        <mkdir dir="${dist.dir}/lib" />
-        <mkdir dir="${dist.dir}/src" />
-        <mkdir dir="${dist.dir}/licenses" />
+	<target name="package" depends="compile" description="Package the application">
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/lib" />
+		<mkdir dir="${dist.dir}/src" />
+		<mkdir dir="${dist.dir}/licenses" />
 		<copy todir="${dist.dir}">
-	        <fileset dir="">
-	            <include name="build.xml" />
-	            <include name="LICENSE.txt" />
-	        </fileset>
+			<fileset dir="">
+				<include name="build.xml" />
+				<include name="LICENSE.txt" />
+			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/lib">
-	        <fileset dir="${lib}">
-	            <include name="*.jar" />
-	        </fileset>
+			<fileset dir="${lib}">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/src">
-	        <fileset dir="src">
-	            <include name="**/*.java" />
-	            <include name="**/*.properties" />
-	            <include name="**/*.dicon" />
-	            <include name="**/*.gif" />
-	        </fileset>
+			<fileset dir="src">
+				<include name="**/*.java" />
+				<include name="**/*.properties" />
+				<include name="**/*.dicon" />
+				<include name="**/*.gif" />
+			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/licenses">
-	        <fileset dir="licenses">
-	            <include name="**/*" />
-	        </fileset>
+			<fileset dir="licenses">
+				<include name="**/*" />
+			</fileset>
 		</copy>
-        <zip destfile="${dist.dir}/${build.finalName}.zip">
-        	<fileset dir="${dist.dir}">
-	            <include name="**/*" />
-        	    <exclude name="${build.finalName}.zip" />
-        	</fileset>
-        </zip>
-    </target>
+		<zip destfile="${dist.dir}/${build.finalName}.zip">
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+				<exclude name="${build.finalName}.zip" />
+			</fileset>
+		</zip>
+	</target>
 
 </project>
