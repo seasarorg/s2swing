@@ -75,7 +75,7 @@
 	</target>
 
 	<target name="javadoc" depends="compile" description="Generates the Javadoc of the application">
-		<javadoc sourcepath="${build.sourceDir}" packagenames="*" destdir="${reporting.outputDirectory}/javadoc" access="protected" old="false" verbose="false" version="true" use="true" author="true" splitindex="false" nodeprecated="false" nodeprecatedlist="false" notree="false" noindex="false" nohelp="false" nonavbar="false" serialwarn="false" charset="UTF-8" linksource="false" breakiterator="false">
+		<javadoc sourcepath="${build.sourceDir}" packagenames="*" destdir="${reporting.outputDirectory}/javadoc" access="protected" old="false" verbose="false" version="true" use="true" author="true" splitindex="false" nodeprecated="false" nodeprecatedlist="false" notree="false" noindex="false" nohelp="false" nonavbar="false" serialwarn="false" charset="UTF-8" linksource="false" breakiterator="false" encoding="UTF-8">
 			<classpath>
 				<pathelement location="${build.outputDir}" />
 				<path refid="build.classpath" />
