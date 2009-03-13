@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib/ognl-2.6.9-patch-20070908.jar"/>
 	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/s2-framework-2.4.32.jar"/>
-	<classpathentry kind="lib" path="lib/s2swing-0.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/s2-framework-2.4.34.jar"/>
+	<classpathentry kind="lib" path="lib/s2swing-0.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
