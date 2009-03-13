@@ -2,122 +2,122 @@
 
 <project name="s2swing-build" default="package" basedir=".">
 
-    <property name="build.finalName" value="s2swing-0.1.1" />
-    <property name="build.dir" value="target" />
-    <property name="build.outputDir" value="${build.dir}/classes" />
-    <property name="build.sourceDir" value="src/main/java" />
-    <property name="build.resourceDir" value="src/main/resources" />
-    <property name="build.testOutputDir" value="${build.dir}/test-classes" />
-    <property name="build.testDir" value="src/test/java" />
-    <property name="build.testResourceDir" value="src/test/resources" />
-    <property name="test.reports" value="${build.dir}/test-reports" />
-    <property name="dist.dir" value="dist" />
-    <property name="reporting.outputDirectory" value="${dist.dir}" />
-    <property name="lib" value="lib" />
+	<property name="build.finalName" value="s2swing-0.1.1" />
+	<property name="build.dir" value="target" />
+	<property name="build.outputDir" value="${build.dir}/classes" />
+	<property name="build.sourceDir" value="src/main/java" />
+	<property name="build.resourceDir" value="src/main/resources" />
+	<property name="build.testOutputDir" value="${build.dir}/test-classes" />
+	<property name="build.testDir" value="src/test/java" />
+	<property name="build.testResourceDir" value="src/test/resources" />
+	<property name="test.reports" value="${build.dir}/test-reports" />
+	<property name="dist.dir" value="dist" />
+	<property name="reporting.outputDirectory" value="${dist.dir}" />
+	<property name="lib" value="lib" />
 
-    <path id="build.classpath">
-        <fileset dir="${lib}">
-            <include name="*.jar" />
-        </fileset>
-    </path>
+	<path id="build.classpath">
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 
-    <target name="clean" description="Clean the output directory">
-        <delete dir="${build.dir}" />
-    </target>
+	<target name="clean" description="Clean the output directory">
+		<delete dir="${build.dir}" />
+	</target>
 
-    <target name="compile" description="Compile the code">
-        <mkdir dir="${build.outputDir}" />
-        <javac destdir="${build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true" verbose="false" fork="false" source="1.5" target="1.5">
-            <src>
-                <pathelement location="${build.sourceDir}" />
-            </src>
-            <classpath refid="build.classpath" />
-        </javac>
-        <copy todir="${build.outputDir}">
-            <fileset dir="${build.resourceDir}" />
-        </copy>
-    </target>
+	<target name="compile" description="Compile the code">
+		<mkdir dir="${build.outputDir}" />
+		<javac destdir="${build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true" verbose="false" fork="false" source="1.5" target="1.5" encoding="UTF-8">
+			<src>
+				<pathelement location="${build.sourceDir}" />
+			</src>
+			<classpath refid="build.classpath" />
+		</javac>
+		<copy todir="${build.outputDir}">
+			<fileset dir="${build.resourceDir}" />
+		</copy>
+	</target>
 
-    <target name="compile-tests" depends="compile" description="Compile the test code">
-        <mkdir dir="${build.testOutputDir}" />
-        <javac destdir="${build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true" verbose="false" fork="false">
-            <src>
-                <pathelement location="${build.testDir}" />
-            </src>
-            <classpath>
-                <path refid="build.classpath" />
-                <pathelement location="${build.outputDir}" />
-            </classpath>
-        </javac>
-        <copy todir="${build.testOutputDir}">
-            <fileset dir="${build.testResourceDir}" />
-        </copy>
-    </target>
+	<target name="compile-tests" depends="compile" description="Compile the test code">
+		<mkdir dir="${build.testOutputDir}" />
+		<javac destdir="${build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true" verbose="false" fork="false">
+			<src>
+				<pathelement location="${build.testDir}" />
+			</src>
+			<classpath>
+				<path refid="build.classpath" />
+				<pathelement location="${build.outputDir}" />
+			</classpath>
+		</javac>
+		<copy todir="${build.testOutputDir}">
+			<fileset dir="${build.testResourceDir}" />
+		</copy>
+	</target>
 
-    <target name="test" depends="compile-tests" description="Run the test cases">
-        <mkdir dir="${test.reports}" />
-        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir=".">
-            <sysproperty key="basedir" value="." />
-            <formatter type="xml" />
-            <formatter type="plain" usefile="false" />
-            <classpath>
-                <pathelement location="${build.outputDir}" />
-                <pathelement location="${build.testOutputDir}" />
-                <path refid="build.classpath" />
-            </classpath>
-            <batchtest todir="${test.reports}">
-                <fileset dir="${build.testDir}">
-                    <include name="**/*Test.java" />
-                    <exclude name="**/*Abstract*Test.java" />
-                </fileset>
-            </batchtest>
-        </junit>
-    </target>
+	<target name="test" depends="compile-tests" description="Run the test cases">
+		<mkdir dir="${test.reports}" />
+		<junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir=".">
+			<sysproperty key="basedir" value="." />
+			<formatter type="xml" />
+			<formatter type="plain" usefile="false" />
+			<classpath>
+				<pathelement location="${build.outputDir}" />
+				<pathelement location="${build.testOutputDir}" />
+				<path refid="build.classpath" />
+			</classpath>
+			<batchtest todir="${test.reports}">
+				<fileset dir="${build.testDir}">
+					<include name="**/*Test.java" />
+					<exclude name="**/*Abstract*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
 
-    <target name="javadoc" depends="compile" description="Generates the Javadoc of the application">
-        <javadoc sourcepath="${build.sourceDir}" packagenames="*" destdir="${reporting.outputDirectory}/javadoc" access="protected" old="false" verbose="false" version="true" use="true" author="true" splitindex="false" nodeprecated="false" nodeprecatedlist="false" notree="false" noindex="false" nohelp="false" nonavbar="false" serialwarn="false" charset="UTF-8" linksource="false" breakiterator="false">
-            <classpath>
-                <pathelement location="${build.outputDir}" />
-                <path refid="build.classpath" />
-            </classpath>
-        </javadoc>
-    </target>
+	<target name="javadoc" depends="compile" description="Generates the Javadoc of the application">
+		<javadoc sourcepath="${build.sourceDir}" packagenames="*" destdir="${reporting.outputDirectory}/javadoc" access="protected" old="false" verbose="false" version="true" use="true" author="true" splitindex="false" nodeprecated="false" nodeprecatedlist="false" notree="false" noindex="false" nohelp="false" nonavbar="false" serialwarn="false" charset="UTF-8" linksource="false" breakiterator="false">
+			<classpath>
+				<pathelement location="${build.outputDir}" />
+				<path refid="build.classpath" />
+			</classpath>
+		</javadoc>
+	</target>
 
-    <target name="package" depends="compile,test" description="Package the application">
-        <mkdir dir="${dist.dir}" />
-        <mkdir dir="${dist.dir}/lib" />
-        <mkdir dir="${dist.dir}/src" />
-        <mkdir dir="${dist.dir}/licenses" />
-        <jar jarfile="${dist.dir}/${build.finalName}.jar" compress="true" index="false" basedir="${build.outputDir}" excludes="**/package.html" />
+	<target name="package" depends="compile,test" description="Package the application">
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/lib" />
+		<mkdir dir="${dist.dir}/src" />
+		<mkdir dir="${dist.dir}/licenses" />
+		<jar jarfile="${dist.dir}/${build.finalName}.jar" compress="true" index="false" basedir="${build.outputDir}" excludes="**/package.html" />
 		<copy todir="${dist.dir}">
-	        <fileset dir="">
-	            <include name="build.xml" />
-	            <include name="LICENSE.txt" />
-	        </fileset>
+			<fileset dir="">
+				<include name="build.xml" />
+				<include name="LICENSE.txt" />
+			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/lib">
-	        <fileset dir="${lib}">
-	            <include name="*.jar" />
-	        </fileset>
+			<fileset dir="${lib}">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/src">
-	        <fileset dir="src">
-	            <include name="**/*.java" />
-	            <include name="**/*.properties" />
-	            <include name="**/*.dicon" />
-	        </fileset>
+			<fileset dir="src">
+				<include name="**/*.java" />
+				<include name="**/*.properties" />
+				<include name="**/*.dicon" />
+			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/licenses">
-	        <fileset dir="licenses">
-	            <include name="**/*" />
-	        </fileset>
+			<fileset dir="licenses">
+				<include name="**/*" />
+			</fileset>
 		</copy>
-        <zip destfile="${dist.dir}/${build.finalName}.zip">
-        	<fileset dir="${dist.dir}">
-	            <include name="**/*" />
-        	    <exclude name="${build.finalName}.zip" />
-        	</fileset>
-        </zip>
-    </target>
+		<zip destfile="${dist.dir}/${build.finalName}.zip">
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+				<exclude name="${build.finalName}.zip" />
+			</fileset>
+		</zip>
+	</target>
 
 </project>
