@@ -25,6 +25,9 @@ import org.seasar.framework.exception.EmptyRuntimeException;
  */
 
 public class ClassUtil {
+    private ClassUtil() {
+    }
+
     public static boolean isSystemClass(Class<?> cls) {
         if (cls == null) {
             throw new EmptyRuntimeException("cls");

@@ -28,6 +28,9 @@ import org.seasar.framework.exception.EmptyRuntimeException;
  */
 
 public class MessageUtil {
+    private MessageUtil() {
+    }
+
     /**
      * 簡易的なテンプレートのレンダリングを行います。 与えられたテンプレート文字列の中から、"{"と"}"で囲まれた変数名を、その変数値で置き換えます。
      * 

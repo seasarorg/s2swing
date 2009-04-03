@@ -57,8 +57,8 @@ public class S2ActionUpdaterTest extends TestCase {
         S2ActionInjector injector = new S2ActionInjector();
         injector.inject(aaa, actionMap);
         S2Action action1 = (S2Action) actionMap.get("action1");
-        
-        S2ActionUpdater updater = new S2ActionUpdater(actionMap);
+
+        S2ActionUpdater updater = new S2ActionUpdater(aaa, actionMap);
 
         aaa.setEnabled(false);
         aaa.setSelected(true);

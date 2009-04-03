@@ -30,6 +30,9 @@ import org.seasar.framework.util.MethodUtil;
  */
 
 public class AnnotationUtil {
+    private AnnotationUtil() {
+    }
+
     /**
      * アノテーションから引数を取得します。
      * 

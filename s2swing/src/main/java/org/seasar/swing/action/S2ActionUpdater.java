@@ -20,6 +20,7 @@ import java.awt.AWTEvent;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -36,6 +37,7 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 public class S2ActionUpdater implements AWTEventListener, Serializable {
     private static final long serialVersionUID = -840660630564050729L;
 
+    private WeakReference<Object> viewRef;
     private ActionMap actionMap;
     private long eventMask;
     private boolean registered;
@@ -46,10 +48,11 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
      * @param actionMap
      *            アクションマップ
      */
-    public S2ActionUpdater(ActionMap actionMap) {
-        if (actionMap == null) {
-            throw new EmptyRuntimeException("actionMap");
+    public S2ActionUpdater(Object view, ActionMap actionMap) {
+        if (view == null) {
+            throw new EmptyRuntimeException("view");
         }
+        this.viewRef = new WeakReference<Object>(view);
         this.actionMap = actionMap;
         setUp();
     }
@@ -102,8 +105,8 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
             return;
         }
         Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
-        updateActions();
         registered = true;
+        updateActions();
     }
 
     /**
@@ -118,6 +121,9 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
     }
 
     public void eventDispatched(AWTEvent e) {
+        if (!registered) {
+            return;
+        }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 updateActions();
@@ -129,10 +135,15 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
      * アクションマップに含まれる全ての{@code S2Action}オブジェクトの実行可否状態と選択状態を更新します。
      */
     public void updateActions() {
-        for (Object key : actionMap.allKeys()) {
-            Action action = actionMap.get(key);
-            if (action instanceof S2Action) {
-                ((S2Action) action).update();
+        Object view = viewRef.get();
+        if (view == null) {
+            deregister();
+        } else {
+            for (Object key : actionMap.allKeys()) {
+                Action action = actionMap.get(key);
+                if (action instanceof S2Action) {
+                    ((S2Action) action).update();
+                }
             }
         }
     }

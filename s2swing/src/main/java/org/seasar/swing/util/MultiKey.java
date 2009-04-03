@@ -42,7 +42,9 @@ public class MultiKey {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MultiKey) {
+        if (obj == this) {
+            return true;
+        } else if (obj instanceof MultiKey) {
             MultiKey k = (MultiKey) obj;
             if (keys.length != k.keys.length) {
                 return false;
@@ -53,7 +55,8 @@ public class MultiKey {
                 }
             }
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }

@@ -78,11 +78,7 @@ public class ViewManager {
         actionMap = Resources.getActionMap(view);
         resourceMap = Resources.getResourceMap(view);
 
-        actionUpdater = createActionUpdater();
-    }
-
-    protected S2ActionUpdater createActionUpdater() {
-        return new S2ActionUpdater(actionMap);
+        actionUpdater = new S2ActionUpdater(view, actionMap);
     }
 
     public ApplicationActionMap getActionMap() {
@@ -135,7 +131,6 @@ public class ViewManager {
         autoBindActions();
 
         actionUpdater.register();
-
         installWindowListener();
 
         JComponent holder = findClientPropertyHolder(view.getRootComponent());
@@ -218,11 +213,6 @@ public class ViewManager {
     }
 
     private class ViewWindowListener extends WindowAdapter {
-        @Override
-        public void windowOpened(WindowEvent e) {
-            actionUpdater.register();
-        }
-
         @Override
         public void windowClosed(WindowEvent e) {
             actionUpdater.deregister();

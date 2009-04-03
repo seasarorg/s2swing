@@ -26,6 +26,9 @@ public class ELUtil {
     private static final String START = "${";
     private static final String END = "}";
 
+    private ELUtil() {
+    }
+
     /**
      * 文字列表現がELであるかどうかを判定します。
      * 

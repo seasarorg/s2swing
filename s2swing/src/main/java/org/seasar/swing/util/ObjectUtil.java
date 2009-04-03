@@ -23,6 +23,9 @@ package org.seasar.swing.util;
  */
 
 public class ObjectUtil {
+    private ObjectUtil() {
+    }
+
     /**
      * オブジェクトの同値性を判定します。
      * 
