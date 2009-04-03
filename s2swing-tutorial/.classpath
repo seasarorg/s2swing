@@ -13,6 +13,6 @@
 	<classpathentry kind="lib" path="lib/ognl-2.6.9-patch-20070908.jar"/>
 	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/s2-framework-2.4.34.jar"/>
-	<classpathentry kind="lib" path="lib/s2swing-0.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/s2swing-0.1.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
