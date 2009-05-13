@@ -2,7 +2,7 @@
 
 <project name="s2swing-build" default="package" basedir=".">
 
-	<property name="build.finalName" value="s2swing-0.1.2" />
+	<property name="build.finalName" value="s2swing-0.1.3" />
 	<property name="build.dir" value="target" />
 	<property name="build.outputDir" value="${build.dir}/classes" />
 	<property name="build.sourceDir" value="src/main/java" />
@@ -23,6 +23,7 @@
 
 	<target name="clean" description="Clean the output directory">
 		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
 	</target>
 
 	<target name="compile" description="Compile the code">

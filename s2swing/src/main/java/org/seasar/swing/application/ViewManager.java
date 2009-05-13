@@ -43,6 +43,7 @@ import org.seasar.swing.action.S2ActionUpdater;
 import org.seasar.swing.desc.ActionTargetDesc;
 import org.seasar.swing.desc.ViewDesc;
 import org.seasar.swing.desc.ViewDescFactory;
+import org.seasar.swing.exception.IllegalRegistrationException;
 import org.seasar.swing.util.ClassUtil;
 
 /**
@@ -126,9 +127,9 @@ public class ViewManager {
 
         view.initialize();
 
+        autoBindActions();
         autoInjectComponentNames();
         autoInjectComponentProperties();
-        autoBindActions();
 
         actionUpdater.register();
         installWindowListener();
@@ -172,12 +173,13 @@ public class ViewManager {
 
     protected void autoBindActions() {
         for (ActionTargetDesc actionDesc : viewDesc.getActionTargetDescs()) {
-            Action action = actionMap.get(actionDesc.getActionName());
-            if (action == null) {
-                // TODO warn
-                continue;
-            }
             Field field = actionDesc.getField();
+            String actionName = actionDesc.getActionName();
+            Action action = actionMap.get(actionName);
+            if (action == null) {
+                throw new IllegalRegistrationException("ESWI0105", field
+                        .getName(), actionName);
+            }
             field.setAccessible(true);
             Object source = FieldUtil.get(field, view);
             if (source == null) {
@@ -190,11 +192,12 @@ public class ViewManager {
             if (method != null) {
                 if (logger.isDebugEnabled()) {
                     logger.log("DSWI0004", new Object[] { field.getName(),
-                            actionDesc.getActionName() });
+                            actionName });
                 }
                 MethodUtil.invoke(method, source, new Object[] { action });
             } else {
-                // TODO warn
+                throw new IllegalRegistrationException("ESWI0106", field
+                        .getName());
             }
         }
     }
