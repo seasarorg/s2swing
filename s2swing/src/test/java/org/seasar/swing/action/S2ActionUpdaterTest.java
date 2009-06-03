@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 the Seasar Foundation and the Others.
+ * Copyright 2004-2009 the Seasar Foundation and the Others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class S2ActionUpdaterTest extends TestCase {
         injector.inject(aaa, actionMap);
         S2Action action1 = (S2Action) actionMap.get("action1");
 
-        S2ActionUpdater updater = new S2ActionUpdater(aaa, actionMap);
+        S2ActionUpdater updater = new S2ActionUpdater(aaa);
 
         aaa.setEnabled(false);
         aaa.setSelected(true);
@@ -73,5 +73,9 @@ public class S2ActionUpdaterTest extends TestCase {
 
         assertTrue(action1.isEnabled());
         assertFalse(action1.isSelected());
+
+        // actionMap is internally weak-referenced by SAF's ActionManager,
+        // so we must hold this reference until assertions are done.
+        actionMap.size();
     }
 }

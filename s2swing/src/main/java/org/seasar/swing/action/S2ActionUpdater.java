@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 the Seasar Foundation and the Others.
+ * Copyright 2004-2009 the Seasar Foundation and the Others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,22 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.SwingUtilities;
 
 import org.seasar.framework.exception.EmptyRuntimeException;
+import org.seasar.framework.util.StringUtil;
+import org.seasar.swing.application.Resources;
+import org.seasar.swing.expression.CachedEngine;
+import org.seasar.swing.expression.ExpressionEngine;
+import org.seasar.swing.expression.OgnlEngine;
 
 /**
- * AWTイベントを監視し、アクションマップに登録された{@code S2Action}オブジェクトの実行可否状態と選択状態を最新に保ちます。
+ * AWTイベントを監視し、ビューのアクションマップに登録された{@code S2Action}オブジェクトの実行可否状態と選択状態を最新に保ちます。
  * 
  * @author kaiseh
  */
@@ -37,23 +44,26 @@ import org.seasar.framework.exception.EmptyRuntimeException;
 public class S2ActionUpdater implements AWTEventListener, Serializable {
     private static final long serialVersionUID = -840660630564050729L;
 
-    private WeakReference<Object> viewRef;
-    private ActionMap actionMap;
+    private static final ExpressionEngine DEFAULT_ENGINE = new CachedEngine(
+            new OgnlEngine());
+
+    private transient WeakReference<Object> viewRef;
     private long eventMask;
     private boolean registered;
 
+    private Map<String, Boolean> evaluationCache = new HashMap<String, Boolean>();
+
     /**
-     * 指定されたアクションマップを元にインスタンスを作成します。
+     * 指定されたビューを元にインスタンスを作成します。
      * 
-     * @param actionMap
-     *            アクションマップ
+     * @param view
+     *            ビューオブジェクト
      */
-    public S2ActionUpdater(Object view, ActionMap actionMap) {
+    public S2ActionUpdater(Object view) {
         if (view == null) {
             throw new EmptyRuntimeException("view");
         }
         this.viewRef = new WeakReference<Object>(view);
-        this.actionMap = actionMap;
         setUp();
     }
 
@@ -65,6 +75,11 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
         eventMask &= ~AWTEvent.COMPONENT_EVENT_MASK;
         eventMask &= ~AWTEvent.MOUSE_MOTION_EVENT_MASK;
         eventMask &= ~AWTEvent.PAINT_EVENT_MASK;
+    }
+
+    private ExpressionEngine getExpressionEngine() {
+        // TODO make replaceable in the future?
+        return DEFAULT_ENGINE;
     }
 
     /**
@@ -135,16 +150,56 @@ public class S2ActionUpdater implements AWTEventListener, Serializable {
      * アクションマップに含まれる全ての{@code S2Action}オブジェクトの実行可否状態と選択状態を更新します。
      */
     public void updateActions() {
-        Object view = viewRef.get();
+        Object view = viewRef != null ? viewRef.get() : null;
         if (view == null) {
             deregister();
         } else {
+            clearEvaluationCache();
+            ActionMap actionMap = Resources.getActionMap(view);
             for (Object key : actionMap.allKeys()) {
                 Action action = actionMap.get(key);
                 if (action instanceof S2Action) {
-                    ((S2Action) action).update();
+                    updateS2Action(view, (S2Action) action);
                 }
             }
         }
+    }
+
+    private void clearEvaluationCache() {
+        evaluationCache.clear();
+    }
+
+    private void updateS2Action(Object view, S2Action action) {
+        action.setActionUpdater(this);
+
+        String enabledCond = action.getEnabledCondition();
+        if (!StringUtil.isEmpty(enabledCond)) {
+            boolean enabled = evaluate(view, enabledCond);
+            action.setEnabled(enabled);
+        }
+
+        String selectedCond = action.getSelectedCondition();
+        if (!StringUtil.isEmpty(selectedCond)) {
+            boolean selected = evaluate(view, selectedCond);
+            action.setSelected(selected);
+        }
+    }
+
+    private boolean evaluate(Object view, String condition) {
+        Boolean cachedResult = evaluationCache.get(condition);
+        if (cachedResult != null) {
+            return cachedResult.booleanValue();
+        }
+
+        ExpressionEngine engine = getExpressionEngine();
+        // Note that the compiled objects will be cached in the default
+        // expression engine, so there is no serious performance slowdown.
+        Object expr = engine.compile(condition);
+        Object rawResult = engine.evaluate(expr, view);
+
+        boolean result = Boolean.TRUE.equals(rawResult);
+        evaluationCache.put(condition, Boolean.valueOf(result));
+
+        return result;
     }
 }

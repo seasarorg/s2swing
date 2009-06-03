@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 the Seasar Foundation and the Others.
+ * Copyright 2004-2009 the Seasar Foundation and the Others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,8 @@ import java.awt.event.ActionEvent;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
-import org.seasar.framework.util.StringUtil;
 import org.seasar.swing.desc.S2ActionDesc;
 import org.seasar.swing.exception.ExceptionHandler;
-import org.seasar.swing.expression.CachedEngine;
-import org.seasar.swing.expression.ExpressionEngine;
-import org.seasar.swing.expression.OgnlEngine;
 
 /**
  * 実行可否状態と選択状態の宣言的記述をサポートしたアクションクラスです。
@@ -37,15 +33,12 @@ import org.seasar.swing.expression.OgnlEngine;
 public class S2Action extends ApplicationAction {
     private static final long serialVersionUID = -1896748042936856313L;
 
-    private static final ExpressionEngine DEFAULT_ENGINE = createDefaultEngine();
-
     private static ExceptionHandler exceptionHandler;
 
-    private ApplicationActionMap actionMap;
     private String enabledCondition;
     private String selectedCondition;
-    private transient Object enabledExpr;
-    private transient Object selectedExpr;
+
+    private S2ActionUpdater actionUpdater;
 
     /**
      * アクションを作成します。
@@ -61,59 +54,24 @@ public class S2Action extends ApplicationAction {
             S2ActionDesc actionDesc) {
         super(actionMap, resourceMap, actionDesc.getName(), actionDesc
                 .getMethod(), null, null, actionDesc.getBlockingScope());
-        this.actionMap = actionMap;
         this.enabledCondition = actionDesc.getEnabledCondition();
         this.selectedCondition = actionDesc.getSelectedCondition();
     }
 
-    private static ExpressionEngine createDefaultEngine() {
-        return new CachedEngine(new OgnlEngine());
+    public String getEnabledCondition() {
+        return enabledCondition;
     }
 
-    private ExpressionEngine getExpressionEngine() {
-        // TODO 置き換え可能にする？
-        return DEFAULT_ENGINE;
+    public String getSelectedCondition() {
+        return selectedCondition;
     }
 
-    /**
-     * アクションの実行可否状態と選択状態の記述式を評価し、状態を更新します。
-     */
-    public void update() {
-        if (!StringUtil.isEmpty(enabledCondition)) {
-            setEnabled(evaluateEnabled());
-        }
-        if (!StringUtil.isEmpty(selectedCondition)) {
-            setSelected(evaluateSelected());
-        }
+    public S2ActionUpdater getActionUpdater() {
+        return actionUpdater;
     }
 
-    private boolean evaluateEnabled() {
-        if (StringUtil.isEmpty(enabledCondition)) {
-            return true;
-        }
-        ExpressionEngine engine = getExpressionEngine();
-        if (enabledExpr == null) {
-            enabledExpr = engine.compile(enabledCondition);
-        }
-        return evaluateOnActionObject(enabledExpr, engine, enabledCondition);
-    }
-
-    private boolean evaluateSelected() {
-        if (StringUtil.isEmpty(selectedCondition)) {
-            return true;
-        }
-        ExpressionEngine engine = getExpressionEngine();
-        if (selectedExpr == null) {
-            selectedExpr = engine.compile(selectedCondition);
-        }
-        return evaluateOnActionObject(selectedExpr, engine, selectedCondition);
-    }
-
-    private boolean evaluateOnActionObject(Object compiled,
-            ExpressionEngine engine, String source) {
-        Object result = engine.evaluate(compiled, actionMap.getActionsObject(),
-                source);
-        return Boolean.TRUE.equals(result);
+    public void setActionUpdater(S2ActionUpdater actionUpdater) {
+        this.actionUpdater = actionUpdater;
     }
 
     public static ExceptionHandler getExceptionHandler() {
@@ -126,8 +84,11 @@ public class S2Action extends ApplicationAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (!evaluateEnabled()) {
-            return;
+        if (actionUpdater != null) {
+            actionUpdater.updateActions();
+            if (!isEnabled()) {
+                return;
+            }
         }
         try {
             super.actionPerformed(e);

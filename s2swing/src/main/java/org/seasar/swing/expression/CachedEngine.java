@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 the Seasar Foundation and the Others.
+ * Copyright 2004-2009 the Seasar Foundation and the Others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,13 +31,20 @@ public class CachedEngine implements ExpressionEngine {
     private static final long serialVersionUID = 350718720220429566L;
 
     private ExpressionEngine baseEngine;
-    private transient Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
+    private transient Map<String, Object> cache;
 
     public CachedEngine(ExpressionEngine baseEngine) {
         if (baseEngine == null) {
             throw new EmptyRuntimeException("baseEngine");
         }
         this.baseEngine = baseEngine;
+    }
+
+    private Map<String, Object> getCache() {
+        if (cache == null) {
+            cache = new ConcurrentHashMap<String, Object>();
+        }
+        return cache;
     }
 
     public ExpressionEngine getBaseEngine() {
@@ -48,6 +55,7 @@ public class CachedEngine implements ExpressionEngine {
         if (expression == null) {
             throw new EmptyRuntimeException("expression");
         }
+        Map<String, Object> cache = getCache();
         Object compiled = cache.get(expression);
         if (compiled == null) {
             compiled = baseEngine.compile(expression);
